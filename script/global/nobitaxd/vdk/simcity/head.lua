@@ -35,17 +35,21 @@ Include("\\script\\global\\nobitaxd\\vdk\\simcity\\libs\\index.lua")
 -- Use Include() to load components
 print("[head.lua] Loading components...")
 
-local result1 = Include("\\script\\global\\nobitaxd\\vdk\\simcity\\components\\sim.movement.lua")
-print("[head.lua] After sim.movement.lua: SimMovement=" .. tostring(SimMovement) .. ", SimMovementSys=" .. tostring(SimMovementSys) .. ", result=" .. tostring(result1))
+Include("\\script\\global\\nobitaxd\\vdk\\simcity\\components\\sim.movement.lua")
+print("[head.lua] After sim.movement.lua: SimMovement=" .. tostring(SimMovement))
+print("[head.lua]   SimMovementSys=" .. tostring(SimMovementSys))
 
-local result2 = Include("\\script\\global\\nobitaxd\\vdk\\simcity\\components\\sim.fun.lua")
-print("[head.lua] After sim.fun.lua: SimFun=" .. tostring(SimFun) .. ", SimFunSys=" .. tostring(SimFunSys) .. ", result=" .. tostring(result2))
+Include("\\script\\global\\nobitaxd\\vdk\\simcity\\components\\sim.fun.lua")
+print("[head.lua] After sim.fun.lua: SimFun=" .. tostring(SimFun))
+print("[head.lua]   SimFunSys=" .. tostring(SimFunSys))
 
-local result3 = Include("\\script\\global\\nobitaxd\\vdk\\simcity\\components\\sim.entity.lua")
-print("[head.lua] After sim.entity.lua: SimEntity=" .. tostring(SimEntity) .. ", SimEntitySys=" .. tostring(SimEntitySys) .. ", result=" .. tostring(result3))
+Include("\\script\\global\\nobitaxd\\vdk\\simcity\\components\\sim.entity.lua")
+print("[head.lua] After sim.entity.lua: SimEntity=" .. tostring(SimEntity))
+print("[head.lua]   SimEntitySys=" .. tostring(SimEntitySys))
 
-local result4 = Include("\\script\\global\\nobitaxd\\vdk\\simcity\\components\\sim.fight.lua")
-print("[head.lua] After sim.fight.lua: SimFight=" .. tostring(SimFight) .. ", SimFightSys=" .. tostring(SimFightSys) .. ", result=" .. tostring(result4))
+Include("\\script\\global\\nobitaxd\\vdk\\simcity\\components\\sim.fight.lua")
+print("[head.lua] After sim.fight.lua: SimFight=" .. tostring(SimFight))
+print("[head.lua]   SimFightSys=" .. tostring(SimFightSys))
 
 -- Plugins first
 Include("\\script\\global\\nobitaxd\\vdk\\simcity\\plugins\\index.lua")

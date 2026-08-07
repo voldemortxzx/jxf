@@ -304,7 +304,7 @@ SimEntity.Citizen = {
         -- Is every one dead?
         if (doRespawn == 1 or tbNpc.isDead == 1) then
             -- [FIX] TongKim mode: preserve fightingScore (no death penalty)
-            // Regular ThanhThi mode still loses 30% on death for balance
+            -- Regular ThanhThi mode still loses 30% on death for balance
             if tbNpc.tongkim ~= 1 then
                 tbNpc.fightingScore = ceil(tbNpc.fightingScore * 0.7)
             end
@@ -394,7 +394,7 @@ SimEntity.KeoXe = {
         -- Is every one dead?
         if (doRespawn == 1 or tbNpc.isDead == 1) then
             -- [FIX] TongKim mode: preserve fightingScore (no death penalty)
-            // Regular ThanhThi mode still loses 30% on death for balance
+            -- Regular ThanhThi mode still loses 30% on death for balance
             if tbNpc.tongkim ~= 1 then
                 tbNpc.fightingScore = ceil(tbNpc.fightingScore * 0.7)
             end
