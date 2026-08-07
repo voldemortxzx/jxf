@@ -36,7 +36,7 @@ TIME_RESTING = { -- nghi ngoi, khong danh nhau lai trong vong thoi gian nay
 TONGKIM_SPAWN_MINSTAY = 0         -- thoi gian toi thieu o lai dai doanh truoc khi xong len
 TONGKIM_SPAWN_MAXSTAY = 1        -- thoi gian toi da co the nup trong dai doanh
 TONGKIM_MAX_BOTS_PER_MAP = 60    -- [FIX] max TongKim bots per map (20-40 per path × 2 paths = 80 max, but limit to 60)
-FIGHTING_SCORE_MAX = 30000       -- [FIX] maximum fightingScore cap to prevent unlimited accumulation
+FIGHTING_SCORE_MAX = 200000      -- [FIX] maximum fightingScore cap to prevent unlimited accumulation
 
 
 -- PARAM setup

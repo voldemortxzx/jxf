@@ -128,8 +128,8 @@ function execAddScoreToAroundNPC(self, fighter, finalIndex)
         if fighter2 and fighter2.id ~= fighter.id and fighter2.isFighting == 1 then
             fighter2.fightingScore = ceil(fighter2.fightingScore + (scoreTotal / N) + (scoreTotal / N) * fighter2.rank / 10)
             -- [FIX] Cap fightingScore to prevent unlimited accumulation
-            if fighter2.fightingScore > (FIGHTING_SCORE_MAX or 30000) then
-                fighter2.fightingScore = FIGHTING_SCORE_MAX or 30000
+            if fighter2.fightingScore > (FIGHTING_SCORE_MAX or 200000) then
+                fighter2.fightingScore = FIGHTING_SCORE_MAX or 200000
             end
             SimCityTongKim:updateRank(fighter2)
         end

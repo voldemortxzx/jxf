@@ -1265,8 +1265,8 @@ function GroupFighter:_calculateFightingScore(tbNpc, nNpcIndex, currRank)
 	    		if tbNpc2 and tbNpc2.isFighting == 1 then
 	    			tbNpc2.fightingScore = ceil(tbNpc2.fightingScore + (scoreTotal/N) + (scoreTotal/N)*tbNpc2.rank/10)
 	    			-- [FIX] Cap fightingScore to prevent unlimited accumulation
-	    			if tbNpc2.fightingScore > (FIGHTING_SCORE_MAX or 30000) then
-	    				tbNpc2.fightingScore = FIGHTING_SCORE_MAX or 30000
+	    			if tbNpc2.fightingScore > (FIGHTING_SCORE_MAX or 200000) then
+	    				tbNpc2.fightingScore = FIGHTING_SCORE_MAX or 200000
 	    			end
 	    			self:_checkRank(tbNpc2)
 				end
