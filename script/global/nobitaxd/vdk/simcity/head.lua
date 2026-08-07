@@ -37,6 +37,13 @@ Include("\\script\\global\\nobitaxd\\vdk\\simcity\\plugins\\index.lua")
 -- Data load
 Include("\\script\\global\\nobitaxd\\vdk\\simcity\\libs\\data.lua")
 
+-- Components (must be loaded before classes)
+Include("\\script\\global\\nobitaxd\\vdk\\simcity\\components\\sim.movement.lua")
+Include("\\script\\global\\nobitaxd\\vdk\\simcity\\components\\sim.fun.lua")
+Include("\\script\\global\\nobitaxd\\vdk\\simcity\\components\\sim.fight.lua")
+Include("\\script\\global\\nobitaxd\\vdk\\simcity\\components\\sim.entity.lua")
+Include("\\script\\global\\nobitaxd\\vdk\\simcity\\components\\sim.core.lua")
+
 -- Now main class
 Include("\\script\\global\\nobitaxd\\vdk\\simcity\\class\\sim_theosau.lua")
 Include("\\script\\global\\nobitaxd\\vdk\\simcity\\class\\sim_citizen.lua")
