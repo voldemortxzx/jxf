@@ -37,7 +37,7 @@ TBBOSS  = {
 function PickBoss(nIndex)
 	if GetFightState() == 0 then 
 		Talk(1,"","Kh«ng thÓ th¶ Boss ë nh÷ng n¬i phi chiÕn ®Êu ®­îc.")
-		return 
+		return
 	end
 	local nBossCount = getn(TBBOSS)
 	local nRandomIndex = random(1, nBossCount)

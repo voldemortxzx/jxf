@@ -24,7 +24,7 @@ function GetDesc(itemIdx)
 	if(detail == 4908) then
 		return "<color=water>Cã thÓ dïng ®Ó n©ng cÊp hoÆc trao ®æi vËt phÈm quı gi¸.\nGÆp <color=orange>Ch©n Vò T«n<color> t¹i <color=green>Héi Qu¸n Vâ L©m<color> ®Ó biÕt thªm th«ng tin.<color>"
 	end
-	-- TuyÖt §Ønh LÖnh
+	-- TuyÖt §Ønh Th¹ch
 	if(detail == 4959) then
 		return "<color=water>Dïng ®Ó quy ®æi <color=orange>Vò Khİ TuyÖt §Ønh<color>.\nGÆp <color=orange>TuyÖt §Ønh Vò §Õ<color> t¹i <color=green>Héi Qu¸n Vâ L©m<color> ®Ó biÕt thªm th«ng tin.<color>"
 	end

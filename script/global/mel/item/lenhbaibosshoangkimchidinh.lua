@@ -72,7 +72,7 @@ end
 function PickBoss(nIndex)
 	if GetFightState() == 0 then 
 		Talk(1,"","Kh«ng thÓ th¶ boss ë nh÷ng n¬i phi chiÕn ®Êu ®­îc.")
-		return 
+		return
 	end
 	local item = TBBOSS[nIndex]
 	local nw,nx,ny = GetWorldPos()

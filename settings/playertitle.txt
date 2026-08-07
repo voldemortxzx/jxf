@@ -1,4 +1,4 @@
-TitleName	TitleId	SpeicalGraphic	FaceId	AuraSkill	AuraSkillLevel	ExtSkill1	ExtSkillLevel1	ExtSkill2	ExtSkillLevel2	ExtSkill3	ExtSkillLevel3	ExtSkill4	ExtSkillLevel4	ExtSkill5	ExtSkillLevel5	Memo	Color
+TitleName	TitleId	SpeicalGraphic	FaceId	AuraSkill	AuraSkillLevel	ExtSkill1	ExtSkillLevel1	ExtSkill2	ExtSkillLevel2	ExtSkill3	ExtSkillLevel3	ExtSkill4	ExtSkillLevel4	ExtSkill5	ExtSkillLevel5	Memo	TitlePriority
 Binh s‹ 	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0		
 Hi÷u Ûy 	2	7	0	0	0	0	0	0	0	0	0	0	0	0	0		
 ThËng L‹nh 	3	13	0	0	0	0	0	0	0	0	0	0	0	0	0		

@@ -5,10 +5,10 @@ Include("\\script\\dailogsys\\dailogsay.lua")
 Include("\\script\\lib\\string.lua")
 Include("\\script\\vng_lib\\files_lib.lua")
 Include("\\script\\global\\mel\\configserver.lua")
-Include("\\script\\global\\vinh\\simcity\\controllers\\thanhthi.lua")
-Include("\\script\\global\\vinh\\simcity\\head.lua")
-Include("\\script\\global\\vinh\\simcity\\controllers\\main.lua")
-Include("\\script\\global\\vinh\\simcity\\controllers\\keoxe.lua")
+Include("\\script\\global\\nobitaxd\\vdk\\simcity\\controllers\\thanhthi.lua")
+Include("\\script\\global\\nobitaxd\\vdk\\simcity\\head.lua")
+Include("\\script\\global\\nobitaxd\\vdk\\simcity\\controllers\\main.lua")
+Include("\\script\\global\\nobitaxd\\vdk\\simcity\\controllers\\keoxe.lua")
 
 ----------------------------------------------------------------------------------------------------
 --										 LÖnh Bµi TÝnh N¨ng								  		  --

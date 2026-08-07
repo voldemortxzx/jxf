@@ -1,5 +1,6 @@
 Include("\\script\\gm_tool\\dispose_item.lua")
 Include("\\script\\global\\mel\\configserver.lua")
+Include("\\script\\global\\mel\\item\\lbadmin.lua")
 
 ----------------------------------------------------------------------------------------------------
 --										 CÈm Nang §ång Hµnh										  --
@@ -12,7 +13,6 @@ function main(nItemIndex)
 	local nPhucDuyen = GetTask(151)
     local nVinhDu = GetTask(2501)
     local nMayMan = GetLucky(0)
-	
     local nLen = 17
     local szThongTin = format("Th«ng tin:\n")
     szThongTin = szThongTin..format("<pic=135> <color=green>%-"..nLen.."s<color>: <color=orange>%d<color>/<color=green>%d<color>\n", "TÈy Tñy Kinh", nTTK, GioiHanTTK)
@@ -21,8 +21,8 @@ function main(nItemIndex)
 	szThongTin = szThongTin..format("<pic=135> <color=green>%-"..nLen.."s<color>: <color=orange>%d<color>\n", "§iÓm Phóc Duyªn", nPhucDuyen)
     szThongTin = szThongTin..format("<pic=135> <color=green>%-"..nLen.."s<color>: <color=orange>%d<color>\n", "§iÓm Vinh Dù", nVinhDu)
     szThongTin = szThongTin..format("<pic=135> <color=green>%-"..nLen.."s<color>: <color=orange>%d", "ChØ sè May M¾n", nMayMan)
-
     local tbSay = {szThongTin}
+		tinsert(tbSay, "NhËn Admin/Dailog_Admin")
 		tinsert(tbSay, "NhËn tr¹ng th¸i Phi ChiÕn §Êu/phichiendau")
 		tinsert(tbSay, "Gi¶i kÑt nh©n vËt/KetAcc")
 		tinsert(tbSay, "Söa lçi ThÇn Hµnh Phï/FixTHP")
