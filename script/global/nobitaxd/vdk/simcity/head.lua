@@ -32,40 +32,24 @@ Include("\\script\\global\\nobitaxd\\vdk\\simcity\\config.lua")
 Include("\\script\\global\\nobitaxd\\vdk\\simcity\\libs\\index.lua")
 
 -- Load components FIRST (before sim.core.lua) so they're available in global scope
--- Use dofile directly to ensure files are loaded in global scope
-print("[head.lua] Loading components with dofile...")
+-- Use Include() to load components
+print("[head.lua] Loading components...")
 
-local ok, err = pcall(dofile, "\\script\\global\\nobitaxd\\vdk\\simcity\\components\\sim.movement.lua")
-if not ok then
-    print("[head.lua] ERROR loading sim.movement.lua: " .. tostring(err))
-else
-    print("[head.lua] After sim.movement.lua: SimMovement=" .. tostring(SimMovement))
-    print("[head.lua]   SimMovementSys=" .. tostring(SimMovementSys))
-end
+Include("\\script\\global\\nobitaxd\\vdk\\simcity\\components\\sim.movement.lua")
+print("[head.lua] After sim.movement.lua: SimMovement=" .. tostring(SimMovement))
+print("[head.lua]   SimMovementSys=" .. tostring(SimMovementSys))
 
-ok, err = pcall(dofile, "\\script\\global\\nobitaxd\\vdk\\simcity\\components\\sim.fun.lua")
-if not ok then
-    print("[head.lua] ERROR loading sim.fun.lua: " .. tostring(err))
-else
-    print("[head.lua] After sim.fun.lua: SimFun=" .. tostring(SimFun))
-    print("[head.lua]   SimFunSys=" .. tostring(SimFunSys))
-end
+Include("\\script\\global\\nobitaxd\\vdk\\simcity\\components\\sim.fun.lua")
+print("[head.lua] After sim.fun.lua: SimFun=" .. tostring(SimFun))
+print("[head.lua]   SimFunSys=" .. tostring(SimFunSys))
 
-ok, err = pcall(dofile, "\\script\\global\\nobitaxd\\vdk\\simcity\\components\\sim.entity.lua")
-if not ok then
-    print("[head.lua] ERROR loading sim.entity.lua: " .. tostring(err))
-else
-    print("[head.lua] After sim.entity.lua: SimEntity=" .. tostring(SimEntity))
-    print("[head.lua]   SimEntitySys=" .. tostring(SimEntitySys))
-end
+Include("\\script\\global\\nobitaxd\\vdk\\simcity\\components\\sim.entity.lua")
+print("[head.lua] After sim.entity.lua: SimEntity=" .. tostring(SimEntity))
+print("[head.lua]   SimEntitySys=" .. tostring(SimEntitySys))
 
-ok, err = pcall(dofile, "\\script\\global\\nobitaxd\\vdk\\simcity\\components\\sim.fight.lua")
-if not ok then
-    print("[head.lua] ERROR loading sim.fight.lua: " .. tostring(err))
-else
-    print("[head.lua] After sim.fight.lua: SimFight=" .. tostring(SimFight))
-    print("[head.lua]   SimFightSys=" .. tostring(SimFightSys))
-end
+Include("\\script\\global\\nobitaxd\\vdk\\simcity\\components\\sim.fight.lua")
+print("[head.lua] After sim.fight.lua: SimFight=" .. tostring(SimFight))
+print("[head.lua]   SimFightSys=" .. tostring(SimFightSys))
 
 -- Plugins first
 Include("\\script\\global\\nobitaxd\\vdk\\simcity\\plugins\\index.lua")
