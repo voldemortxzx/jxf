@@ -95,33 +95,37 @@ end
 **Before**: Bots had a 25% chance to prioritize attacking players over NPCs when both were nearby.
 
 **After**: Bots now:
+- Check if there's ANY enemy (player or NPC) first
 - Calculate distances to both player and NPC enemies
 - Attack the **nearest enemy** first
-- Only attack players if they are closer than NPC enemies
+- Properly handle cases where only one type of enemy exists
 
 **Key Changes**:
 ```lua
--- Calculate distances to both enemies
-local npcDist = 9999
-local playerDist = 9999
-
-if nearestNpcEnemy and nearestNpcEnemy > 0 then
-    npcDist = GetDistanceRadius(...)
-end
-
-if nearestPlayerEnemy and nearestPlayerEnemy > 0 then
-    playerDist = GetDistanceRadius(...)
-end
-
 -- Attack the nearest enemy (prioritize closer target)
-if npcDist < playerDist and nearestNpcEnemy > 0 then
-    -- Attack nearest NPC enemy
-    tbNpc.fightSys:TriggerFightWithNPC(simInstance, tbNpc)
-elseif nearestPlayerEnemy > 0 then
-    -- Attack nearest player enemy
-    tbNpc.fightSys:TriggerFightWithPlayer(simInstance, tbNpc)
+-- [FIXED] Check if there's ANY enemy first, then attack based on distance
+if nearestNpcEnemy > 0 or nearestPlayerEnemy > 0 then
+    -- There's at least one enemy, decide which to attack based on distance
+    if nearestNpcEnemy > 0 and nearestPlayerEnemy > 0 then
+        -- Both exist, attack the closer one
+        if npcDist < playerDist then
+            -- Attack nearest NPC enemy
+            tbNpc.fightSys:TriggerFightWithNPC(simInstance, tbNpc)
+        else
+            -- Attack nearest player enemy
+            tbNpc.fightSys:TriggerFightWithPlayer(simInstance, tbNpc)
+        end
+    elseif nearestNpcEnemy > 0 then
+        -- Only NPC enemy exists, attack it
+        tbNpc.fightSys:TriggerFightWithNPC(simInstance, tbNpc)
+    elseif nearestPlayerEnemy > 0 then
+        -- Only player enemy exists, attack it
+        tbNpc.fightSys:TriggerFightWithPlayer(simInstance, tbNpc)
+    end
 end
 ```
+
+**Bug Fix**: The original implementation had a logic error where it would check `npcDist < playerDist` but not properly handle the case where only one enemy type existed. The fixed version first checks if there's ANY enemy, then decides which to attack based on distance.
 
 ### 4. **config.lua** - Configuration Update
 **File**: `d:/test/jxf/script/global/nobitaxd/vdk/simcity/config.lua`

@@ -887,18 +887,39 @@ SimMovement.Citizen = {
                 end
                 
                 -- Attack the nearest enemy (prioritize closer target)
-                if npcDist < playerDist and nearestNpcEnemy > 0 then
-                    -- Attack nearest NPC enemy
-                    if tbNpc.fightSys:TriggerFightWithNPC(simInstance, tbNpc) == 1 then return 1 end
-                elseif nearestPlayerEnemy > 0 then
-                    -- Attack nearest player enemy
-                    local myLife = NPCINFO_GetNpcCurrentLife(tbNpc.finalIndex)
-                    local maxLife = NPCINFO_GetNpcCurrentMaxLife(tbNpc.finalIndex)
-                    
-                    if ((tbNpc.CHANCE_ATTACK_PLAYER and random(0, tbNpc.CHANCE_ATTACK_PLAYER) <= 2) or (myLife and maxLife and myLife < maxLife))
-                    then
-                        if tbNpc.fightSys:TriggerFightWithPlayer(simInstance, tbNpc) == 1 then
-                            return 1
+                -- [FIXED] Check if there's ANY enemy first, then attack based on distance
+                if nearestNpcEnemy > 0 or nearestPlayerEnemy > 0 then
+                    -- There's at least one enemy, decide which to attack based on distance
+                    if nearestNpcEnemy > 0 and nearestPlayerEnemy > 0 then
+                        -- Both exist, attack the closer one
+                        if npcDist < playerDist then
+                            -- Attack nearest NPC enemy
+                            if tbNpc.fightSys:TriggerFightWithNPC(simInstance, tbNpc) == 1 then return 1 end
+                        else
+                            -- Attack nearest player enemy
+                            local myLife = NPCINFO_GetNpcCurrentLife(tbNpc.finalIndex)
+                            local maxLife = NPCINFO_GetNpcCurrentMaxLife(tbNpc.finalIndex)
+                            
+                            if ((tbNpc.CHANCE_ATTACK_PLAYER and random(0, tbNpc.CHANCE_ATTACK_PLAYER) <= 2) or (myLife and maxLife and myLife < maxLife))
+                            then
+                                if tbNpc.fightSys:TriggerFightWithPlayer(simInstance, tbNpc) == 1 then
+                                    return 1
+                                end
+                            end
+                        end
+                    elseif nearestNpcEnemy > 0 then
+                        -- Only NPC enemy exists, attack it
+                        if tbNpc.fightSys:TriggerFightWithNPC(simInstance, tbNpc) == 1 then return 1 end
+                    elseif nearestPlayerEnemy > 0 then
+                        -- Only player enemy exists, attack it
+                        local myLife = NPCINFO_GetNpcCurrentLife(tbNpc.finalIndex)
+                        local maxLife = NPCINFO_GetNpcCurrentMaxLife(tbNpc.finalIndex)
+                        
+                        if ((tbNpc.CHANCE_ATTACK_PLAYER and random(0, tbNpc.CHANCE_ATTACK_PLAYER) <= 2) or (myLife and maxLife and myLife < maxLife))
+                        then
+                            if tbNpc.fightSys:TriggerFightWithPlayer(simInstance, tbNpc) == 1 then
+                                return 1
+                            end
                         end
                     end
                 end
