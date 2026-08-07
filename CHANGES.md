@@ -1,14 +1,20 @@
 # SimCity Bot AI Changes
 
-## TongKim Bot Respawn Fix
+## TongKim Bot Respawn and Combat Fix (2026-08-07)
 
 ### Issue
-TongKim mode bots were not respawning after death. After dying, bots would not move or fight anymore.
+TongKim mode bots were not respawning after death. After dying, bots would not move or fight anymore. Additionally, bots were not attacking NPC enemies after the nearest enemy logic change.
 
-### Root Cause
-The `Respawn` function in `sim.entity.lua` was calling `SimCore:RetrySpawn` to handle failed spawns, but this function didn't exist in the codebase. When a bot's spawn failed (e.g., due to map being full of NPC slots), the bot would be left in a broken state with `finalIndex == nil` but still being ticked every frame.
+### Root Causes
+1. **Missing RetrySpawn function**: The `Respawn` function in `sim.entity.lua` was calling `SimCore:RetrySpawn` to handle failed spawns, but this function didn't exist in the codebase.
 
-### Solution
+2. **Typo in RetrySpawn**: The `RetrySpawn` function had a typo `tbNpc.lastPos.nY2` instead of `tbNpc.lastPos.nY32`, causing incorrect respawn positions.
+
+3. **isPlayerFighting check blocking NPC combat**: The `TriggerFightWithNPC` function had a condition `if tbNpc.isPlayerFighting == 0` that prevented it from triggering unless the bot was already in player fighting mode. This blocked the nearest enemy targeting logic from working.
+
+### Solutions
+
+#### Fix 1: Added RetrySpawn function
 Added the missing `SimCore:RetrySpawn` function to `sim.core.lua` that:
 1. Checks if the bot has exceeded the maximum retry count (`SIMBOT_RESPAWN_MAX_RETRIES`)
 2. If retries exceeded, removes the bot from the system
@@ -17,10 +23,21 @@ Added the missing `SimCore:RetrySpawn` function to `sim.core.lua` that:
 
 Also added a check in `SimCore:OnTimer` to call `RetrySpawn` when the retry tick is reached.
 
+#### Fix 2: Fixed typo in RetrySpawn
+Changed `tbNpc.lastPos.nY2` to `tbNpc.lastPos.nY32` on line 237 of `sim.core.lua`.
+
+#### Fix 3: Removed isPlayerFighting check from TriggerFightWithNPC
+Removed the `if tbNpc.isPlayerFighting == 0` check from both `TriggerFightWithNPC` functions (in `SimFight.Citizen` and `SimFight.KeoXe`) to allow bots to attack NPC enemies directly without requiring player fighting mode first.
+
 ### Files Modified
 - `script/global/nobitaxd/vdk/simcity/components/sim.core.lua`
   - Added `SimCore:RetrySpawn` function
   - Added retry spawn check at the beginning of `SimCore:OnTimer`
+  - Fixed typo: `nY2` → `nY32`
+
+- `script/global/nobitaxd/vdk/simcity/components/sim.fight.lua`
+  - Removed `isPlayerFighting` check from `SimFight.Citizen:TriggerFightWithNPC`
+  - Removed `isPlayerFighting` check from `SimFight.KeoXe:TriggerFightWithNPC`
 
 ### Configuration
 - `SIMBOT_RESPAWN_RETRY_TICKS` - Time between spawn retry attempts (~5 seconds)

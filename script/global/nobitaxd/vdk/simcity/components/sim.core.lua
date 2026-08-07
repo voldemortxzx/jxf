@@ -235,7 +235,7 @@ function SimCore:RetrySpawn(tbNpc)
         nRespawnY32 = 0
     elseif (isAllDead == 1 and tbNpc.lastPos ~= nil) then
         nRespawnX32 = tbNpc.lastPos.nX32
-        nRespawnY32 = tbNpc.lastPos.nY2
+        nRespawnY32 = tbNpc.lastPos.nY32
     else
         nRespawnX32 = nX32
         nRespawnY32 = nY32

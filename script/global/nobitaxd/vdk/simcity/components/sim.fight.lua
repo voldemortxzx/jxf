@@ -270,9 +270,8 @@ SimFight.Citizen = {
     execCastOnParent = execCastOnParent,
     execCastOnSelf = execCastOnSelf,    
     TriggerFightWithNPC = function(self, simInstance, tbNpc)       
-        if tbNpc.isPlayerFighting == 0 and tbNpc.mode ~= "train" and tbNpc.tongkim ~= 1 then   
-            return 0
-        end
+        -- [FIXED] Removed isPlayerFighting check to allow bot to attack NPC enemies directly
+        -- This is needed for nearest enemy targeting logic
         if (self:IsNpcEnemyAround(simInstance, tbNpc) > 0) then
             return self:JoinFight(simInstance, tbNpc, "enemy around")
         end
@@ -448,9 +447,8 @@ SimFight.KeoXe = {
     execCastOnParent = execCastOnParent,
     execCastOnSelf = execCastOnSelf,
     TriggerFightWithNPC = function(self, simInstance, tbNpc)
-        if tbNpc.isPlayerFighting == 0 then
-            return 0
-        end
+        -- [FIXED] Removed isPlayerFighting check to allow bot to attack NPC enemies directly
+        -- This is needed for nearest enemy targeting logic
         if (self:IsNpcEnemyAround(simInstance, tbNpc) > 0) then
             return self:JoinFight(simInstance, tbNpc, "enemy around")
         end
