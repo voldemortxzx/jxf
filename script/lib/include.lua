@@ -1,11 +1,16 @@
 --Creator:yfeng
 --Date:2004-8-31
---Comm:Include函数模拟
+--Comm:Include锟斤拷锟斤拷模锟斤拷
 function Include(path)
 	local info = getinfo(1,"S")
 	local source = info.source
 	
-	if(strfind(path,"\\")) then --绝对路径表示方法
+	-- Remove '@' prefix if present (from dofile/loadfile)
+	if strsub(source, 1, 1) == "@" then
+		source = strsub(source, 2)
+	end
+	
+	if(strfind(path,"\\")) then --路示
 		local pos = strfind(source,"\\script")
 		if(pos) then
 			local realpath = strsub(source,2,pos-1)..path

@@ -165,9 +165,23 @@ function SimCore:initCharConfig(config)
     -- Fall back to picking the behavior table directly by role so bot creation
     -- never hard-crashes here, and log which one was missing for diagnosis.
     if type(SimMovementSys) == "function" then
-        config.movementSys = SimMovementSys(config)
+        local result = SimMovementSys(config)
+        if result then
+            config.movementSys = result
+        else
+            if print then print("[SimCore] WARNING: SimMovementSys returned nil for role=" .. tostring(config.role)) end
+            if SimMovement then
+                if config.role == "keoxe" then
+                    config.movementSys = SimMovement.KeoXe
+                elseif config.role == "child" then
+                    config.movementSys = SimMovement.FormationChild
+                else
+                    config.movementSys = SimMovement.Citizen
+                end
+            end
+        end
     else
-        if print then print("[SimCore] WARNING: SimMovementSys is nil, using direct fallback for role=" .. tostring(config.role)) end
+        if print then print("[SimCore] WARNING: SimMovementSys is nil (type=" .. type(SimMovementSys) .. "), using direct fallback for role=" .. tostring(config.role)) end
         if SimMovement then
             if config.role == "keoxe" then
                 config.movementSys = SimMovement.KeoXe
