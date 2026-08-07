@@ -52,7 +52,12 @@ function execCastNormalSkill(self, simInstance, tbNpc)
         return
     end
  
-    if tbNpc.isPlayerEnemyAround == 0 and (random(1, 1000) > 50) then
+    -- Check for ANY enemy around (player or NPC)
+    local foundPlayerEnemy = tbNpc.isPlayerEnemyAround
+    local foundNpcEnemy = self:IsNpcEnemyAround(simInstance, tbNpc)
+    
+    -- If no enemies at all, don't cast skill
+    if foundPlayerEnemy == 0 and foundNpcEnemy == 0 then
         return
     end
   
@@ -61,37 +66,46 @@ function execCastNormalSkill(self, simInstance, tbNpc)
     local skillId = selectedSkill[1]
     local skillLevel = selectedSkill[2]
 
-    -- [FIX] Attack closest enemy regardless of type (player or NPC)
-    local foundPlayerEnemy = tbNpc.isPlayerEnemyAround
-    local foundNpcEnemy = self:IsNpcEnemyAround(simInstance, tbNpc)
+    -- Find the NEAREST enemy (player or NPC) and attack it
+    local nearestEnemyType = nil  -- "player" or "npc"
+    local nearestEnemyDist = 9999
+    local nearestEnemyPos = {x = 0, y = 0}
     
-    -- Calculate distances to both enemies
-    local playerDist = 9999
-    local npcDist = 9999
-    
+    -- Check player enemy distance
     if foundPlayerEnemy > 0 then
         local targetX, targetY, targetW = CallPlayerFunction(foundPlayerEnemy, GetWorldPos)
-        playerDist = GetDistanceRadius(tbNpc.lastPos.nX32/32, tbNpc.lastPos.nY32/32, targetX, targetY)
+        local playerDist = GetDistanceRadius(tbNpc.lastPos.nX32/32, tbNpc.lastPos.nY32/32, targetX, targetY)
+        if playerDist < nearestEnemyDist then
+            nearestEnemyDist = playerDist
+            nearestEnemyType = "player"
+            nearestEnemyPos.x = targetX
+            nearestEnemyPos.y = targetY
+        end
     end
     
+    -- Check NPC enemy distance
     if foundNpcEnemy > 0 then
         local targetX, targetY, targetW = GetNpcPos(foundNpcEnemy)
-        npcDist = GetDistanceRadius(tbNpc.lastPos.nX32/32, tbNpc.lastPos.nY32/32, targetX, targetY)
+        local npcDist = GetDistanceRadius(tbNpc.lastPos.nX32/32, tbNpc.lastPos.nY32/32, targetX, targetY)
+        if npcDist < nearestEnemyDist then
+            nearestEnemyDist = npcDist
+            nearestEnemyType = "npc"
+            nearestEnemyPos.x = targetX
+            nearestEnemyPos.y = targetY
+        end
     end
     
-    -- Attack the closest enemy
-    if npcDist < playerDist and foundNpcEnemy > 0 then
-        local targetX, targetY, targetW = GetNpcPos(foundNpcEnemy)
-        NpcCastSkill(tbNpc.finalIndex, skillId, skillLevel, targetX, targetY)
+    -- Attack the nearest enemy
+    if nearestEnemyType == "player" and foundPlayerEnemy > 0 then
+        if BotDoSkill and PIdx2NpcIdx then
+            BotDoSkill(tbNpc.finalIndex, skillId, skillLevel, PIdx2NpcIdx(foundPlayerEnemy))
+        else
+            NpcCastSkill(tbNpc.finalIndex, skillId, skillLevel, nearestEnemyPos.x*32, nearestEnemyPos.y*32)
+        end
         tbNpc.tick_canCast = tbNpc.tick_breath + 2*18/REFRESH_RATE
         return
-    elseif foundPlayerEnemy > 0 then
-        local targetX, targetY, targetW = CallPlayerFunction(foundPlayerEnemy, GetWorldPos)
-        if BotDoSkill and PIdx2NpcIdx then
-            local _r = BotDoSkill(tbNpc.finalIndex, skillId, skillLevel, PIdx2NpcIdx(foundPlayerEnemy))
-        else
-            NpcCastSkill(tbNpc.finalIndex, skillId, skillLevel, targetX*32, targetY*32)
-        end
+    elseif nearestEnemyType == "npc" and foundNpcEnemy > 0 then
+        NpcCastSkill(tbNpc.finalIndex, skillId, skillLevel, nearestEnemyPos.x, nearestEnemyPos.y)
         tbNpc.tick_canCast = tbNpc.tick_breath + 2*18/REFRESH_RATE
         return
     end

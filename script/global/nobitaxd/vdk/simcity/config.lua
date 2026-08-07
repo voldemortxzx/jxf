@@ -1,6 +1,7 @@
 CHANCE_AUTO_ATTACK = 1    -- 1/8000 co hoi chuyen sang chien dau
 CHANCE_JOIN_FIGHT = 1     -- 1/3000 co hoi tham gia danh nhau khi di ngang qua dam danh nhau
 CHANCE_ATTACK_PLAYER = 1  -- 1/3000 co hoi danh nguoi neu den gan nguoi choi dang chien dau
+-- [MODIFIED] Bots now attack nearest enemy (player or NPC) instead of always prioritizing players
 
 STARTUP_AUTOADD_THANHTHI = 1 -- tu dong moi nhan si tren tat ca ban do
 THANHTHI_SIZE = 300   		 -- so luong nhan si trong thanh thi
