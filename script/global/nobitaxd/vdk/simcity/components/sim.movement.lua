@@ -256,6 +256,7 @@ SimMovement.KeoXe = {
         -- respawn-qua-xa (tren) van keo bot lai gan player de populate map. Self-def (HP drop) van chase qua SimDuelMove.
         -- [2026-06-28] THEO SAU: player DI CHUYEN + bot cach xa -> chay theo; player DUNG -> DUNG IM (da so),
         -- chi ~15% bot dich nhe +-2 (tu nhien). Truoc: wander +-4 moi 4-10 tick -> 10 con nhuc nhich kho chiu.
+        -- [IMPROVED] Bot now actively hunts enemies instead of just wandering
         if tbNpc.isFighting == 0 then
             if tbNpc.lastPPosX ~= pX or tbNpc.lastPPosY ~= pY then
                 tbNpc.lastPPosX = pX; tbNpc.lastPPosY = pY
@@ -265,8 +266,37 @@ SimMovement.KeoXe = {
                 NpcRun(tbNpc.finalIndex, pX + random(-3, 3), pY + random(-3, 3))   -- player dang di -> chay theo
             elseif (not tbNpc.wanderTick or tbNpc.wanderTick <= tbNpc.tick_breath) then
                 tbNpc.wanderTick = tbNpc.tick_breath + random(15, 40)
-                -- player DUNG -> DUNG IM TUYET DOI (doi <= 0 thanh <= 15 neu muon vai con dich nhe)
-                if random(1, 100) <= 0 then NpcWalk(tbNpc.finalIndex, myPosX + random(-2, 2), myPosY + random(-2, 2)) end   -- player DUNG -> da so dung im, vai con dich nhe
+                -- [IMPROVED] Bot actively hunts enemies instead of just wandering randomly
+                -- Check for nearby enemies first
+                local foundEnemy = 0
+                if tbNpc.fightSys and tbNpc.fightSys:IsNpcEnemyAround then
+                    foundEnemy = tbNpc.fightSys:IsNpcEnemyAround(simInstance, tbNpc)
+                end
+                
+                if foundEnemy > 0 then
+                    -- Enemy found, move towards it
+                    local ex, ey = GetNpcPos(foundEnemy)
+                    if ex and ey then
+                        NpcRun(tbNpc.finalIndex, floor(ex/32), floor(ey/32))
+                    else
+                        -- Random movement if enemy position invalid
+                        NpcWalk(tbNpc.finalIndex, myPosX + random(-2, 2), myPosY + random(-2, 2))
+                    end
+                else
+                    -- No enemy nearby, move towards enemy camp area (more active hunting)
+                    -- Move in direction of enemy camp instead of random wandering
+                    local enemyCampX, enemyCampY = 0, 0
+                    if tbNpc.camp == 1 then
+                        -- Camp 1: move towards right/bottom (enemy camp 2 direction)
+                        enemyCampX = myPosX + 20
+                        enemyCampY = myPosY + 20
+                    else
+                        -- Camp 2: move towards left/top (enemy camp 1 direction)
+                        enemyCampX = myPosX - 20
+                        enemyCampY = myPosY - 20
+                    end
+                    NpcRun(tbNpc.finalIndex, enemyCampX, enemyCampY)
+                end
             end
         end
         return 1
@@ -1116,9 +1146,26 @@ SimMovement.Citizen = {
         end
 
         -- Mode 1: randomwalk
+        -- [IMPROVED] Bot actively hunts enemies instead of just wandering randomly
         tbNpc.tick_checklag = nil
         if self:HasArrived(simInstance, tbNpc) == 1 then
-            -- Keep walking no stop
+            -- Check for nearby enemies first (more proactive hunting)
+            local foundEnemy = 0
+            if tbNpc.fightSys and tbNpc.fightSys:IsNpcEnemyAround then
+                foundEnemy = tbNpc.fightSys:IsNpcEnemyAround(simInstance, tbNpc)
+            end
+            
+            if foundEnemy > 0 then
+                -- Enemy found, move towards it immediately
+                local ex, ey = GetNpcPos(foundEnemy)
+                if ex and ey then
+                    NpcRun(tbNpc.finalIndex, floor(ex/32), floor(ey/32))
+                    self:CalculateChildrenPosition(simInstance, nListId, floor(ex/32)*32, floor(ey/32)*32)
+                    return 1
+                end
+            end
+            
+            -- No enemy nearby, be more proactive in hunting
             local keepWalkingRate = 90
             if tbNpc.isAttractionAround > 0 then
                 keepWalkingRate = 5
@@ -1147,9 +1194,25 @@ SimMovement.Citizen = {
                     return 1
                 end
 
-            -- Normal walk
+            -- Normal walk - [IMPROVED] Move towards enemy camp instead of random wandering
             elseif (tbNpc.noStop == 1 or random(1, 100) < keepWalkingRate) then
-                tbNpc.nPosId = tbNpc.movementSys:GetRandomWalkPoint(simInstance, tbNpc, tbNpc.nPosId)
+                -- [IMPROVED] TongKim and combat bots move towards enemy territory
+                if tbNpc.tongkim == 1 or tbNpc.mode == "chiendau" then
+                    -- Move towards enemy camp direction
+                    local targetX, targetY = myPosX, myPosY
+                    if tbNpc.camp == 1 then
+                        targetX = myPosX + 30  -- Move right/down towards enemy camp 2
+                        targetY = myPosY + 30
+                    else
+                        targetX = myPosX - 30  -- Move left/up towards enemy camp 1
+                        targetY = myPosY - 30
+                    end
+                    NpcRun(tbNpc.finalIndex, targetX, targetY)
+                    self:CalculateChildrenPosition(simInstance, nListId, targetX*32, targetY*32)
+                    return 1
+                else
+                    tbNpc.nPosId = tbNpc.movementSys:GetRandomWalkPoint(simInstance, tbNpc, tbNpc.nPosId)
+                end
             
             -- Stop walking
             else

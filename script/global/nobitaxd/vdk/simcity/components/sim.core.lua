@@ -886,8 +886,9 @@ function SimCore:OnTimer(tbNpc, rate)
     end
 
     if BOT_VS_BOT == 1 and SimEnemyAround and BotDoSkill and not tbNpc.duelPlayerId and not tbNpc.partyPlayerId
-       and tbNpc.tongkim ~= 1 and tbNpc.finalIndex and tbNpc.finalIndex > 0 and (tbNpc.camp or 0) > 0
+       and tbNpc.finalIndex and tbNpc.finalIndex > 0 and (tbNpc.camp or 0) > 0
        and (not SimCityIsPeaceZone or SimCityIsPeaceZone(tbNpc) ~= 1) then
+        -- [IMPROVED] TongKim bots now also use active enemy hunting (removed tongkim ~= 1 check)
         
         if tbNpc.botDuelTarget or (not tbNpc.botScanTick or tbNpc.botScanTick <= tbNpc.tick_breath) then
             local _cpn = 0
@@ -905,7 +906,9 @@ function SimCore:OnTimer(tbNpc, rate)
                 tbNpc.botScanTick = tbNpc.tick_breath + 4*18/REFRESH_RATE
             elseif not tbNpc.botScanTick or tbNpc.botScanTick <= tbNpc.tick_breath then
                 tbNpc.botScanTick = tbNpc.tick_breath + 4*18/REFRESH_RATE
-                local _e = SimEnemyAround(tbNpc.finalIndex, BOT_COMBAT_RADIUS or 20)
+                -- [IMPROVED] Increase detection radius for TongKim bots to be more proactive
+                local scanRadius = tbNpc.tongkim == 1 and (BOT_COMBAT_RADIUS or 50) or (BOT_COMBAT_RADIUS or 20)
+                local _e = SimEnemyAround(tbNpc.finalIndex, scanRadius)
                 if _e and _e > 0 then
                     tbNpc.botDuelTarget = _e
                     tbNpc.botDuelTick = tbNpc.tick_breath + 12*18/REFRESH_RATE
