@@ -1,10 +1,6 @@
-Include("\\script\\global\\nobitaxd\\vdk\\simcity\\config.lua")
-Include("\\script\\global\\nobitaxd\\vdk\\simcity\\libs\\index.lua")
-Include("\\script\\global\\nobitaxd\\vdk\\simcity\\components\\sim.movement.lua")
-Include("\\script\\global\\nobitaxd\\vdk\\simcity\\components\\sim.fun.lua")
-Include("\\script\\global\\nobitaxd\\vdk\\simcity\\components\\sim.entity.lua")
-Include("\\script\\global\\nobitaxd\\vdk\\simcity\\components\\sim.fight.lua")
-IncludeLib("NPCINFO")
+-- Components are now loaded by head.lua before sim.core.lua is included
+-- This prevents the Include() path resolution issue when sim.core.lua is included
+-- from sim_theosau.lua or sim_citizen.lua
 SimCore = {
     fighterList = {},
     counter = 1,

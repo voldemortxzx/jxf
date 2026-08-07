@@ -1,5 +1,60 @@
 # SimCity Bot AI Changes
 
+## Critical Fix: SimMovementSys Nil Value Error (2026-08-07)
+
+### Issue
+Server error on bot creation:
+```
+error: attempt to call global 'SimMovementSys' (a nil value)
+stack traceback:
+   1. method `initCharConfig' at line 167 [sim.core.lua]
+   2. method `initCharConfig' at line 405 [sim_citizen.lua]
+   3. method `New' at line 13 [sim_citizen.lua]
+   4. method `_createSingle' at line 70 [plugins/index.lua]
+   5. method `createNpcSoCapByMap' at line 605 [plugins/index.lua]
+```
+
+Followed by:
+```
+[SimCore] WARNING: SimMovementSys is nil, using direct fallback for role=citizen
+[SimCore] WARNING: SimEntitySys is nil, using direct fallback for role=citizen
+error: attempt to index field 'movementSys' (a nil value)
+```
+
+### Root Cause
+The `Include()` function in this engine uses `getinfo(1).source` to determine the base path for relative includes. When `sim.core.lua` includes component files (`sim.movement.lua`, `sim.fun.lua`, etc.), the `getinfo(1).source` points to the file that included `sim.core.lua` (either `sim_theosau.lua` or `sim_citizen.lua`), not to `sim.core.lua` itself. This caused the `Include()` function to construct incorrect paths, resulting in the component files not being loaded.
+
+Additionally, `sim.movement.lua` was missing a closing `end` statement for the `SimMovementSys` function definition.
+
+### Solutions
+
+#### Fix 1: Added missing `end` to SimMovementSys function
+Added the missing `end` statement at line 1576 of `sim.movement.lua` to properly close the `SimMovementSys` function definition.
+
+#### Fix 2: Load components in head.lua before sim.core.lua
+Modified `head.lua` to load all component files (`sim.movement.lua`, `sim.fun.lua`, `sim.entity.lua`, `sim.fight.lua`) BEFORE including `sim_theosau.lua` and `sim_citizen.lua`. This ensures the components are loaded in the global scope before `sim.core.lua` tries to use them, avoiding the `Include()` path resolution issue.
+
+#### Fix 3: Removed redundant includes from sim.core.lua
+Removed the component includes from `sim.core.lua` since they're now loaded by `head.lua`.
+
+#### Fix 4: Added defensive fallback in initCharConfig
+Added defensive checks in `SimCore:initCharConfig` to handle cases where the `SimXxxSys` factory functions are not available. The fallback directly picks the behavior table by role from the component tables (`SimMovement`, `SimFun`, `SimEntity`, `SimFight`).
+
+### Files Modified
+- `script/global/nobitaxd/vdk/simcity/components/sim.movement.lua`
+  - Added missing `end` statement for `SimMovementSys` function (line 1576)
+
+- `script/global/nobitaxd/vdk/simcity/head.lua`
+  - Added component includes before `sim_theosau.lua` and `sim_citizen.lua`:
+    - `sim.movement.lua`
+    - `sim.fun.lua`
+    - `sim.entity.lua`
+    - `sim.fight.lua`
+
+- `script/global/nobitaxd/vdk/simcity/components/sim.core.lua`
+  - Removed redundant component includes
+  - Added defensive fallback logic in `initCharConfig` for `SimMovementSys`, `SimFunSys`, `SimEntitySys`, `SimFightSys`
+
 ## TongKim Bot Respawn and Combat Fix (2026-08-07)
 
 ### Issue

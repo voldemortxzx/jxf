@@ -31,13 +31,19 @@ Include("\\script\\lib\\string.lua")
 Include("\\script\\global\\nobitaxd\\vdk\\simcity\\config.lua")
 Include("\\script\\global\\nobitaxd\\vdk\\simcity\\libs\\index.lua")
 
+-- Load components FIRST (before sim.core.lua) so they're available in global scope
+Include("\\script\\global\\nobitaxd\\vdk\\simcity\\components\\sim.movement.lua")
+Include("\\script\\global\\nobitaxd\\vdk\\simcity\\components\\sim.fun.lua")
+Include("\\script\\global\\nobitaxd\\vdk\\simcity\\components\\sim.entity.lua")
+Include("\\script\\global\\nobitaxd\\vdk\\simcity\\components\\sim.fight.lua")
+
 -- Plugins first
 Include("\\script\\global\\nobitaxd\\vdk\\simcity\\plugins\\index.lua")
 
 -- Data load
 Include("\\script\\global\\nobitaxd\\vdk\\simcity\\libs\\data.lua")
 
--- Now main class (sim_citizen.lua includes sim.core.lua which includes all components)
+-- Now main class (sim_citizen.lua includes sim.core.lua which expects components to be loaded)
 Include("\\script\\global\\nobitaxd\\vdk\\simcity\\class\\sim_theosau.lua")
 Include("\\script\\global\\nobitaxd\\vdk\\simcity\\class\\sim_citizen.lua")
 
