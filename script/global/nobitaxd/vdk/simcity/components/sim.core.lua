@@ -175,6 +175,16 @@ function SimCore:initCharConfig(config)
             MoveInactive = function(self, simInstance, tbNpc)
                 -- Basic inactive movement - bot stays in place
                 return 0
+            end,
+            resetPos = function(self, simInstance, nListId)
+                -- Fallback resetPos - do nothing
+                return 1
+            end,
+            HasArrived = function(self, simInstance, tbNpc)
+                return 0
+            end,
+            GetRandomWalkPoint = function(self, simInstance, tbNpc, currentPosId)
+                return "none"
             end
         }
         SimMovement.KeoXe = SimMovement.Citizen
