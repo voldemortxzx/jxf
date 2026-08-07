@@ -221,7 +221,7 @@ function GroupFighter:_addNpcGo(tbNpc, isNew, goX, goY)
 			else
 				name = "Kim"			
 				if tbNpc.camp == 1 then
-					name = "Tèng"
+					name = "Tï¿½ng"
 				end
 			end
 			name = name .." "..SimCityTongKim.RANKS[tbNpc.rank]
@@ -1264,6 +1264,10 @@ function GroupFighter:_calculateFightingScore(tbNpc, nNpcIndex, currRank)
 	    		local tbNpc2 = self.tbNpcList["n"..foundTbNpcs[i]]
 	    		if tbNpc2 and tbNpc2.isFighting == 1 then
 	    			tbNpc2.fightingScore = ceil(tbNpc2.fightingScore + (scoreTotal/N) + (scoreTotal/N)*tbNpc2.rank/10)
+	    			-- [FIX] Cap fightingScore to prevent unlimited accumulation
+	    			if tbNpc2.fightingScore > (FIGHTING_SCORE_MAX or 30000) then
+	    				tbNpc2.fightingScore = FIGHTING_SCORE_MAX or 30000
+	    			end
 	    			self:_checkRank(tbNpc2)
 				end
 			end
@@ -1403,7 +1407,7 @@ function GroupFighter:_check_full_death(nListId)
 		if tbNpc.playerID == 0 then
 			local worldInfo = SimCityWorld:Get(nW)
 			if tbNpc.children and worldInfo.showFightingArea == 1 then
-				Msg2Map(nW, "<color=white>"..tbNpc.szName.."<color> toµn ®oµn b¹i trËn <color=yellow>"..floor(lastPos[1]/8).." "..floor(lastPos[2]/16).."<color>")
+				Msg2Map(nW, "<color=white>"..tbNpc.szName.."<color> toï¿½n ï¿½oï¿½n bï¿½i trï¿½n <color=yellow>"..floor(lastPos[1]/8).." "..floor(lastPos[2]/16).."<color>")
 			end
 		end
 
@@ -1670,7 +1674,7 @@ function GroupFighter:_doParentTick(nListId)
 
 
 			if tbNpc.playerID == 0 and countFighting > 0 and worldInfo.showFightingArea == 1 then 
-				Msg2Map(nW, "Cã "..countFighting.." nh©n sÜ ®ang ®¸nh nhau t¹i "..worldInfo.name.." <color=yellow>"..floor(myPosX/8).." "..floor(myPosY/16).."<color>")
+				Msg2Map(nW, "Cï¿½ "..countFighting.." nhï¿½n sï¿½ ï¿½ang ï¿½ï¿½nh nhau tï¿½i "..worldInfo.name.." <color=yellow>"..floor(myPosX/8).." "..floor(myPosY/16).."<color>")
 			end
 
 			if (countFighting > 0) then
@@ -1875,7 +1879,7 @@ function GroupFighter:ThongBaoBXH(nW)
 		local swIdx = SubWorldID2Idx(nW)
 		if BotLadderClear then BotLadderClear(swIdx) end
 		
-		Msg2Map(nW, "<color=yellow>========= B¶ng XÕp H¹ng =========<color>")
+		Msg2Map(nW, "<color=yellow>========= Bï¿½ng Xï¿½p Hï¿½ng =========<color>")
 		Msg2Map(nW, "<color=yellow>=================================<color>")
 
 		for j = 1, maxIndex do	
@@ -1894,7 +1898,7 @@ function GroupFighter:ThongBaoBXH(nW)
 						else
 							phe = "Kim"			
 							if tbNpc.camp == 1 then
-								phe = "Tèng"
+								phe = "Tï¿½ng"
 							end
 						end
 					end

@@ -1147,6 +1147,10 @@ function SimCore:OnTimer(tbNpc, rate)
             
         if tbNpc.isFighting == 1 then
             tbNpc.fightingScore = tbNpc.fightingScore + 100
+            -- [FIX] Cap fightingScore to prevent unlimited accumulation
+            if tbNpc.fightingScore > (FIGHTING_SCORE_MAX or 30000) then
+                tbNpc.fightingScore = FIGHTING_SCORE_MAX or 30000
+            end
         end
     end
 
