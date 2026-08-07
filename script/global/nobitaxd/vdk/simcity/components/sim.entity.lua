@@ -58,7 +58,7 @@ function execCreateChar(self, simInstance, tbNpc, isNew, goX32, goY32)
             else
                 name = "Kim"
                 if tbNpc.camp == 1 then
-                    name = "Tèng"
+                    name = "Tï¿½ng"
                 end
             end
             name = name .. " " .. SimCityTongKim.RANKS[tbNpc.rank]
@@ -303,7 +303,11 @@ SimEntity.Citizen = {
 
         -- Is every one dead?
         if (doRespawn == 1 or tbNpc.isDead == 1) then
-            tbNpc.fightingScore = ceil(tbNpc.fightingScore * 0.7)
+            // [FIX] TongKim mode: preserve fightingScore (no death penalty)
+            // Regular ThanhThi mode still loses 30% on death for balance
+            if tbNpc.tongkim ~= 1 then
+                tbNpc.fightingScore = ceil(tbNpc.fightingScore * 0.7)
+            end
             SimCityTongKim:updateRank(tbNpc)
 
 
@@ -389,7 +393,11 @@ SimEntity.KeoXe = {
 
         -- Is every one dead?
         if (doRespawn == 1 or tbNpc.isDead == 1) then
-            tbNpc.fightingScore = ceil(tbNpc.fightingScore * 0.7)
+            // [FIX] TongKim mode: preserve fightingScore (no death penalty)
+            // Regular ThanhThi mode still loses 30% on death for balance
+            if tbNpc.tongkim ~= 1 then
+                tbNpc.fightingScore = ceil(tbNpc.fightingScore * 0.7)
+            end
             SimCityTongKim:updateRank(tbNpc)
 
 

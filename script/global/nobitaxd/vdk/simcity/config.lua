@@ -12,9 +12,10 @@ THANHTHI_MIN_REFILL = 10     -- [FIX] neu so bot con lai tren map < nguong nay t
 TONGKIM_HAUDOANH_MIN_REFILL = 10   -- [FIX] tuong tu THANHTHI_MIN_REFILL nhung cho quan tiep vien Tong Kim/Phong Hoa Lien Thanh (plugins/pchientranh.lua taoHauDoanh)
 THANHTHI_REFILL_INTERVAL_TICKS = 90*18   -- [FIX] chu ky quet dinh ky de bu bot (~90 giay/lan), doc lap voi su kien vao/ra map
 
-RADIUS_FIGHT_PLAYER = 20     -- tam quet+tan cong player 
-RADIUS_FIGHT_NPC = 8         -- tam quet NPC chung quanh va tan cong
-RADIUS_FIGHT_SCAN = 8        -- tam quet dam danh nhau chung quanh de tham gia
+-- [MODIFIED] Increased detection radius for TongKim mode to fight at enemy camps
+RADIUS_FIGHT_PLAYER = 50     -- tam quet+tan cong player (increased from 20)
+RADIUS_FIGHT_NPC = 30        -- tam quet NPC chung quanh va tan cong (increased from 8)
+RADIUS_FIGHT_SCAN = 30       -- tam quet dam danh nhau chung quanh de tham gia (increased from 8)
 
 
 CHANCE_CHAT = 10               -- 10/1000 co hoi noi chuyen moi giay
@@ -42,7 +43,7 @@ PARAM_CHILD_ID = 2                 -- param to store child id
 PARAM_TYPE = 3                     -- param to store type
 REFRESH_RATE = 18                  -- refresh rate
 BOT_VS_BOT = 1                     -- bot ngoai thanh TU tim+danh bot khac camp (BAT KE PK-mode/vi tri player). 0=tat
-BOT_COMBAT_RADIUS = 20             -- tam quet bot combat
+BOT_COMBAT_RADIUS = 50             -- tam quet bot combat (increased from 20 for TongKim)
 
 -- CHILD SIM CITIZEN/KEOXE setup
 DISTANCE_CAN_CONTINUE = 5          -- start next position if within 3 points from destination

@@ -206,19 +206,23 @@ SimMovement.KeoXe = {
         -- Binh thuong
         if (cachNguoiChoi <= DISTANCE_SUPPORT_PLAYER) then
             
-            -- Case 1: someone around is fighting, we join
-            if (tbNpc.CHANCE_JOIN_FIGHT and random(0, tbNpc.CHANCE_JOIN_FIGHT) <= 2) then
+            -- Case 1: Check for NPC enemies FIRST (nearest enemy logic)
+            local foundNpcEnemy = tbNpc.fightSys:IsNpcEnemyAround(simInstance, tbNpc)
+            if foundNpcEnemy > 0 then
+                -- Attack NPC enemy directly (nearest enemy priority)
                 if tbNpc.fightSys:TriggerFightWithNPC(simInstance, tbNpc) == 1 then
                     return 1
                 end
             end
 
-            -- Case 2: some player around is fighting and different camp, we join
+            -- Case 2: Only attack player if NO NPC enemies nearby
+            -- This ensures bots prioritize attacking nearest enemy (NPC) over players
             local myLife = NPCINFO_GetNpcCurrentLife(tbNpc.finalIndex)
             local maxLife = NPCINFO_GetNpcCurrentMaxLife(tbNpc.finalIndex)
 
-            if ((tbNpc.CHANCE_ATTACK_PLAYER and random(0, tbNpc.CHANCE_ATTACK_PLAYER) <= 2) or (myLife < maxLife))
-            then
+            if (foundNpcEnemy == 0 and 
+                tbNpc.CHANCE_ATTACK_PLAYER and 
+                random(0, tbNpc.CHANCE_ATTACK_PLAYER) <= 2) then
                 if tbNpc.fightSys:TriggerFightWithPlayer(simInstance, tbNpc) == 1 then
                     return 1
                 end

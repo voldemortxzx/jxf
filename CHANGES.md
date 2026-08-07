@@ -93,3 +93,58 @@ Added missing configuration variables for SimBot healing and stuck detection:
 - `SIMBOT_STUCK_ENABLED` - Enable stuck detection
 - `SIMBOT_STUCK_CHECK_TICKS` - Check interval for stuck bots
 - `SIMBOT_STUCK_MAX_RETRIES` - Maximum position reset attempts before respawn
+
+### Configuration Changes
+
+#### Detection Radius Increases (for TongKim mode)
+Modified `config.lua` to increase bot detection ranges so they can find enemies at enemy camps:
+
+- `RADIUS_FIGHT_PLAYER`: 20 → 50 (player detection radius)
+- `RADIUS_FIGHT_NPC`: 8 → 30 (NPC detection radius)
+- `RADIUS_FIGHT_SCAN`: 8 → 30 (fight scan radius)
+- `BOT_COMBAT_RADIUS`: 20 → 50 (bot combat scan radius)
+
+These changes allow bots to:
+- Detect enemies from much further away
+- Move toward enemy camps instead of just fighting in the middle
+- Engage in combat at the enemy territory
+
+### Critical Fix: Nearest Enemy Priority
+
+#### Problem
+Bots were still prioritizing attacking players over nearby NPC enemies, even after the nearest enemy targeting changes in `sim.fight.lua`.
+
+#### Root Cause
+In `sim.movement.lua`, the combat trigger logic had two independent checks:
+1. `CHANCE_JOIN_FIGHT` → triggers `TriggerFightWithNPC` (attacks NPC)
+2. `CHANCE_ATTACK_PLAYER` → triggers `TriggerFightWithPlayer` (attacks player)
+
+Both checks could pass simultaneously, causing bots to attack players even when closer NPC enemies were nearby.
+
+#### Solution
+Modified `sim.movement.lua` to check for NPC enemies **FIRST** before considering player attacks:
+
+```lua
+-- Check for NPC enemies FIRST (nearest enemy logic)
+local foundNpcEnemy = tbNpc.fightSys:IsNpcEnemyAround(simInstance, tbNpc)
+if foundNpcEnemy > 0 then
+    -- Attack NPC enemy directly (nearest enemy priority)
+    if tbNpc.fightSys:TriggerFightWithNPC(simInstance, tbNpc) == 1 then
+        return 1
+    end
+end
+
+-- Only attack player if NO NPC enemies nearby
+if (foundNpcEnemy == 0 and 
+    tbNpc.CHANCE_ATTACK_PLAYER and 
+    random(0, tbNpc.CHANCE_ATTACK_PLAYER) <= 2) then
+    if tbNpc.fightSys:TriggerFightWithPlayer(simInstance, tbNpc) == 1 then
+        return 1
+    end
+end
+```
+
+#### Result
+- Bots now **always prioritize attacking nearest NPC enemy** over players
+- Player attacks only occur when **no NPC enemies are nearby**
+- Nearest enemy targeting now works correctly end-to-end
