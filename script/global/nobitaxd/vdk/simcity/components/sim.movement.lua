@@ -146,12 +146,14 @@ SimMovement.KeoXe = {
             tbNpc.chaseN = (tbNpc.chaseN or 0) + 1
             if tbNpc.chaseN >= 10 then
                 tbNpc.chaseN = 0
-                local _e = tbNpc.fightSys:IsNpcEnemyAround(simInstance, tbNpc)
+                -- Get current position FIRST (FIX: was missing, causing _mx/_my to be nil)
+                local _mx, _my = GetNpcPos(tbNpc.finalIndex)
                 local _tx, _ty
                 local _nearestEnemyType = nil
                 local _nearestDist = 9999
                 
                 -- Check NPC enemy distance
+                local _e = tbNpc.fightSys:IsNpcEnemyAround(simInstance, tbNpc)
                 if _e and _e > 0 then
                     local _ex, _ey = GetNpcPos(_e)
                     _tx = floor(_ex/32)
@@ -176,7 +178,6 @@ SimMovement.KeoXe = {
                 
                 -- Chase the nearest enemy
                 if _tx then
-                    local _mx, _my = GetNpcPos(tbNpc.finalIndex)
                     if GetDistanceRadius(floor(_mx/32), floor(_my/32), _tx, _ty) > 2 then NpcRun(tbNpc.finalIndex, _tx, _ty) end
                 end
             end
@@ -811,12 +812,14 @@ SimMovement.Citizen = {
             tbNpc.chaseN = (tbNpc.chaseN or 0) + 1
             if tbNpc.chaseN >= 10 then
                 tbNpc.chaseN = 0
-                local _e = tbNpc.fightSys:IsNpcEnemyAround(simInstance, tbNpc)
+                -- Get current position FIRST (FIX: was missing, causing _mx/_my to be nil)
+                local _mx, _my = GetNpcPos(tbNpc.finalIndex)
                 local _tx, _ty
                 local _nearestEnemyType = nil
                 local _nearestDist = 9999
                 
                 -- Check NPC enemy distance
+                local _e = tbNpc.fightSys:IsNpcEnemyAround(simInstance, tbNpc)
                 if _e and _e > 0 then
                     local _ex, _ey = GetNpcPos(_e)
                     _tx = floor(_ex/32)
@@ -841,7 +844,6 @@ SimMovement.Citizen = {
                 
                 -- Chase the nearest enemy
                 if _tx then
-                    local _mx, _my = GetNpcPos(tbNpc.finalIndex)
                     if GetDistanceRadius(floor(_mx/32), floor(_my/32), _tx, _ty) > 2 then NpcRun(tbNpc.finalIndex, _tx, _ty) end
                 end
             end
@@ -1301,12 +1303,14 @@ SimMovement.FormationChild = {
             tbNpc.chaseN = (tbNpc.chaseN or 0) + 1
             if tbNpc.chaseN >= 10 then
                 tbNpc.chaseN = 0
-                local _e = tbNpc.fightSys:IsNpcEnemyAround(simInstance, tbNpc)
+                -- Get current position FIRST (FIX: was missing, causing _mx/_my to be nil)
+                local _mx, _my = GetNpcPos(tbNpc.finalIndex)
                 local _tx, _ty
                 local _nearestEnemyType = nil
                 local _nearestDist = 9999
                 
                 -- Check NPC enemy distance
+                local _e = tbNpc.fightSys:IsNpcEnemyAround(simInstance, tbNpc)
                 if _e and _e > 0 then
                     local _ex, _ey = GetNpcPos(_e)
                     _tx = floor(_ex/32)
@@ -1331,7 +1335,6 @@ SimMovement.FormationChild = {
                 
                 -- Chase the nearest enemy
                 if _tx then
-                    local _mx, _my = GetNpcPos(tbNpc.finalIndex)
                     if GetDistanceRadius(floor(_mx/32), floor(_my/32), _tx, _ty) > 2 then NpcRun(tbNpc.finalIndex, _tx, _ty) end
                 end
             end

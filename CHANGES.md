@@ -3,7 +3,9 @@
 ## TongKim Bot Respawn and Combat Fix (2026-08-07)
 
 ### Issue
-TongKim mode bots were not respawning after death. After dying, bots would not move or fight anymore. Additionally, bots were not attacking NPC enemies after the nearest enemy logic change.
+TongKim mode bots were not respawning after death. After dying, bots would not move or fight anymore. Additionally, bots were not attacking NPC enemies after the nearest enemy logic change. Server errors occurred:
+- `error: attempt to call field 'SweepStaleGhosts' (a nil value)`
+- `error: attempt to perform arithmetic on global '_mx' (a nil value)`
 
 ### Root Causes
 1. **Missing RetrySpawn function**: The `Respawn` function in `sim.entity.lua` was calling `SimCore:RetrySpawn` to handle failed spawns, but this function didn't exist in the codebase.
@@ -11,6 +13,10 @@ TongKim mode bots were not respawning after death. After dying, bots would not m
 2. **Typo in RetrySpawn**: The `RetrySpawn` function had a typo `tbNpc.lastPos.nY2` instead of `tbNpc.lastPos.nY32`, causing incorrect respawn positions.
 
 3. **isPlayerFighting check blocking NPC combat**: The `TriggerFightWithNPC` function had a condition `if tbNpc.isPlayerFighting == 0` that prevented it from triggering unless the bot was already in player fighting mode. This blocked the nearest enemy targeting logic from working.
+
+4. **Missing SweepStaleGhosts function**: The `main.lua` file was calling `SimCitizen:SweepStaleGhosts()` and `SimTheoSau:SweepStaleGhosts()` but these functions didn't exist.
+
+5. **_mx/_my variable scope bug**: In `sim.movement.lua`, the chase logic was using `_mx` and `_my` variables before they were defined, causing arithmetic errors.
 
 ### Solutions
 
@@ -29,15 +35,25 @@ Changed `tbNpc.lastPos.nY2` to `tbNpc.lastPos.nY32` on line 237 of `sim.core.lua
 #### Fix 3: Removed isPlayerFighting check from TriggerFightWithNPC
 Removed the `if tbNpc.isPlayerFighting == 0` check from both `TriggerFightWithNPC` functions (in `SimFight.Citizen` and `SimFight.KeoXe`) to allow bots to attack NPC enemies directly without requiring player fighting mode first.
 
+#### Fix 4: Added SweepStaleGhosts function
+Added the `SimCore:SweepStaleGhosts` function to `sim.core.lua` to cleanup stale ghost fighters that have no finalIndex and are in a broken state.
+
+#### Fix 5: Fixed _mx/_my variable scope bug
+In `sim.movement.lua`, moved the `GetNpcPos(tbNpc.finalIndex)` call to BEFORE the distance calculations, so `_mx` and `_my` are defined before being used.
+
 ### Files Modified
 - `script/global/nobitaxd/vdk/simcity/components/sim.core.lua`
   - Added `SimCore:RetrySpawn` function
   - Added retry spawn check at the beginning of `SimCore:OnTimer`
   - Fixed typo: `nY2` → `nY32`
+  - Added `SimCore:SweepStaleGhosts` function
 
 - `script/global/nobitaxd/vdk/simcity/components/sim.fight.lua`
   - Removed `isPlayerFighting` check from `SimFight.Citizen:TriggerFightWithNPC`
   - Removed `isPlayerFighting` check from `SimFight.KeoXe:TriggerFightWithNPC`
+
+- `script/global/nobitaxd/vdk/simcity/components/sim.movement.lua`
+  - Fixed variable scope bug: moved `GetNpcPos(tbNpc.finalIndex)` call before distance calculations
 
 ### Configuration
 - `SIMBOT_RESPAWN_RETRY_TICKS` - Time between spawn retry attempts (~5 seconds)

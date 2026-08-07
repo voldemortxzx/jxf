@@ -1075,3 +1075,14 @@ function SimCore:ATick(rate)
     end 
     self.currentProcessGroup = self.currentProcessGroup == 1 and 2 or 1
 end
+
+-- [NEW FEATURE] SweepStaleGhosts - cleanup stale ghost fighters
+-- This function removes fighters that have no finalIndex and are in a broken state
+function SimCore:SweepStaleGhosts()
+    for nListId, tbNpc in self.fighterList do
+        if tbNpc and tbNpc.finalIndex == nil and tbNpc.isDead == 1 then
+            -- This is a stale ghost, remove it
+            self:Remove(nListId)
+        end
+    end
+end
