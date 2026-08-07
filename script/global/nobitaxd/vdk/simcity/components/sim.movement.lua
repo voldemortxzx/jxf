@@ -269,7 +269,7 @@ SimMovement.KeoXe = {
                 -- [IMPROVED] Bot actively hunts enemies instead of just wandering randomly
                 -- Check for nearby enemies first
                 local foundEnemy = 0
-                if tbNpc.fightSys and tbNpc.fightSys:IsNpcEnemyAround then
+                if tbNpc.fightSys and tbNpc.fightSys:IsNpcEnemyAround(simInstance, tbNpc) then
                     foundEnemy = tbNpc.fightSys:IsNpcEnemyAround(simInstance, tbNpc)
                 end
                 
