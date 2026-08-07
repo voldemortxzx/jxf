@@ -160,6 +160,26 @@ function SimCore:initCharConfig(config)
     end
 
     -- Setup movement behavior - direct assignment (factory functions are redundant)
+    if not SimMovement then
+        SimMovement = {}
+        -- Create fallback Citizen movement behavior
+        SimMovement.Citizen = {
+            IsActive = function(self, simInstance, tbNpc)
+                tbNpc.isActive = 1
+                return 1
+            end,
+            Move = function(self, simInstance, tbNpc)
+                -- Basic movement - bot stays in place
+                return 0
+            end,
+            MoveInactive = function(self, simInstance, tbNpc)
+                -- Basic inactive movement - bot stays in place
+                return 0
+            end
+        }
+        SimMovement.KeoXe = SimMovement.Citizen
+        SimMovement.FormationChild = SimMovement.Citizen
+    end
     if SimMovement then
         if config.role == "keoxe" then
             config.movementSys = SimMovement.KeoXe
@@ -171,6 +191,18 @@ function SimCore:initCharConfig(config)
     end
 
     -- Setup fun behavior - direct assignment (factory functions are redundant)
+    if not SimFun then
+        SimFun = {}
+        -- Create fallback Citizen fun behavior
+        SimFun.Citizen = {
+            OnCreate = function(self, simInstance, tbNpc) end,
+            OnDelete = function(self, simInstance, tbNpc) end,
+            OnTimer = function(self, simInstance, tbNpc) end,
+            OnTick = function(self, simInstance, tbNpc) end
+        }
+        SimFun.KeoXe = SimFun.Citizen
+        SimFun.Base = SimFun.Citizen
+    end
     if SimFun then
         if config.role == "citizen" then
             config.funSys = SimFun.Citizen
@@ -182,6 +214,17 @@ function SimCore:initCharConfig(config)
     end
 
     -- Setup entity behavior - direct assignment (factory functions are redundant)
+    if not SimEntity then
+        SimEntity = {}
+        -- Create fallback Citizen entity behavior
+        SimEntity.Citizen = {
+            OnCreate = function(self, simInstance, tbNpc) end,
+            OnDelete = function(self, simInstance, tbNpc) end,
+            OnTimer = function(self, simInstance, tbNpc) end,
+            OnTick = function(self, simInstance, tbNpc) end
+        }
+        SimEntity.KeoXe = SimEntity.Citizen
+    end
     if SimEntity then
         if config.role == "keoxe" then
             config.entitySys = SimEntity.KeoXe
@@ -191,6 +234,21 @@ function SimCore:initCharConfig(config)
     end
 
     -- Setup fight behavior - direct assignment (factory functions are redundant)
+    if not SimFight then
+        SimFight = {}
+        -- Create fallback Citizen fight behavior
+        SimFight.Citizen = {
+            IsActive = function(self, simInstance, tbNpc) return 0 end,
+            IsNpcEnemyAround = function(self, simInstance, tbNpc) return 0 end,
+            IsPlayerEnemyAround = function(self, simInstance, tbNpc) return 0 end,
+            Attack = function(self, simInstance, tbNpc) end,
+            OnCreate = function(self, simInstance, tbNpc) end,
+            OnDelete = function(self, simInstance, tbNpc) end,
+            OnTimer = function(self, simInstance, tbNpc) end,
+            OnTick = function(self, simInstance, tbNpc) end
+        }
+        SimFight.KeoXe = SimFight.Citizen
+    end
     if SimFight then
         if config.role == "keoxe" then
             config.fightSys = SimFight.KeoXe
