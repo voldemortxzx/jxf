@@ -1151,7 +1151,7 @@ SimMovement.Citizen = {
         if self:HasArrived(simInstance, tbNpc) == 1 then
             -- Check for nearby enemies first (more proactive hunting)
             local foundEnemy = 0
-            if tbNpc.fightSys and tbNpc.fightSys:IsNpcEnemyAround then
+            if tbNpc.fightSys and tbNpc.fightSys:IsNpcEnemyAround(simInstance, tbNpc) then
                 foundEnemy = tbNpc.fightSys:IsNpcEnemyAround(simInstance, tbNpc)
             end
             
