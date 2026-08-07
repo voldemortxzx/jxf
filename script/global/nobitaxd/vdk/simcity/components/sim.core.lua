@@ -204,6 +204,63 @@ function SimCore:OnDeath(nListId, nNpcIndex, attackerIndex)
     tbNpc.entitySys:OnDeath(self, tbNpc, nNpcIndex, attackerIndex)    
 end
 
+-- [FIX] RetrySpawn function to handle bot respawn retries after death
+-- This function is called from OnTimer when a bot's spawn fails
+function SimCore:RetrySpawn(tbNpc)
+    if tbNpc == nil then
+        return 0
+    end
+    
+    -- Check if we've exceeded max retries
+    if tbNpc.spawnRetryCount >= (SIMBOT_RESPAWN_MAX_RETRIES or 3) then
+        -- Max retries exceeded, remove the bot from the system
+        self:Remove(tbNpc.id)
+        return 0
+    end
+    
+    -- Try to respawn the bot
+    local nListId = tbNpc.id
+    local nX32, nY32, nMapIndex = GetNpcPos(tbNpc.finalIndex)
+    
+    -- Get respawn position
+    local isAllDead = 1
+    local nRespawnX32, nRespawnY32 = 0, 0
+    
+    if isAllDead == 1 and tbNpc.role == "child" then
+        nRespawnX32 = tbNpc.parentAppointPos[1]*32
+        nRespawnY32 = tbNpc.parentAppointPos[2]*32
+    elseif (isAllDead == 1 and tbNpc.resetPosWhenRevive and tbNpc.resetPosWhenRevive == 1) then
+        tbNpc.movementSys:resetPos(self, nListId)
+        nRespawnX32 = 0
+        nRespawnY32 = 0
+    elseif (isAllDead == 1 and tbNpc.lastPos ~= nil) then
+        nRespawnX32 = tbNpc.lastPos.nX32
+        nRespawnY32 = tbNpc.lastPos.nY2
+    else
+        nRespawnX32 = nX32
+        nRespawnY32 = nY32
+        tbNpc.lastPos = {
+            nX32 = nX32,
+            nY32 = nY32
+        }
+    end
+    
+    -- Delete old NPC and try to create new one
+    if tbNpc.finalIndex and tbNpc.finalIndex > 0 then
+        DelNpcSafe(tbNpc.finalIndex)
+        tbNpc.finalIndex = nil
+    end
+    
+    -- Try to create the bot again
+    local _created = tbNpc.entitySys:CreateChar(self, tbNpc, 0, nRespawnX32, nRespawnY32)
+    if not _created or _created == 0 then
+        -- Failed again, schedule another retry
+        tbNpc.spawnRetryCount = (tbNpc.spawnRetryCount or 0) + 1
+        tbNpc.spawnRetryTick = (tbNpc.tick_breath or 0) + (SIMBOT_RESPAWN_RETRY_TICKS or 5*18/REFRESH_RATE)
+    end
+    
+    return _created or 0
+end
 
 SIMBOT_MELEE_SKILLS = {[318]=1,[319]=1,[322]=1,[323]=1,[325]=1,[361]=1,[368]=1}
 SIMBOT_DISMOUNT_SKILLS = {[318]=1,[319]=1,[323]=1,[325]=1,[328]=1,[380]=1,[336]=1,[337]=1,[339]=1,[342]=1,[351]=1,[353]=1,[357]=1,[359]=1,[362]=1,[365]=1,[368]=1,[372]=1,[375]=1}
@@ -683,6 +740,11 @@ function SimBotDuelMove(simInstance, tbNpc)
 end
 
 function SimCore:OnTimer(tbNpc, rate)
+    -- [FIX] Check if bot needs to retry spawn after death
+    if tbNpc.spawnRetryTick and tbNpc.spawnRetryTick <= (tbNpc.tick_breath or 0) then
+        self:RetrySpawn(tbNpc)
+        return 0
+    end
   
     if (tbNpc.bangKeoxe and SetNpcBang and tbNpc.isDead ~= 1 and tbNpc.finalIndex and tbNpc.finalIndex > 0) then
         tbNpc.bangBcN = (tbNpc.bangBcN or 0) + 1
@@ -1012,4 +1074,4 @@ function SimCore:ATick(rate)
         end
     end 
     self.currentProcessGroup = self.currentProcessGroup == 1 and 2 or 1
-end 
+end
