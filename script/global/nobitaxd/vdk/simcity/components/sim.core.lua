@@ -163,12 +163,66 @@ function SimCore:initCharConfig(config)
         config.nSettingsIdx = (random(1,2) == 1) and -1 or -2
     end
 
-    -- Setup movement behavior    
-    config.movementSys = SimMovementSys(config)
-    config.funSys = SimFunSys(config)
-    config.entitySys = SimEntitySys(config)
-    config.fightSys = SimFightSys(config)
+    -- Setup movement behavior
+    -- [FIX] Guard against SimXxxSys global factory being unavailable at this point
+    -- (seen intermittently as "attempt to call global 'SimMovementSys' (a nil value)").
+    -- Fall back to picking the behavior table directly by role so bot creation
+    -- never hard-crashes here, and log which one was missing for diagnosis.
+    if type(SimMovementSys) == "function" then
+        config.movementSys = SimMovementSys(config)
+    else
+        if print then print("[SimCore] WARNING: SimMovementSys is nil, using direct fallback for role=" .. tostring(config.role)) end
+        if SimMovement then
+            if config.role == "keoxe" then
+                config.movementSys = SimMovement.KeoXe
+            elseif config.role == "child" then
+                config.movementSys = SimMovement.FormationChild
+            else
+                config.movementSys = SimMovement.Citizen
+            end
+        end
+    end
 
+    if type(SimFunSys) == "function" then
+        config.funSys = SimFunSys(config)
+    else
+        if print then print("[SimCore] WARNING: SimFunSys is nil, using direct fallback for role=" .. tostring(config.role)) end
+        if SimFun then
+            if config.role == "citizen" then
+                config.funSys = SimFun.Citizen
+            elseif config.role == "keoxe" then
+                config.funSys = SimFun.KeoXe
+            else
+                config.funSys = SimFun.Base
+            end
+        end
+    end
+
+    if type(SimEntitySys) == "function" then
+        config.entitySys = SimEntitySys(config)
+    else
+        if print then print("[SimCore] WARNING: SimEntitySys is nil, using direct fallback for role=" .. tostring(config.role)) end
+        if SimEntity then
+            if config.role == "keoxe" then
+                config.entitySys = SimEntity.KeoXe
+            else
+                config.entitySys = SimEntity.Citizen
+            end
+        end
+    end
+
+    if type(SimFightSys) == "function" then
+        config.fightSys = SimFightSys(config)
+    else
+        if print then print("[SimCore] WARNING: SimFightSys is nil, using direct fallback for role=" .. tostring(config.role)) end
+        if SimFight then
+            if config.role == "keoxe" then
+                config.fightSys = SimFight.KeoXe
+            else
+                config.fightSys = SimFight.Citizen
+            end
+        end
+    end
 
 end
 

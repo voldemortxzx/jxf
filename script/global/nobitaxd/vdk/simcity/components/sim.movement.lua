@@ -1575,3 +1575,4 @@ function SimMovementSys(tbNpc)
     end
     return SimMovement.Citizen
 end
+end
