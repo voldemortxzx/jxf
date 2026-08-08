@@ -221,7 +221,7 @@ function GroupFighter:_addNpcGo(tbNpc, isNew, goX, goY)
 			else
 				name = "Kim"			
 				if tbNpc.camp == 1 then
-					name = "T�ng"
+					name = "Tèng"
 				end
 			end
 			name = name .." "..SimCityTongKim.RANKS[tbNpc.rank]
@@ -1407,7 +1407,7 @@ function GroupFighter:_check_full_death(nListId)
 		if tbNpc.playerID == 0 then
 			local worldInfo = SimCityWorld:Get(nW)
 			if tbNpc.children and worldInfo.showFightingArea == 1 then
-				Msg2Map(nW, "<color=white>"..tbNpc.szName.."<color> to�n �o�n b�i tr�n <color=yellow>"..floor(lastPos[1]/8).." "..floor(lastPos[2]/16).."<color>")
+				Msg2Map(nW, "<color=white>"..tbNpc.szName.."<color> toµn ®oµn b¹i trËn <color=yellow>"..floor(lastPos[1]/8).." "..floor(lastPos[2]/16).."<color>")
 			end
 		end
 
@@ -1674,7 +1674,7 @@ function GroupFighter:_doParentTick(nListId)
 
 
 			if tbNpc.playerID == 0 and countFighting > 0 and worldInfo.showFightingArea == 1 then 
-				Msg2Map(nW, "C� "..countFighting.." nh�n s� �ang ��nh nhau t�i "..worldInfo.name.." <color=yellow>"..floor(myPosX/8).." "..floor(myPosY/16).."<color>")
+				Msg2Map(nW, "Cã "..countFighting.." nh©n sÜ ®ang ®¸nh nhau t¹i "..worldInfo.name.." <color=yellow>"..floor(myPosX/8).." "..floor(myPosY/16).."<color>")
 			end
 
 			if (countFighting > 0) then
@@ -1879,7 +1879,7 @@ function GroupFighter:ThongBaoBXH(nW)
 		local swIdx = SubWorldID2Idx(nW)
 		if BotLadderClear then BotLadderClear(swIdx) end
 		
-		Msg2Map(nW, "<color=yellow>========= B�ng X�p H�ng =========<color>")
+		Msg2Map(nW, "<color=yellow>========= B¶ng XÕp H¹ng =========<color>")
 		Msg2Map(nW, "<color=yellow>=================================<color>")
 
 		for j = 1, maxIndex do	
@@ -1898,12 +1898,12 @@ function GroupFighter:ThongBaoBXH(nW)
 						else
 							phe = "Kim"			
 							if tbNpc.camp == 1 then
-								phe = "T�ng"
+								phe = "Tèng"
 							end
 						end
 					end
 
-					if phe == "Kim" then
+				if phe == "Kim" then
 						phe = "K"
 					else
 						phe = "T"
