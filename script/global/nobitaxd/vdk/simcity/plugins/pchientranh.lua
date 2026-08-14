@@ -690,6 +690,43 @@ function SimCityChienTranh:caidat()
 	return 1
 end
 
+-- [DEBUG] liet ke top bot Tong Kim theo diem, kem trang thai isFighting/duel-lock/dich gan de
+-- tra loi truc tiep "vi sao diem bot X khong tang nua" ma khong can xem log server.
+function SimCityChienTranh:debugTongKimStatus()
+	local nW = self.nW
+	local rows = {}
+	for k, v in SimCitizen.fighterList do
+		if v.nMapId == nW and v.tongkim == 1 and v.role ~= "child" then
+			tinsert(rows, { k, v.fightingScore or 0 })
+		end
+	end
+
+	if getn(rows) == 0 then
+		Msg2Map(nW, "<color=yellow>Khong co bot Tong Kim nao tren ban do nay<color>")
+		return 1
+	end
+
+	sort(rows, _sortByScore)
+
+	Msg2Map(nW, "<color=yellow>===== DEBUG bot Tong Kim (toi da 15, sap theo diem) =====<color>")
+	local shown = getn(rows)
+	if shown > 15 then shown = 15 end
+	for i = 1, shown do
+		local v = SimCitizen.fighterList[rows[i][1]]
+		if v then
+			local campTxt = (v.camp == 1) and "Tong" or "Kim"
+			local fightState = (v.isFighting == 1) and "DANG DANH" or "KHONG DANH"
+			local lockTxt = v.duelPlayerId and " [KHOA DUEL PLAYER]" or ""
+			local npcE = (v.finalIndex and v.finalIndex > 0 and v.fightSys) and v.fightSys:IsNpcEnemyAround(SimCitizen, v) or 0
+			local playerETxt = (v.isPlayerEnemyAround and v.isPlayerEnemyAround > 0) and "co" or "khong"
+			Msg2Map(nW, i .. ". [" .. campTxt .. "] " .. (v.hardsetName or SimCityNPCInfo:getName(v.nNpcId)) ..
+				" - diem:" .. (v.fightingScore or 0) .. " - " .. fightState .. lockTxt ..
+				" - dichNPCgan:" .. tostring(npcE > 0) .. " - dichPlayerGan:" .. playerETxt)
+		end
+	end
+	return 1
+end
+
 function SimCityChienTranh:mainMenu()
 	local worldInfo = SimCityWorld:Get(self.nW)
 	local result = SimCityGraphToChienTranh:build(worldInfo, 32)
@@ -718,6 +755,7 @@ function SimCityChienTranh:mainMenu()
 		-- [NEW] GM co the tu kich hoat ngay viec cat bot du/bu thieu ve dung TONGKIM_MAX_BOTS_PER_SIDE,
 		-- khong can doi player khac vao map moi kich hoat qua onPlayerEnterMap.
 		tinsert(tbSay, "Can bang so luong bot Tong Kim (20/ben)/#SimCityChienTranh:taoHauDoanh(1)")
+		tinsert(tbSay, "Debug trang thai diem bot Tong Kim/#SimCityChienTranh:debugTongKimStatus()")
 	end
 
 	tinsert(tbSay, "Ph�t anh h�ng thi�p/#SimCityChienTranh:goiAnhHungThiepNgoaiTrang()")

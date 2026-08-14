@@ -881,7 +881,12 @@ function SimCore:OnTimer(tbNpc, rate)
             if _cur then
                 if tbNpc.prevHP and _cur < tbNpc.prevHP then
                     tbNpc.selfDefTick = tbNpc.tick_breath + 20*18/REFRESH_RATE                       
-                    if not tbNpc.duelPlayerId and not tbNpc.partyPlayerId and GetNpcLastAttacker and NpcIdx2PIdx then                        
+                    -- [FIX] bot Tong Kim khong khoa duel doc quyen voi player tan cong minh -- truoc day
+                    -- BAT KY bot nao bi player danh trung deu bi "khoa" chi danh player do qua SimDuelMove
+                    -- (bo qua toan bo logic "dich gan nhat") toi ~120 tick (~2 phut/lan). Day chinh la ly do
+                    -- "1 so bot chi focus vao player ma bo qua bot gan no": van giu selfDefTick (aggro binh
+                    -- thuong qua isPlayerEnemyAround) nhung KHONG ep vao che do duel rieng cho player.
+                    if not tbNpc.duelPlayerId and not tbNpc.partyPlayerId and tbNpc.tongkim ~= 1 and GetNpcLastAttacker and NpcIdx2PIdx then                        
                         local _atk = GetNpcLastAttacker(tbNpc.finalIndex)
                         if _atk and _atk > 0 then
                             local _ap = NpcIdx2PIdx(_atk)
