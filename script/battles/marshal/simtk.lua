@@ -6,7 +6,14 @@ function simTK:markWarStarted(idMap)
 	local wi = SimCityWorld:Get(idMap)
 	if wi then
 		wi.tkWarStarted = 1; wi.tkMarshal = nil
-		wi.tkMFB = nil			
+		wi.tkMFB = nil
+		-- [FIX] worldInfo.allowFighting chua bao gio duoc bat cho ban do Tong Kim cua he thong
+		-- marshal (pworld.lua modifyTongKimMap khong set, SimCityChienTranh:init cung khong set).
+		-- SimCityCanFight() (libs/common.lua) doi hoi allowFighting==1 (hoac cityPeace==1) sau khi
+		-- qua ai tkWarStarted check -> thieu dong nay khien bot KHONG THE tu do giao chien voi nhau,
+		-- chi danh duoc qua self-def/player gan -> diem tich luy dung lai som (~7500) vi da so bot
+		-- khong bao gio vao duoc trang thai isFighting qua co che chu dong tim dich.
+		wi.allowFighting = 1
 		if BT_GetBattleParam and getNpcInfo and SetMissionV then
 			for _ri = 1, 6 do
 				local t1, l1 = getNpcInfo(BT_GetBattleParam(_ri))

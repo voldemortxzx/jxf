@@ -1,34 +1,34 @@
 IncludeLib("BATTLE");
 Include("\\script\\battles\\battlehead.lua")
 Include("\\script\\battles\\marshal\\head.lua")
-Include("\\script\\event\\jiefang_jieri\\200904\\qianqiu_yinglie\\sj_announce.lua")		-- ½â·Å»î¶¯Ö®Ç§ÇïÓ¢ÁÒ
+Include("\\script\\event\\jiefang_jieri\\200904\\qianqiu_yinglie\\sj_announce.lua")		-- ï¿½ï¿½Å»î¶¯Ö®Ç§ï¿½ï¿½Ó¢ï¿½ï¿½
 Include("\\script\\missions\\basemission\\lib.lua")
 Include("\\script\\battles\\songjingtetan_position.lua")
 Include("\\script\\activitysys\\config\\32\\talkdailytask.lua")
 Include("\\script\\battles\\marshal\\simTK.lua")
-tbIndex = {}	-- Ñ¡ÖÐµÄ×ø±êµÄIndex
-tbPoint = {}	-- µ±Ç°±»Ñ¡ÔñµÄ×ø±ê¼¯ºÏ
+tbIndex = {}	-- Ñ¡ï¿½Ðµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Index
+tbPoint = {}	-- ï¿½ï¿½Ç°ï¿½ï¿½Ñ¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ê¼¯ï¿½ï¿½
 tbNpc = 
 {
 	[1] = 
 	{
 		nNpcId = 1685,  --npc Id
-		nLevel = 95,		-- µÈ¼¶
---		nSeries = 1,		-- ÎåÐÐ
-		bNoRevive = 1,			-- ²»ÖØÉú
-		szName = "§Æc Th¸m",		-- Ãû×Ö
+		nLevel = 95,		-- ï¿½È¼ï¿½
+--		nSeries = 1,		-- ï¿½ï¿½ï¿½ï¿½
+		bNoRevive = 1,			-- ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+		szName = "ï¿½ï¿½c Thï¿½m",		-- ï¿½ï¿½ï¿½ï¿½
 		nIsboss = 1,
-		nCurCamp = 1,	--ÕóÓª 1ËÎ 2½ð
+		nCurCamp = 1,	--ï¿½ï¿½Óª 1ï¿½ï¿½ 2ï¿½ï¿½
 	},
 	[2] = 
 	{
 		nNpcId = 1686,  --npc Id
-		nLevel = 95,		-- µÈ¼¶
---		nSeries = 1,		-- ÎåÐÐ
-		bNoRevive = 1,			-- ²»ÖØÉú
-		szName = "§Æc Th¸m",		-- Ãû×Ö
+		nLevel = 95,		-- ï¿½È¼ï¿½
+--		nSeries = 1,		-- ï¿½ï¿½ï¿½ï¿½
+		bNoRevive = 1,			-- ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+		szName = "ï¿½ï¿½c Thï¿½m",		-- ï¿½ï¿½ï¿½ï¿½
 		nIsboss = 1,
-		nCurCamp = 2,	--ÕóÓª 1ËÎ 2½ð
+		nCurCamp = 2,	--ï¿½ï¿½Óª 1ï¿½ï¿½ 2ï¿½ï¿½
 	}
 }  
 
@@ -52,7 +52,7 @@ end
 function AddTeTan(nNowTimeCount)
 	if tbAppearTime[nNowTimeCount - RUNGAME_TIME] == 1 then
 		local nrandomCount = 0
-		-- ÅÐ¶¨µ±Ç°µØÍ¼µÄId
+		-- ï¿½Ð¶ï¿½ï¿½ï¿½Ç°ï¿½ï¿½Í¼ï¿½ï¿½Id
 		local nNowMapId = BT_GetGameData(GAME_MAPID)
 		if nNowMapId == 380 then
 			tbPoint = tbPoint_map380
@@ -63,51 +63,51 @@ function AddTeTan(nNowTimeCount)
 		else
 			return
 		end
-		s_area = BT_GetGameData(GAME_CAMP1AREA) 	-- GAME_CAMP1AREA ËÎ GAME_CAMP1AREA ½ð
+		s_area = BT_GetGameData(GAME_CAMP1AREA) 	-- GAME_CAMP1AREA ï¿½ï¿½ GAME_CAMP1AREA ï¿½ï¿½
 		j_area = BT_GetGameData(GAME_CAMP2AREA)
 		
-		Msg2MSAll(MISSIONID, "§Æc Th¸m míi ®· tiÕn vµo chiÕn tr­êng råi, mäi ng­êi nhanh chãng hµnh ®éng!");
+		Msg2MSAll(MISSIONID, "ï¿½ï¿½c Thï¿½m mï¿½i ï¿½ï¿½ tiï¿½n vï¿½o chiï¿½n trï¿½ï¿½ng rï¿½i, mï¿½i ngï¿½ï¿½i nhanh chï¿½ng hï¿½nh ï¿½ï¿½ng!");
 		
 		SelectPosition(nrandomCount)
 		local tbPosition_s = tbPoint[s_area]
 		local tbPosition_j = tbPoint[j_area]
 		for i=1,4 do
 			local nIndex = tbIndex[i]
-			tbNpc.szName = "§Æc Th¸m"
+			tbNpc.szName = "ï¿½ï¿½c Thï¿½m"
 			basemission_CallNpc(tbNpc[1], nNowMapId, tbPosition_s[nIndex].x * 32, tbPosition_s[nIndex].y * 32)
-			local msg = format("T¨ng thªm Tèng Kim §Æc Th¸m: X = %d Y = %d",tbPosition_s[nIndex].x,tbPosition_s[nIndex].y)
+			local msg = format("Tï¿½ng thï¿½m Tï¿½ng Kim ï¿½ï¿½c Thï¿½m: X = %d Y = %d",tbPosition_s[nIndex].x,tbPosition_s[nIndex].y)
 			WriteLog(msg)
-			tbNpc.szName = "§Æc Th¸m"
+			tbNpc.szName = "ï¿½ï¿½c Thï¿½m"
 			basemission_CallNpc(tbNpc[2], nNowMapId, tbPosition_j[nIndex].x * 32, tbPosition_j[nIndex].y * 32)
-			local msg = format("T¨ng thªm Kim §Æc Th¸m : X = %d Y = %d",tbPosition_j[nIndex].x,tbPosition_j[nIndex].y)
+			local msg = format("Tï¿½ng thï¿½m Kim ï¿½ï¿½c Thï¿½m : X = %d Y = %d",tbPosition_j[nIndex].x,tbPosition_j[nIndex].y)
 			WriteLog(msg)
 		end
 	end
 end
 
 function OnTimer()
-	t = GetMissionV(MS_TIMER1) + 1;--¼ÆÊýÆ÷£¬Í³¼Æµ±Ç°¶¨Ê±Æ÷´¥·¢ÁË¶àÉÙ´ÎÁË
+	t = GetMissionV(MS_TIMER1) + 1;--ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í³ï¿½Æµï¿½Ç°ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ë¶ï¿½ï¿½Ù´ï¿½ï¿½ï¿½
 	SetMissionV(MS_TIMER1, t)
 	
-	--Storm ¼Ó½±Àø»ý·Ö
+	--Storm ï¿½Ó½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	local add_time = 60 * FRAME2TIME / TIMER_1
 	storm_addm_mspointex(1, MISSIONID, (t - RUNGAME_TIME) / add_time)
 
 	local lsf_level = BT_GetGameData(GAME_LEVEL)
 	if (lsf_level == 1) then
-		resultstr = "Khu vùc S¬ cÊp "
+		resultstr = "Khu vï¿½c Sï¿½ cï¿½p "
 	elseif (lsf_level == 2) then
-		resultstr = "Khu vùc Trung cÊp "
+		resultstr = "Khu vï¿½c Trung cï¿½p "
 	elseif (lsf_level == 3) then
-		resultstr = "Khu vùc Cao cÊp "
+		resultstr = "Khu vï¿½c Cao cï¿½p "
 	end
 	
-	if (t == RUNGAME_TIME) then --Èç¹ûµ½ÁËÕýÊ½¿ªÕ½Ê±¿Ì£¬ÔòÍ£Ö¹±¨Ãû£¬ÕýÊ½½øÈëÕ½¶·½×¶Î
+	if (t == RUNGAME_TIME) then --ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê½ï¿½ï¿½Õ½Ê±ï¿½Ì£ï¿½ï¿½ï¿½Í£Ö¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê½ï¿½ï¿½ï¿½ï¿½Õ½ï¿½ï¿½ï¿½×¶ï¿½
 		RunMission(MISSIONID)
-		AddGlobalCountNews(resultstr.."Thêi gian b¸o danh Tèng Kim (ph­¬ng thøc b¶o vÖ Nguyªn So¸i) ®· kÕt thóc. ChiÕn ®Êu chÝnh thøc b¾t ®Çu", 2);
-		Msg2MSAll(MISSIONID, "Tèng Kim chÝnh thøc khai chiÕn! C¸c chiÕn sÜ! X«ng lªn!");
+		AddGlobalCountNews(resultstr.."Thï¿½i gian bï¿½o danh Tï¿½ng Kim (phï¿½ï¿½ng thï¿½c bï¿½o vï¿½ Nguyï¿½n Soï¿½i) ï¿½ï¿½ kï¿½t thï¿½c. Chiï¿½n ï¿½ï¿½u chï¿½nh thï¿½c bï¿½t ï¿½ï¿½u", 2);
+		Msg2MSAll(MISSIONID, "Tï¿½ng Kim chï¿½nh thï¿½c khai chiï¿½n! Cï¿½c chiï¿½n sï¿½! Xï¿½ng lï¿½n!");
 		WriteLog("marshal battle is entering fight state. now member count="..GetMSPlayerCount(MISSIONID, 1)..":"..GetMSPlayerCount(MISSIONID, 2))
-		-- ÈÕ³£ÈÎÎñË¢ÐÂ¶Ô»°NPC
+		-- ï¿½Õ³ï¿½ï¿½ï¿½ï¿½ï¿½Ë¢ï¿½Â¶Ô»ï¿½NPC
 		%tbTalkDailyTask:AddTalkNpc(BT_GetGameData(GAME_MAPID), BT_GetGameData(GAME_MAPID));
 	end
 
@@ -115,34 +115,37 @@ function OnTimer()
 		RestTime = (RUNGAME_TIME - t) * TIMER_1 / FRAME2TIME
 		RestMin, RestSec = GetMinAndSec(RestTime);
 		if (RestSec == 0) then
-			str1 = resultstr.."<#>Tèng Kim ®ang trong giai ®o¹n b¸o danh. C¸c hiÖp kh¸ch muèn tham gia h·y nhanh chãng ®Õn T­¬ng D­¬ng hoÆc Chu Tiªn trÊn ®Ó b¸o danh! (hoÆc dïng Tèng Kim Chiªu th­) .Thêi gian b¸o danh cßn l¹i lµ:"..RestMin.." phót. §iÒu kiÖn tham gia: CÊp kh«ng Ýt h¬n 40, phÝ b¸o danh 2 v¹n l­îng. Sau khi khai chiÕn nÕu nh­ vÉn ch­a ®Õn giíi h¹n cao nhÊt th× vÉn cã thÓ b¸o danh vµo tiÕp";
-			str2 = "<#>C¸ch thêi gian khai chiÕn chØ cßn:"..RestMin.."phót"
+			str1 = resultstr.."<#>Tï¿½ng Kim ï¿½ang trong giai ï¿½oï¿½n bï¿½o danh. Cï¿½c hiï¿½p khï¿½ch muï¿½n tham gia hï¿½y nhanh chï¿½ng ï¿½ï¿½n Tï¿½ï¿½ng Dï¿½ï¿½ng hoï¿½c Chu Tiï¿½n trï¿½n ï¿½ï¿½ bï¿½o danh! (hoï¿½c dï¿½ng Tï¿½ng Kim Chiï¿½u thï¿½) .Thï¿½i gian bï¿½o danh cï¿½n lï¿½i lï¿½:"..RestMin.." phï¿½t. ï¿½iï¿½u kiï¿½n tham gia: Cï¿½p khï¿½ng ï¿½t hï¿½n 40, phï¿½ bï¿½o danh 2 vï¿½n lï¿½ï¿½ng. Sau khi khai chiï¿½n nï¿½u nhï¿½ vï¿½n chï¿½a ï¿½ï¿½n giï¿½i hï¿½n cao nhï¿½t thï¿½ vï¿½n cï¿½ thï¿½ bï¿½o danh vï¿½o tiï¿½p";
+			str2 = "<#>Cï¿½ch thï¿½i gian khai chiï¿½n chï¿½ cï¿½n:"..RestMin.."phï¿½t"
 		else
-			str1 = resultstr.."<#>Tèng Kim ®ang trong giai ®o¹n b¸o danh. C¸c hiÖp kh¸ch muèn tham gia h·y nhanh chãng ®Õn T­¬ng D­¬ng hoÆc Chu Tiªn trÊn ®Ó b¸o danh! (hoÆc dïng  Tèng Kim Chiªu th­) .Thêi gian b¸o danh cßn l¹i lµ:"..RestMin.."phót"..RestSec.." gi©y. §iÒu kiÖn tham gia: CÊp kh«ng Ýt h¬n 40, phÝ b¸o danh 2 v¹n l­îng. Sau khi khai chiÕn nÕu nh­ vÉn ch­a ®Õn giíi h¹n cao nhÊt th× vÉn cã thÓ b¸o danh vµo tiÕp";
-			str2 = "<#>C¸ch thêi gian khai chiÕn chØ cßn:"..RestMin.."phót"..RestSec.." gi©y"
+			str1 = resultstr.."<#>Tï¿½ng Kim ï¿½ang trong giai ï¿½oï¿½n bï¿½o danh. Cï¿½c hiï¿½p khï¿½ch muï¿½n tham gia hï¿½y nhanh chï¿½ng ï¿½ï¿½n Tï¿½ï¿½ng Dï¿½ï¿½ng hoï¿½c Chu Tiï¿½n trï¿½n ï¿½ï¿½ bï¿½o danh! (hoï¿½c dï¿½ng  Tï¿½ng Kim Chiï¿½u thï¿½) .Thï¿½i gian bï¿½o danh cï¿½n lï¿½i lï¿½:"..RestMin.."phï¿½t"..RestSec.." giï¿½y. ï¿½iï¿½u kiï¿½n tham gia: Cï¿½p khï¿½ng ï¿½t hï¿½n 40, phï¿½ bï¿½o danh 2 vï¿½n lï¿½ï¿½ng. Sau khi khai chiï¿½n nï¿½u nhï¿½ vï¿½n chï¿½a ï¿½ï¿½n giï¿½i hï¿½n cao nhï¿½t thï¿½ vï¿½n cï¿½ thï¿½ bï¿½o danh vï¿½o tiï¿½p";
+			str2 = "<#>Cï¿½ch thï¿½i gian khai chiï¿½n chï¿½ cï¿½n:"..RestMin.."phï¿½t"..RestSec.." giï¿½y"
 		end
 		AddGlobalCountNews(str1, 2);
-		Msg2MSAll(MISSIONID,str2);		--Í¨Öª³¡ÄÚÍæ¼Ò¿ªÕ½Ê£ÓàÊ±¼ä
+		Msg2MSAll(MISSIONID,str2);		--Í¨Öªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò¿ï¿½Õ½Ê£ï¿½ï¿½Ê±ï¿½ï¿½
 	end
 	
 	-- off dac tham
 	-- (DOI 2026-06-18) SPAWN BOT TRUOC KHAI CHIEN cho dep: 60 giay truoc RUNGAME_TIME.
 	--   Doi so 60 (giay) de bot xuat hien som/muon hon. Spawn qua som -> bot danh nhau truoc khai chien.
-	--   Chi Cao cap (lsf_level==3) nhu cu. == nen chi ban 1 lan dung luc.
-	if (lsf_level == 3 and t == 1) then
+	-- [FIX] truoc day CHI ap dung cho lsf_level==3 (Cao cap) -- So cap/Trung cap khong duoc bot fill
+	-- qua duong nay (co the da duoc bot fill boi 1 nguon khac ngoai workspace nay, vd script/simcity.lua
+	-- goi qua RemoteExc, ma ta khong co quyen truy cap/sua). Bo gioi han cap do de dam bao gioi han
+	-- TONGKIM_MAX_BOTS_PER_SIDE (config.lua) ap dung DONG NHAT cho ca 3 cap do.
+	if (t == 1) then
 		simTK:add_npc_simcity(BT_GetGameData(GAME_MAPID))
 	end
 	--if (t >= RUNGAME_TIME) then
-	--	AddTeTan(t)  -- Ôö¼ÓËÎ½ðÌØÌ½
+	--	AddTeTan(t)  -- ï¿½ï¿½ï¿½ï¿½ï¿½Î½ï¿½ï¿½ï¿½Ì½
 		
-		if (t == RUNGAME_TIME) then --ÕýÊ½¿ªÕ½µÄµÚÒ»´Î´¥·¢Ê±£¬²úÉúÕ½¶·NpcµÄÉú³É¹æÔòÊý¾Ý
+		if (t == RUNGAME_TIME) then --ï¿½ï¿½Ê½ï¿½ï¿½Õ½ï¿½Äµï¿½Ò»ï¿½Î´ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Õ½ï¿½ï¿½Npcï¿½ï¿½ï¿½ï¿½ï¿½É¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 			if lsf_level == 3 then
 				--sf_buildfightnpcdata() --tat NPC trong map TongKim
 				-- elseif lsf_level == 3 then				
 				-- (DOI) simTK:add_npc_simcity da chuyen len block PRE-SPAWN (truoc khai chien) o tren
 			end
 		else
-			--µ½¿ªÕ½ºó°ëÐ¡Ê±¿´Ë«·½×Ü»ý·Ö£¬»ý·ÖÐ¡µÄÒ»·½²úÉúÔªË§
+			--ï¿½ï¿½ï¿½ï¿½Õ½ï¿½ï¿½ï¿½Ð¡Ê±ï¿½ï¿½Ë«ï¿½ï¿½ï¿½Ü»ï¿½ï¿½Ö£ï¿½ï¿½ï¿½ï¿½ï¿½Ð¡ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÔªË§
 			if (t == BOSS_TIME) then
 				if (GetMissionV(MS_TOTALPOINT_S) < GetMissionV(MS_TOTALPOINT_J)) then
 					marshal_down(1)
@@ -157,7 +160,7 @@ function OnTimer()
 				end
 			end
 
-			if (t == BOSS_TIME2) then	--µ½×îºó20·ÖÖÓÊ±½«ÁíÒ»·½µÄÔªË§²úÉú
+			if (t == BOSS_TIME2) then	--ï¿½ï¿½ï¿½ï¿½ï¿½20ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ÔªË§ï¿½ï¿½ï¿½ï¿½
 				mar = GetMissionV(MS_MARSHAL)
 				if (mar == 1) then
 					marshal_down(2)
@@ -166,15 +169,15 @@ function OnTimer()
 				end
 			end
 			
-			--bt_pop2signmap()	--½«ÔÚºóÓª£¨fight=0£©µÄÍæ¼ÒËÍ»Ø±¨Ãûµã
+			--bt_pop2signmap()	--ï¿½ï¿½ï¿½Úºï¿½Óªï¿½ï¿½fight=0ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í»Ø±ï¿½ï¿½ï¿½ï¿½ï¿½
 			
-			--Ã¿Ò»·ÖÖÓÍ¨¸æµ±Ç°Ë«·½»ý·Ö£¬ºÍnpc
+			--Ã¿Ò»ï¿½ï¿½ï¿½ï¿½Í¨ï¿½æµ±Ç°Ë«ï¿½ï¿½ï¿½ï¿½ï¿½Ö£ï¿½ï¿½ï¿½npc
 			if (mod(t, 3) == 0 ) then
 				if lsf_level == 3 then
-					sf_callfightnpc(t - RUNGAME_TIME, VANISHGAME_TIME - RUNGAME_TIME)	-- ²úÉúÕ½¶·Npc
+					sf_callfightnpc(t - RUNGAME_TIME, VANISHGAME_TIME - RUNGAME_TIME)	-- ï¿½ï¿½ï¿½ï¿½Õ½ï¿½ï¿½Npc
 				end
 				local bs, bj = 0, 0; if GetBotPoints then bs, bj = GetBotPoints(SubWorld) end
-				msstr = "C«ng c¸o: hiÖn giê tæng tÝch lòy cña 2 phe lµ "..(GetMissionV(MS_TOTALPOINT_S)+bs)..":"..(GetMissionV(MS_TOTALPOINT_J)+bj);
+				msstr = "Cï¿½ng cï¿½o: hiï¿½n giï¿½ tï¿½ng tï¿½ch lï¿½y cï¿½a 2 phe lï¿½ "..(GetMissionV(MS_TOTALPOINT_S)+bs)..":"..(GetMissionV(MS_TOTALPOINT_J)+bj);
 				Msg2MSAll(MISSIONID, msstr)
 			end
 			
@@ -225,18 +228,18 @@ function marshal_down(camp)
 	if (camp == 1) then
 		enterpos = GetIniFileData(mapfile, "Area_"..s_area, "generalpos");
 		x,y = bt_str2xydata(enterpos)	
-		npcidx_s = AddNpc(GetMissionV(MS_TRANK1_S + 6 - 1), GetMissionV(MS_RANK1LVL_S + 6 - 1), SubWorld, x*32, y*32, 1, "Nguyªn So¸i", 1)
+		npcidx_s = AddNpc(GetMissionV(MS_TRANK1_S + 6 - 1), GetMissionV(MS_RANK1LVL_S + 6 - 1), SubWorld, x*32, y*32, 1, "Nguyï¿½n Soï¿½i", 1)
 		SetNpcCurCamp(npcidx_s, 1)
 		--if simTK then simTK:markMarshal(BT_GetGameData(GAME_MAPID), 1, x, y, npcidx_s) end   -- [2026-06-28] dang ky boss -> sim bot phe Tong ve thu
 		SetNpcDeathScript(npcidx_s, tabFILE_NPCDEATH[6])
-		Msg2MSAll(MISSIONID, "<color=0x00FFFF>Tèng Kim chiÕn b¸o: Nguyªn So¸i ®· xuÊt hiÖn")
+		Msg2MSAll(MISSIONID, "<color=0x00FFFF>Tï¿½ng Kim chiï¿½n bï¿½o: Nguyï¿½n Soï¿½i ï¿½ï¿½ xuï¿½t hiï¿½n")
 	else
 		enterpos = GetIniFileData(mapfile, "Area_"..j_area, "generalpos");
 		x,y = bt_str2xydata(enterpos)	
-		npcidx_j = AddNpc(GetMissionV(MS_TRANK1_J + 6 - 1), GetMissionV(MS_RANK1LVL_J + 6 - 1), SubWorld, x*32, y*32, 1, "Nguyªn So¸i", 1)
+		npcidx_j = AddNpc(GetMissionV(MS_TRANK1_J + 6 - 1), GetMissionV(MS_RANK1LVL_J + 6 - 1), SubWorld, x*32, y*32, 1, "Nguyï¿½n Soï¿½i", 1)
 		SetNpcCurCamp(npcidx_j, 2)
 		--if simTK then simTK:markMarshal(BT_GetGameData(GAME_MAPID), 2, x, y, npcidx_j) end   -- [2026-06-28] dang ky boss -> sim bot phe Kim ve thu
 		SetNpcDeathScript(npcidx_j, tabFILE_NPCDEATH[6])
-		Msg2MSAll(MISSIONID, "<color=0x9BFF9B>Tèng Kim chiÕn b¸o: Nguyªn So¸i ®· xuÊt hiÖn")
+		Msg2MSAll(MISSIONID, "<color=0x9BFF9B>Tï¿½ng Kim chiï¿½n bï¿½o: Nguyï¿½n Soï¿½i ï¿½ï¿½ xuï¿½t hiï¿½n")
 	end		
 end
