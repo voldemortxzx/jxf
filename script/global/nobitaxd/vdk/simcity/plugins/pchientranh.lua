@@ -715,6 +715,9 @@ function SimCityChienTranh:mainMenu()
 		if GetMissionV(1) ~= 2 then
 			tinsert(tbSay, "Khai chi�n/#SimCityChienTranh:khaiChienTongKim()")
 		end
+		-- [NEW] GM co the tu kich hoat ngay viec cat bot du/bu thieu ve dung TONGKIM_MAX_BOTS_PER_SIDE,
+		-- khong can doi player khac vao map moi kich hoat qua onPlayerEnterMap.
+		tinsert(tbSay, "Can bang so luong bot Tong Kim (20/ben)/#SimCityChienTranh:taoHauDoanh(1)")
 	end
 
 	tinsert(tbSay, "Ph�t anh h�ng thi�p/#SimCityChienTranh:goiAnhHungThiepNgoaiTrang()")
@@ -742,6 +745,44 @@ function SimCityChienTranh:countMapSpawn(nW, camp)
 		end
 	end
 	return counter
+end
+
+-- [FIX] Bot Tong Kim khong bao gio bi xoa vinh vien khi chet (luon hoi sinh tai cho), nen
+-- logic cu (chi THEM khi thieu) khong bao gio lam dan so 1 phe GIAM XUONG duoc -- neu phe do
+-- da tung bi don qua dong (lenh GM "Dieu dong quan binh", ban cu truoc khi co gioi han/camp
+-- rieng, v.v.) thi no cu dong mai. Ham nay dem + XOA BOT bot du (uu tien bot dang KHONG danh
+-- nhau) de dua tung phe ve dung <= maxPerCamp. Dem theo tongkim==1 (khong chi baoDanhTongKim)
+-- de bat het moi nguon spawn chien dau tren ban do Tong Kim, khong tinh children (role=="child"
+-- di theo troop cha, khong phai 1 "bot" rieng).
+function SimCityChienTranh:trimExcessBots(nW, camp, maxPerCamp)
+	local idle, fighting, n = {}, {}, 0
+	for k, v in SimCitizen.fighterList do
+		if v.nMapId == nW and v.tongkim == 1 and v.camp == camp and v.role ~= "child" then
+			n = n + 1
+			if v.isFighting == 1 then
+				tinsert(fighting, k)
+			else
+				tinsert(idle, k)
+			end
+		end
+	end
+
+	local excess = n - maxPerCamp
+	if excess > 0 then
+		local removed = 0
+		for i = 1, getn(idle) do
+			if removed >= excess then break end
+			SimCitizen:Remove(idle[i])
+			removed = removed + 1
+		end
+		for i = 1, getn(fighting) do
+			if removed >= excess then break end
+			SimCitizen:Remove(fighting[i])
+			removed = removed + 1
+		end
+		n = n - removed
+	end
+	return n
 end
 
 
@@ -776,7 +817,7 @@ function SimCityChienTranh:taoHauDoanh(ngoaitrang)
 	local id = 0
 
 	for forCamp = 1, 2 do
-		local total = self:countMapSpawn(self.nW, forCamp)
+		local total = self:trimExcessBots(self.nW, forCamp, maxPerCamp)
 		if total < minRefill then
 			local loop = 0
 			while (total < maxPerCamp and loop < 100) do
