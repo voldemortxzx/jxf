@@ -29,7 +29,6 @@ Include("\\script\\global\\autoexec_head.lua")
 Include("\\script\\activitysys\\npcfunlib.lua")
 Include("\\script\\Î÷ÄÏÄÏÇø\\´óÀí¸®\\´óÀí¸®\\trap\\dali_heidong_trap.lua")
 
-
 if (GetProductRegion() =="cn"or GetProductRegion() =="cn_ib") then
 	-- ¶ÁÈëÕÐÄ¼Ê¹ÈÎÎñÍ·ÎÄ¼þ
 	Include("\\script\\task\\lord\\head.lua");
@@ -241,48 +240,6 @@ if (CFG_ViemDe	== 1) then
 	{389,80,4,852,1607,3178,0,"D­îc th­¬ng",0,"\\script\\missions\\yandibaozang\\npc\\yaoshang.lua"},
 	}
 end
-addbailuyencongnpc={ --ffadd
-{1525,95,5,995,1562,3180,0,"Qu¸i luyÖn c«ng",0," "},
-{1525,95,5,995,1563,3181,0,"Qu¸i luyÖn c«ng",0," "},
-{1525,95,5,995,1564,3182,0,"Qu¸i luyÖn c«ng",0," "},
-{1525,95,5,995,1565,3183,0,"Qu¸i luyÖn c«ng",0," "},
-{1525,95,5,995,1566,3184,0,"Qu¸i luyÖn c«ng",0," "},
-{1525,95,5,995,1584,3185,0,"Qu¸i luyÖn c«ng",0," "},
-{1525,95,5,995,1584,3186,0,"Qu¸i luyÖn c«ng",0," "},
-{1525,95,5,995,1584,3187,0,"Qu¸i luyÖn c«ng",0," "},
-{1525,95,5,995,1584,3188,0,"Qu¸i luyÖn c«ng",0," "},
-{1525,95,5,995,1584,3189,0,"Qu¸i luyÖn c«ng",0," "},
-{1525,95,5,995,1584,3190,0,"Qu¸i luyÖn c«ng",0," "},
-{1525,95,5,995,1584,3191,0,"Qu¸i luyÖn c«ng",0," "},
-{1525,95,5,995,1584,3192,0,"Qu¸i luyÖn c«ng",0," "},
-{1525,95,5,995,1584,3193,0,"Qu¸i luyÖn c«ng",0," "},
-{1525,95,5,995,1584,3194,0,"Qu¸i luyÖn c«ng",0," "},
-{1525,95,5,995,1562,3181,0,"Qu¸i luyÖn c«ng",0," "},
-{1525,95,5,995,1562,3183,0,"Qu¸i luyÖn c«ng",0," "},
-{1525,95,5,995,1570,3183,0,"Qu¸i luyÖn c«ng",0," "},
-{1525,95,5,995,1570,3184,0,"Qu¸i luyÖn c«ng",0," "},
-{1525,95,5,995,1570,3185,0,"Qu¸i luyÖn c«ng",0," "},
-{1525,95,5,995,1571,3183,0,"Qu¸i luyÖn c«ng",0," "},
-{1525,95,5,995,1571,3184,0,"Qu¸i luyÖn c«ng",0," "},
-{1525,95,5,995,1571,3185,0,"Qu¸i luyÖn c«ng",0," "},
-{1525,95,5,995,1575,3180,0,"Qu¸i luyÖn c«ng",0," "},
-{1525,95,5,995,1575,3189,0,"Qu¸i luyÖn c«ng",0," "},
-{1525,95,5,995,1575,3190,0,"Qu¸i luyÖn c«ng",0," "},
-{1525,95,5,995,1575,3181,0,"Qu¸i luyÖn c«ng",0," "},
-{1525,95,5,995,1575,3182,0,"Qu¸i luyÖn c«ng",0," "},
-{1525,95,5,995,1575,3183,0,"Qu¸i luyÖn c«ng",0," "},
-{1525,95,5,995,1578,3183,0,"Qu¸i luyÖn c«ng",0," "},
-{1525,95,5,995,1578,3184,0,"Qu¸i luyÖn c«ng",0," "},
-{1525,95,5,995,1578,3185,0,"Qu¸i luyÖn c«ng",0," "},
-{1525,95,5,995,1578,3186,0,"Qu¸i luyÖn c«ng",0," "},
-{1525,95,5,995,1578,3187,0,"Qu¸i luyÖn c«ng",0," "},
-{1525,95,5,995,1580,3181,0,"Qu¸i luyÖn c«ng",0," "},
-{1525,95,5,995,1580,3182,0,"Qu¸i luyÖn c«ng",0," "},
-{1525,95,5,995,1580,3183,0,"Qu¸i luyÖn c«ng",0," "},
-{1525,95,5,995,1580,3184,0,"Qu¸i luyÖn c«ng",0," "},
-{1525,95,5,995,1580,3186,0,"Qu¸i luyÖn c«ng",0," "},
-}
-
 
 addmasknpc = {
 	--{375,1,1554,3137,"\\script\\global\\Â·ÈË_Ò×ÈÝÊõÊ¿.lua","DÞch dung thuËt sÜ"},
@@ -438,7 +395,6 @@ Include("\\script\\activitysys\\functionlib.lua")
 
 Include("\\script\\task\\150skilltask\\g_task.lua")
 Include("\\script\\global\\nobitaxd\\autoexec_nobitaxd.lua")
-Include("\\script\\global\\mel\\feature\\taobaitrain.lua")
 function main()
     dofile("script/global/autoexec.lua");
 	DynamicExecute("\\script\\missions\\tianchimijing\\floor1\\gamefloor1.lua","GameFloor1:Start")
@@ -474,8 +430,7 @@ function main()
 	-- ¹Ò»úµØÍ¼ÈÎÎñ
 	load_mission_aexp();
 	add_dialognpc(adddialognpc);
-	add_newmonster(addbailuyencongnpc)
-	tao_bai_train()
+
 	if (CFG_ThienTu	== 1) then
 		add_dialognpc(nw_npclist)	-- TÝnh n¨ng Thiªn Tö **blackcupid**
 	end
@@ -704,16 +659,4 @@ function vlus_npc()
 		SetNpcScript(nID, tbNpcList[i][6])
 	end
 	
-end
-
-function add_newmonster(Tab1)
-	for i = 1 , getn(Tab1) do
-		Mid = SubWorldID2Idx(Tab1[i][4]);
-		if (Mid >= 0 ) then
-			TabValue5 = Tab1[i][5] * 32
-			TabValue6 = Tab1[i][6] * 32
-			newmonsterindex = AddNpc(Tab1[i][1],Tab1[i][2],Mid,TabValue5,TabValue6,Tab1[i][7],Tab1[i][8],Tab1[i][11]);
-			SetNpcScript(newmonsterindex, Tab1[i][10]);
-		end;
-	end;
 end

@@ -1,6 +1,10 @@
--- Components are now loaded by head.lua before sim.core.lua is included
--- This prevents the Include() path resolution issue when sim.core.lua is included
--- from sim_theosau.lua or sim_citizen.lua
+Include("\\script\\global\\nobitaxd\\vdk\\simcity\\config.lua")
+Include("\\script\\global\\nobitaxd\\vdk\\simcity\\libs\\index.lua")
+Include("\\script\\global\\nobitaxd\\vdk\\simcity\\components\\sim.movement.lua")
+Include("\\script\\global\\nobitaxd\\vdk\\simcity\\components\\sim.fun.lua")
+Include("\\script\\global\\nobitaxd\\vdk\\simcity\\components\\sim.entity.lua")
+Include("\\script\\global\\nobitaxd\\vdk\\simcity\\components\\sim.fight.lua")
+IncludeLib("NPCINFO")
 SimCore = {
     fighterList = {},
     counter = 1,
@@ -30,7 +34,7 @@ function SimCore:initCharConfig(config)
     config.level = config.level or 95
     config.isAttackable = config.isAttackable or 0
     if config.capHP and config.capHP ~= "auto" then
-        config.maxHP = random(20000, 50000)  
+        config.maxHP = random(SIMBOT_HP_MIN or 60000, SIMBOT_HP_MAX or 120000)  
     end
     config.parentAppointPos = {0, 0}
     config.walkMode = config.walkMode or "random"
@@ -159,113 +163,12 @@ function SimCore:initCharConfig(config)
         config.nSettingsIdx = (random(1,2) == 1) and -1 or -2
     end
 
-    -- Setup movement behavior - direct assignment (factory functions are redundant)
-    if not SimMovement then
-        SimMovement = {}
-        -- Create fallback Citizen movement behavior
-        SimMovement.Citizen = {
-            IsActive = function(self, simInstance, tbNpc)
-                tbNpc.isActive = 1
-                return 1
-            end,
-            Move = function(self, simInstance, tbNpc)
-                -- Basic movement - bot stays in place
-                return 0
-            end,
-            MoveInactive = function(self, simInstance, tbNpc)
-                -- Basic inactive movement - bot stays in place
-                return 0
-            end,
-            resetPos = function(self, simInstance, nListId)
-                -- Fallback resetPos - do nothing
-                return 1
-            end,
-            HasArrived = function(self, simInstance, tbNpc)
-                return 0
-            end,
-            GetRandomWalkPoint = function(self, simInstance, tbNpc, currentPosId)
-                return "none"
-            end
-        }
-        SimMovement.KeoXe = SimMovement.Citizen
-        SimMovement.FormationChild = SimMovement.Citizen
-    end
-    if SimMovement then
-        if config.role == "keoxe" then
-            config.movementSys = SimMovement.KeoXe
-        elseif config.role == "child" then
-            config.movementSys = SimMovement.FormationChild
-        else
-            config.movementSys = SimMovement.Citizen
-        end
-    end
+    -- Setup movement behavior    
+    config.movementSys = SimMovementSys(config)
+    config.funSys = SimFunSys(config)
+    config.entitySys = SimEntitySys(config)
+    config.fightSys = SimFightSys(config)
 
-    -- Setup fun behavior - direct assignment (factory functions are redundant)
-    if not SimFun then
-        SimFun = {}
-        -- Create fallback Citizen fun behavior
-        SimFun.Citizen = {
-            OnCreate = function(self, simInstance, tbNpc) end,
-            OnDelete = function(self, simInstance, tbNpc) end,
-            OnTimer = function(self, simInstance, tbNpc) end,
-            OnTick = function(self, simInstance, tbNpc) end
-        }
-        SimFun.KeoXe = SimFun.Citizen
-        SimFun.Base = SimFun.Citizen
-    end
-    if SimFun then
-        if config.role == "citizen" then
-            config.funSys = SimFun.Citizen
-        elseif config.role == "keoxe" then
-            config.funSys = SimFun.KeoXe
-        else
-            config.funSys = SimFun.Base
-        end
-    end
-
-    -- Setup entity behavior - direct assignment (factory functions are redundant)
-    if not SimEntity then
-        SimEntity = {}
-        -- Create fallback Citizen entity behavior
-        SimEntity.Citizen = {
-            OnCreate = function(self, simInstance, tbNpc) end,
-            OnDelete = function(self, simInstance, tbNpc) end,
-            OnTimer = function(self, simInstance, tbNpc) end,
-            OnTick = function(self, simInstance, tbNpc) end
-        }
-        SimEntity.KeoXe = SimEntity.Citizen
-    end
-    if SimEntity then
-        if config.role == "keoxe" then
-            config.entitySys = SimEntity.KeoXe
-        else
-            config.entitySys = SimEntity.Citizen
-        end
-    end
-
-    -- Setup fight behavior - direct assignment (factory functions are redundant)
-    if not SimFight then
-        SimFight = {}
-        -- Create fallback Citizen fight behavior
-        SimFight.Citizen = {
-            IsActive = function(self, simInstance, tbNpc) return 0 end,
-            IsNpcEnemyAround = function(self, simInstance, tbNpc) return 0 end,
-            IsPlayerEnemyAround = function(self, simInstance, tbNpc) return 0 end,
-            Attack = function(self, simInstance, tbNpc) end,
-            OnCreate = function(self, simInstance, tbNpc) end,
-            OnDelete = function(self, simInstance, tbNpc) end,
-            OnTimer = function(self, simInstance, tbNpc) end,
-            OnTick = function(self, simInstance, tbNpc) end
-        }
-        SimFight.KeoXe = SimFight.Citizen
-    end
-    if SimFight then
-        if config.role == "keoxe" then
-            config.fightSys = SimFight.KeoXe
-        else
-            config.fightSys = SimFight.Citizen
-        end
-    end
 
 end
 
@@ -301,63 +204,6 @@ function SimCore:OnDeath(nListId, nNpcIndex, attackerIndex)
     tbNpc.entitySys:OnDeath(self, tbNpc, nNpcIndex, attackerIndex)    
 end
 
--- [FIX] RetrySpawn function to handle bot respawn retries after death
--- This function is called from OnTimer when a bot's spawn fails
-function SimCore:RetrySpawn(tbNpc)
-    if tbNpc == nil then
-        return 0
-    end
-    
-    -- Check if we've exceeded max retries
-    if tbNpc.spawnRetryCount >= (SIMBOT_RESPAWN_MAX_RETRIES or 3) then
-        -- Max retries exceeded, remove the bot from the system
-        self:Remove(tbNpc.id)
-        return 0
-    end
-    
-    -- Try to respawn the bot
-    local nListId = tbNpc.id
-    local nX32, nY32, nMapIndex = GetNpcPos(tbNpc.finalIndex)
-    
-    -- Get respawn position
-    local isAllDead = 1
-    local nRespawnX32, nRespawnY32 = 0, 0
-    
-    if isAllDead == 1 and tbNpc.role == "child" then
-        nRespawnX32 = tbNpc.parentAppointPos[1]*32
-        nRespawnY32 = tbNpc.parentAppointPos[2]*32
-    elseif (isAllDead == 1 and tbNpc.resetPosWhenRevive and tbNpc.resetPosWhenRevive == 1) then
-        tbNpc.movementSys:resetPos(self, nListId)
-        nRespawnX32 = 0
-        nRespawnY32 = 0
-    elseif (isAllDead == 1 and tbNpc.lastPos ~= nil) then
-        nRespawnX32 = tbNpc.lastPos.nX32
-        nRespawnY32 = tbNpc.lastPos.nY32
-    else
-        nRespawnX32 = nX32
-        nRespawnY32 = nY32
-        tbNpc.lastPos = {
-            nX32 = nX32,
-            nY32 = nY32
-        }
-    end
-    
-    -- Delete old NPC and try to create new one
-    if tbNpc.finalIndex and tbNpc.finalIndex > 0 then
-        DelNpcSafe(tbNpc.finalIndex)
-        tbNpc.finalIndex = nil
-    end
-    
-    -- Try to create the bot again
-    local _created = tbNpc.entitySys:CreateChar(self, tbNpc, 0, nRespawnX32, nRespawnY32)
-    if not _created or _created == 0 then
-        -- Failed again, schedule another retry
-        tbNpc.spawnRetryCount = (tbNpc.spawnRetryCount or 0) + 1
-        tbNpc.spawnRetryTick = (tbNpc.tick_breath or 0) + (SIMBOT_RESPAWN_RETRY_TICKS or 5*18/REFRESH_RATE)
-    end
-    
-    return _created or 0
-end
 
 SIMBOT_MELEE_SKILLS = {[318]=1,[319]=1,[322]=1,[323]=1,[325]=1,[361]=1,[368]=1}
 SIMBOT_DISMOUNT_SKILLS = {[318]=1,[319]=1,[323]=1,[325]=1,[328]=1,[380]=1,[336]=1,[337]=1,[339]=1,[342]=1,[351]=1,[353]=1,[357]=1,[359]=1,[362]=1,[365]=1,[368]=1,[372]=1,[375]=1}
@@ -837,11 +683,6 @@ function SimBotDuelMove(simInstance, tbNpc)
 end
 
 function SimCore:OnTimer(tbNpc, rate)
-    -- [FIX] Check if bot needs to retry spawn after death
-    if tbNpc.spawnRetryTick and tbNpc.spawnRetryTick <= (tbNpc.tick_breath or 0) then
-        self:RetrySpawn(tbNpc)
-        return 0
-    end
   
     if (tbNpc.bangKeoxe and SetNpcBang and tbNpc.isDead ~= 1 and tbNpc.finalIndex and tbNpc.finalIndex > 0) then
         tbNpc.bangBcN = (tbNpc.bangBcN or 0) + 1
@@ -983,9 +824,8 @@ function SimCore:OnTimer(tbNpc, rate)
     end
 
     if BOT_VS_BOT == 1 and SimEnemyAround and BotDoSkill and not tbNpc.duelPlayerId and not tbNpc.partyPlayerId
-       and tbNpc.finalIndex and tbNpc.finalIndex > 0 and (tbNpc.camp or 0) > 0
+       and tbNpc.tongkim ~= 1 and tbNpc.finalIndex and tbNpc.finalIndex > 0 and (tbNpc.camp or 0) > 0
        and (not SimCityIsPeaceZone or SimCityIsPeaceZone(tbNpc) ~= 1) then
-        -- [IMPROVED] TongKim bots now also use active enemy hunting (removed tongkim ~= 1 check)
         
         if tbNpc.botDuelTarget or (not tbNpc.botScanTick or tbNpc.botScanTick <= tbNpc.tick_breath) then
             local _cpn = 0
@@ -1003,9 +843,7 @@ function SimCore:OnTimer(tbNpc, rate)
                 tbNpc.botScanTick = tbNpc.tick_breath + 4*18/REFRESH_RATE
             elseif not tbNpc.botScanTick or tbNpc.botScanTick <= tbNpc.tick_breath then
                 tbNpc.botScanTick = tbNpc.tick_breath + 4*18/REFRESH_RATE
-                -- [IMPROVED] Increase detection radius for TongKim bots to be more proactive
-                local scanRadius = tbNpc.tongkim == 1 and (BOT_COMBAT_RADIUS or 50) or (BOT_COMBAT_RADIUS or 20)
-                local _e = SimEnemyAround(tbNpc.finalIndex, scanRadius)
+                local _e = SimEnemyAround(tbNpc.finalIndex, BOT_COMBAT_RADIUS or 20)
                 if _e and _e > 0 then
                     tbNpc.botDuelTarget = _e
                     tbNpc.botDuelTick = tbNpc.tick_breath + 12*18/REFRESH_RATE
@@ -1174,15 +1012,4 @@ function SimCore:ATick(rate)
         end
     end 
     self.currentProcessGroup = self.currentProcessGroup == 1 and 2 or 1
-end
-
--- [NEW FEATURE] SweepStaleGhosts - cleanup stale ghost fighters
--- This function removes fighters that have no finalIndex and are in a broken state
-function SimCore:SweepStaleGhosts()
-    for nListId, tbNpc in self.fighterList do
-        if tbNpc and tbNpc.finalIndex == nil and tbNpc.isDead == 1 then
-            -- This is a stale ghost, remove it
-            self:Remove(nListId)
-        end
-    end
-end
+end 

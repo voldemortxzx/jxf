@@ -55,20 +55,6 @@ Include("\\script\\global\\nobitaxd\\vdk\\tinhnang\\trungluyentrangbi\\trangbihk
 Include("\\script\\global\\nobitaxd\\vdk\\tinhnang\\trungluyentrangbi\\trangbihkmp\\refine_equip_hanche.lua");
 Include("\\script\\missions\\sevencity\\simsevencity.lua")
 Include("\\script\\global\\nobitaxd\\vdk\\tinhnang\\res\\test_res_item.lua")
-Include("\\script\\global\\mel\\feature\\taobaitrain.lua")
-
-
-IncludeLib("RELAYLADDER");
-IncludeLib("TONG")
-IncludeLib("FILESYS");
-Include("\\script\\vng_lib\\files_lib.lua")
-Include("\\script\\lib\\pfunction.lua")
-Include("\\script\\lib\\composeex.lua")
---Transaction log - Modified by DinhHQ - 20110816
-Include("\\script\\activitysys\\playerfunlib.lua")
-Include("\\script\\vng_lib\\taskweekly_lib.lua")
-Include("\\script\\vng_lib\\bittask_lib.lua")
-Include("\\script\\lib\\objbuffer_head.lua")
 ----------------------
 function main()
 	dofile("script/global/nobitaxd/npc/npcthunghiem.lua");
@@ -110,22 +96,24 @@ function main()
 	else
 		local tbOpt =
 		{			
-		--{"xx", XHDauHoi},
+		
 		{"NhËn hç trî Test nh©n vËt", HoTroTest},
+
+	
+		--{"Hñy bá mäi thø mËt khÈu 1", DisposeItem_main},
+		
 		{"Di chuyÓn vÒ Ba L¨ng HuyÖn", GotoBLH},
 		--{"Test", LayDoRes},
 		--{"KT Res", kiemtrares},
+{"Xoa Ruong", DonSachRuong},		
 		{"TriÖu tËp ®ång ®éi", GoiPTToiNoi},
-
 		{"Hæ Trî Kü N¨ng M«n Ph¸i", HoTroSkill},
-		{"Xoa Ruong", DonSachRuong},
-		{"Hñy bá mäi thø mËt khÈu 1", DisposeItem_main},
 		{"Hç trî lµm NhiÖm vô nhanh", diadovolam},
 		{"Gäi ho¹t ®éng Game nhanh", goihoatdongmaychu},
 		{"Thay §æi Tr¹ng Th¸i", trangthai},
 		{"LÊy th«ng tin NPC", LastNpcTalk},
 		{"Thî rÌn ®a n¨ng", thorendanang},
-		{"Gäi SimCity", goisimcity},
+		{"Gäi SimCity", goisimcity},	
 		{"Tho¸t"},
 		--{"§æi r¸c lÊy vò khÝ ngÉu nhiªn", weapon_ring},
 		}
@@ -133,8 +121,6 @@ function main()
 	end
 	return 1
 end
-
-
 function DonSachRuong()
 	--Say(" dän!")
 	local tbItems = {}
@@ -148,7 +134,6 @@ function DonSachRuong()
 	AddItem(6,1,4258,1,1,1);
 	AddItem(6,1,1266,1,0,0);
 	AddItem(6,1,438,1,1,1);
-	tbAwardTemplet:GiveAwardByList({szName="Tiªn Th¶o Lé §Æc BiÖt", tbProp={6,1,1181,1,0,0}, nCount=1, nWidth=3, nHeight=5}, "AloneScript")
 end
 --------------------Hæ trî skill------------------------------
 function HoTroSkill()
@@ -602,19 +587,19 @@ function HoTroTest()
 	local tbOpt =
 	{
 	{"NhËn c¸c lo¹i ®iÓm", pointall},
-	{"Häc kü n¨ng m«n ph¸i", HocKyNangMonPhai},	
-	{"NhËn vËt phÈm hç trî", HoTro_VatPhamKhac},
-	{"TÈy tñy nhanh", TayTuyNhanh},
 	{"NhËn tiÒn", moneyall},
 	{"NhËn trang bÞ", trangbiall},
 	{"NhËn thó c­ìi", ThuCuoi},
-	{"LÊy ®å theo ID", LayDoTheoID},
-	{"ChuyÓn m«n ph¸i nhanh", change_phai},
+	{"Häc kü n¨ng m«n ph¸i", HocKyNangMonPhai},	
+	{"NhËn vËt phÈm hç trî", VatPhamHoTro},	
 	{"Më réng r­¬ng", moruong},
-	{"NhËn skills", NhanSkill},		
+	{"NhËn skills", NhanSkill},	
+	{"TÈy tñy nhanh", TayTuyNhanh},	
 	{"T¹o bang héi", DieuKienTaoBangHoi},
 	{"NhËn danh hiÖu", nhandanhhieu},
 	{"Thay ®æi danh hiÖu", change_title},
+	{"LÊy ®å theo ID", LayDoTheoID},
+	{"ChuyÓn m«n ph¸i nhanh", change_phai},	
 	{"Quay l¹i", main},
 	{"Tho¸t"},
 	}
@@ -697,9 +682,6 @@ TAB_VATPHAMHOTRO = {
 	{szName="ThÇn Hµnh Phï", tbProp={6,1,1266,1,0,0}, nBindState=-2, nWidth=1, nHeight=1},
 	{szName="Thæ ®Þa phï (sö dông v« h¹n) ", tbProp={6,1,438,1,0,0}, nBindState=-2, nWidth=1, nHeight=1},
 	--{szName="S¸t thñ gi¶n (cÊp 90)", tbProp={6,1,400,90,0,0}, nWidth=1, nHeight=2 },
-	{szName="ChiÕn cæ", tbProp={6,1,156,1,0,0}, nCount=100, nWidth=3, nHeight=5},	
-	{szName="LÖnh bµi", tbProp={6,1,157,1,0,0}, nCount=100, nWidth=3, nHeight=5},
-	{szName="Tiªn Th¶o Lé", tbProp={6,1,71,1,0,0}, nCount=50, nWidth=3, nHeight=5},
 	{szName="Khiªu chiÕn lÖnh", tbProp={6,1,1499,1,0,0}, nCount=2, nWidth=3, nHeight=5},	
 	{szName="LÖnh bµi Phong L¨ng §é", tbProp={4,489,1,0,0,0} , nWidth=1, nHeight=1},
 	--{szName="Viªm §Õ LÖnh", tbProp={6,1,1617,1,0,0}, nWidth=1, nHeight=1 },
@@ -709,7 +691,7 @@ TAB_VATPHAMHOTRO = {
 	{szName="TÈy Tñy Kinh", tbProp={6,1,22,1,0,0}, nCount=15 , nWidth=3, nHeight=5},
 	{szName="Vâ L©m MËt TÞch", tbProp={6,1,26,1,0,0}, nCount=15, nWidth=3, nHeight=5},
 	{szName="Phi Tèc hoµn", tbProp={6,0,6,1,0,0}, nCount=2 , nWidth=3, nHeight=5},
-	{szName="§¹i Lùc hoµn", tbProp={6,0,3,1,0,0}, nCount=2, nWidth=3, nHeight=5},		
+	{szName="§¹i Lùc hoµn", tbProp={6,0,3,1,0,0}, nCount=2, nWidth=3, nHeight=5},	
 }
 
 function VatPhamHoTro()

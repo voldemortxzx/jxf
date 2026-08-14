@@ -368,7 +368,7 @@ if (StyleName == "Life") then
 	if(Level < 30) then
 		return GetLife(Level, Param1, Param2)
 	end
-	return 9*GetLife(Level, Param1, Param2);
+	return 5*GetLife(Level, Param1, Param2);
 end;
 
 if (StyleName == "AttackRating") then

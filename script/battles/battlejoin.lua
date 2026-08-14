@@ -27,7 +27,6 @@ function main()
 	local nOldSubWorld = SubWorld
 	SubWorld = SubWorldID2Idx(nWorld)
 	bt_setnormaltask2type()
-	Msg2Player("Ng≠¨i Æ∑ Æ«u qu©n cho Kim quËc, h∑y Æ’n g∆p MÈ binh quan xin nhÀp chi’n tr≠Íng!"..BT_GetGameData(GAME_BATTLEID))
 	if (BT_GetGameData(GAME_BATTLEID) == 0 ) then
 		Say("ßπi qu©n cÒa ta v…n ch≠a xu t ph∏t! H∑y tπm thÍi nghÿ ng¨i ÆÓi tin nh–",0)
 		SubWorld = nOldSubWorld
@@ -42,19 +41,19 @@ function main()
 -------------------------------------------------------------------	
 	wid = SubWorldIdx2ID(SubWorld);
 	local pl_level = GetLevel()
-	local bt_level = 3;
+	local bt_level = 0;
 	
-	--if (pl_level < 40 ) then
-	--	Say("Chi’n tr≠Íng chÿ dµnh cho ng≠Íi tı c p 40 trÎ l™n, ng≠¨i ch≠a ÆÒ Æi“u ki÷n. CË gæng tÀp luy÷n th™m Æi!",2, "ß≠Óc!/bt_oncancel", "Ta muËn t◊m hi”u th´ng tin chi’n dﬁch./bt_onbattleinfo");
-	--	SubWorld = nOldSubWorld
-	--	return 
+	if (pl_level < 40 ) then
+		Say("Chi’n tr≠Íng chÿ dµnh cho ng≠Íi tı c p 40 trÎ l™n, ng≠¨i ch≠a ÆÒ Æi“u ki÷n. CË gæng tÀp luy÷n th™m Æi!",2, "ß≠Óc!/bt_oncancel", "Ta muËn t◊m hi”u th´ng tin chi’n dﬁch./bt_onbattleinfo");
+		SubWorld = nOldSubWorld
+		return 
 	-- elseif (pl_level < 80) then
-	--	bt_level = 1
-	--elseif (pl_level < 120) then
-	--	bt_level = 2
-	--elseif (pl_level >= 90) then
-	--	bt_level = 3
-	--end;
+	-- 	bt_level = 1
+	-- elseif (pl_level < 120) then
+	-- 	bt_level = 2
+	elseif (pl_level >= 90) then
+		bt_level = 3
+	end;
 	SubWorld = SubWorldID2Idx(nWorld)
 	if (tbGAME_SIGNMAP[bt_level] ~= wid) then
 		 local maplevel = bt_map2battlelevel(wid)

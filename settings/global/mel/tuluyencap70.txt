@@ -1,2 +1,0 @@
-nIdMap	pX	pY	pX1	pY1	sNameMap
-1017	1607	3212	200	200	Tu Luy÷n 70

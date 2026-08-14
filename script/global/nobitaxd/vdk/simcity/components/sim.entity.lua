@@ -58,7 +58,7 @@ function execCreateChar(self, simInstance, tbNpc, isNew, goX32, goY32)
             else
                 name = "Kim"
                 if tbNpc.camp == 1 then
-                    name = "Tï¿½ng"
+                    name = "Tèng"
                 end
             end
             name = name .. " " .. SimCityTongKim.RANKS[tbNpc.rank]
@@ -223,19 +223,7 @@ SimEntity.Citizen = {
 
         -- Normal respawn ? Can del NPC
         DelNpcSafe(tbNpc.finalIndex) 
-        tbNpc.finalIndex = nil   -- FIX: avoid stale/deleted index lingering if CreateChar below fails
-        tbNpc.goX32 = nX32
-        tbNpc.goY32 = nY32
-        local _created = self:CreateChar(simInstance, tbNpc, 0, nX32, nY32)
-        if not _created or _created == 0 then
-            -- FIX: previously the return value here was ignored entirely, so a
-            -- failed respawn (e.g. map momentarily full of NPC slots) silently
-            -- left the fighter with finalIndex == nil forever: invisible on the
-            -- map but still ticked every frame. Now hand off to SimCore:RetrySpawn
-            -- (wired into OnTimer) which retries a few times before removing.
-            tbNpc.spawnRetryCount = 0
-            tbNpc.spawnRetryTick = (tbNpc.tick_breath or 0) + (SIMBOT_RESPAWN_RETRY_TICKS or 5*18/REFRESH_RATE)
-        end
+        self:CreateChar(simInstance, tbNpc, 0, nX32, nY32)
     end,
     
     OnDeath = function(self, simInstance, tbNpc, nNpcIndex, attackerIndex)        
@@ -303,11 +291,7 @@ SimEntity.Citizen = {
 
         -- Is every one dead?
         if (doRespawn == 1 or tbNpc.isDead == 1) then
-            -- [FIX] TongKim mode: preserve fightingScore (no death penalty)
-            -- Regular ThanhThi mode still loses 30% on death for balance
-            if tbNpc.tongkim ~= 1 then
-                tbNpc.fightingScore = ceil(tbNpc.fightingScore * 0.7)
-            end
+            tbNpc.fightingScore = ceil(tbNpc.fightingScore * 0.7)
             SimCityTongKim:updateRank(tbNpc)
 
 
@@ -363,15 +347,7 @@ SimEntity.KeoXe = {
 
         -- Normal respawn ? Can del NPC
         DelNpcSafe(tbNpc.finalIndex) 
-        tbNpc.finalIndex = nil   -- FIX: avoid stale/deleted index lingering if CreateChar below fails
-        tbNpc.goX32 = nX32
-        tbNpc.goY32 = nY32
-        local _created = self:CreateChar(simInstance, tbNpc, 0, nX32, nY32)
-        if not _created or _created == 0 then
-            -- FIX: same stale-index / never-recovers issue as SimEntity.Citizen.Respawn.
-            tbNpc.spawnRetryCount = 0
-            tbNpc.spawnRetryTick = (tbNpc.tick_breath or 0) + (SIMBOT_RESPAWN_RETRY_TICKS or 5*18/REFRESH_RATE)
-        end
+        self:CreateChar(simInstance, tbNpc, 0, nX32, nY32)
     end,
     OnDeath = function(self, simInstance, tbNpc, nNpcIndex, attackerIndex)
         if tbNpc == nil then
@@ -393,11 +369,7 @@ SimEntity.KeoXe = {
 
         -- Is every one dead?
         if (doRespawn == 1 or tbNpc.isDead == 1) then
-            -- [FIX] TongKim mode: preserve fightingScore (no death penalty)
-            -- Regular ThanhThi mode still loses 30% on death for balance
-            if tbNpc.tongkim ~= 1 then
-                tbNpc.fightingScore = ceil(tbNpc.fightingScore * 0.7)
-            end
+            tbNpc.fightingScore = ceil(tbNpc.fightingScore * 0.7)
             SimCityTongKim:updateRank(tbNpc)
 
 
