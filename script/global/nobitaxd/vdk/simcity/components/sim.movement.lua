@@ -38,7 +38,12 @@ function IsActive(self, simInstance,tbNpc)
                 and tbNpc.camp ~= 0
                 and IsAttackableCamp(camp, tbNpc.camp) == 1
                 and GetDistanceRadius(tbNpc.lastPos.nX32/32, tbNpc.lastPos.nY32/32, pX, pY) <= scanFightRadius
-                and (SIMBOT_AGGRO_PLAYER == 1 or tbNpc.mode == "train")   -- [2026-06-28] train bot proximity-aggro player toi gan (thanh/thon van peace)   -- [2026-06-25] BO GetFightState: bot CHI danh tra khi BI DANH (self-def line duoi), KHONG aggro chi vi player o fight-mode danh con KHAC   -- [2026-06-20] SIMBOT_AGGRO_PLAYER=1: bot NHAM+danh player khac camp du player CHUA bat chien dau 
+                -- [FIX] SIMBOT_AGGRO_PLAYER khong duoc gan =1 o dau trong chuoi Include dang chay (chi con
+                -- trong group_fighter.class.lua, file khong duoc Include) -> luon nil -> dieu kien nay truoc
+                -- day CHI dung cho "train", bot Tong Kim khong bao gio chu dong nham player, CHI phan don
+                -- khi bi danh (self-def duoi). Sau khi bo "khoa duel doc quyen" (fix truoc), day la duong
+                -- DUY NHAT con lai de bot Tong Kim thay player -> nhieu bot khong con danh player nua.
+                and (SIMBOT_AGGRO_PLAYER == 1 or tbNpc.mode == "train" or tbNpc.tongkim == 1)   -- [2026-06-28] train bot proximity-aggro player toi gan (thanh/thon van peace)   -- [2026-06-25] BO GetFightState: bot CHI danh tra khi BI DANH (self-def line duoi), KHONG aggro chi vi player o fight-mode danh con KHAC   -- [2026-06-20] SIMBOT_AGGRO_PLAYER=1: bot NHAM+danh player khac camp du player CHUA bat chien dau 
                  then
                 tbNpc.isPlayerEnemyAround = pID
             end
