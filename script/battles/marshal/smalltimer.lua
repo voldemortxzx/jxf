@@ -227,7 +227,7 @@ function marshal_down(camp)
 		x,y = bt_str2xydata(enterpos)	
 		npcidx_s = AddNpc(GetMissionV(MS_TRANK1_S + 6 - 1), GetMissionV(MS_RANK1LVL_S + 6 - 1), SubWorld, x*32, y*32, 1, "Nguy™n So∏i", 1)
 		SetNpcCurCamp(npcidx_s, 1)
-		--if simTK then simTK:markMarshal(BT_GetGameData(GAME_MAPID), 1, x, y, npcidx_s) end   -- [2026-06-28] dang ky boss -> sim bot phe Tong ve thu
+		if simTK then simTK:markMarshal(BT_GetGameData(GAME_MAPID), 1, x, y, npcidx_s) end   -- [2026-06-28] dang ky boss -> sim bot phe Tong ve thu
 		SetNpcDeathScript(npcidx_s, tabFILE_NPCDEATH[6])
 		Msg2MSAll(MISSIONID, "<color=0x00FFFF>TËng Kim chi’n b∏o: Nguy™n So∏i Æ∑ xu t hi÷n")
 	else
@@ -235,7 +235,7 @@ function marshal_down(camp)
 		x,y = bt_str2xydata(enterpos)	
 		npcidx_j = AddNpc(GetMissionV(MS_TRANK1_J + 6 - 1), GetMissionV(MS_RANK1LVL_J + 6 - 1), SubWorld, x*32, y*32, 1, "Nguy™n So∏i", 1)
 		SetNpcCurCamp(npcidx_j, 2)
-		--if simTK then simTK:markMarshal(BT_GetGameData(GAME_MAPID), 2, x, y, npcidx_j) end   -- [2026-06-28] dang ky boss -> sim bot phe Kim ve thu
+		if simTK then simTK:markMarshal(BT_GetGameData(GAME_MAPID), 2, x, y, npcidx_j) end   -- [2026-06-28] dang ky boss -> sim bot phe Kim ve thu
 		SetNpcDeathScript(npcidx_j, tabFILE_NPCDEATH[6])
 		Msg2MSAll(MISSIONID, "<color=0x9BFF9B>TËng Kim chi’n b∏o: Nguy™n So∏i Æ∑ xu t hi÷n")
 	end		

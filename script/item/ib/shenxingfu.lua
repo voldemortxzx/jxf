@@ -57,7 +57,6 @@ function main(sel)
 		--{"NhËn hç trî m¸u.", nhanmau},
 		{"Sö dông thuËt thÇn hµnh cã thÓ ®­a ®¹i hiÖp ®Õn thµnh thÞ th«n trÊn chØ ®Þnh", gototown},
 		{"§i ®Õn b¶n ®å luyÖn c«ng.", gotoluyencong},
-		{"§i ®Õn Tu LuyÖn Cèc", TuLuyenCoc2},
 		{"T×m Boss §¹i Hoµng Kim." ,findgoldboss},
 		{"T×m Boss TiÓu Hoµng Kim." ,findsmallboss},
 		{"§i ®Õn vÞ trÝ kh¸c.",gopos_step2othermap},
@@ -67,106 +66,6 @@ function main(sel)
 	CreateNewSayEx(szTitle, tbOpt)
 	return 1	
 end;
-
-function TuLuyenCoc()
-	local tab_Content = {
-		"§i ®Õn Tu LuyÖn Cèc 10-80/TuLuyenCoc1",
-		"§i ®Õn Tu LuyÖn Cèc 90-180/TuLuyenCoc2",
-		"Rêi khái/no",
-	}
-	Say("ThÇn hµnh phï, ®i ®Õn n¬i ng­¬i muèn.", getn(tab_Content), tab_Content)
-end
-----------------------------------------------------------------------------------------------------
--- Tu LuyÖn Cèc 10-80
-TB_TULUYEN_DATA_1 = {
-    [10] = 1011,
-    [20] = 1012,
-    [30] = 1013,
-    [40] = 1014,
-    [50] = 1015,
-    [60] = 1016,
-    [70] = 1017,
-    [80] = 1018,
-}
-
-function TuLuyenCoc1()
-    local tbSay = {}
-    local tbLevels = {10, 20, 30, 40, 50, 60, 70, 80}
-    for i = 1, getn(tbLevels) do
-        local nLvl = tbLevels[i]
-        tinsert(tbSay, "§i ®Õn Tu LuyÖn CÊp "..nLvl.."/TuLuyen"..nLvl)
-    end
-    tinsert(tbSay, "Rêi khái/no")
-    Say("ThÇn hµnh phï, ®i ®Õn n¬i ng­¬i muèn.", getn(tbSay), tbSay)
-end
-
-function DoJump(nLevelReq)
-    local nMapId = TB_TULUYEN_DATA_1[nLevelReq]
-    if GetLevel() < nLevelReq then
-        Say("§¼ng cÊp cña ng­êi ch­a ®ñ <color=yellow>"..nLevelReq.."<color> ®Ó vµo khu vùc nµy!", 0)
-        return
-    end
-    if nMapId then
-        NewWorld(nMapId, 1651, 3168)
-        SetFightState(1)
-        Msg2Player("DÞch chuyÓn ®Õn khu vùc Tu LuyÖn CÊp "..nLevelReq)
-    else
-        Msg2Player("Lçi: Kh«ng t×m thÊy d÷ liÖu Map cho cÊp "..nLevelReq)
-    end
-end
-
-function TuLuyen10() DoJump(10) end
-function TuLuyen20() DoJump(20) end
-function TuLuyen30() DoJump(30) end
-function TuLuyen40() DoJump(40) end
-function TuLuyen50() DoJump(50) end
-function TuLuyen60() DoJump(60) end
-function TuLuyen70() DoJump(70) end
-function TuLuyen80() DoJump(80) end
-----------------------------------------------------------------------------------------------------
--- Tu LuyÖn Cèc 90-180
-TB_TULUYEN_DATA_2 = {
-   -- [90]  = 1019,
-    [100] = 1020,
-    [120] = 1021,
-    [140] = 1022,
-    [160] = 1023,
-    [180] = 1024,
-}
-
-function TuLuyenCoc2()
-    local tbSay = {}
-    --local tbLevels = {90, 100, 120, 140, 160, 180}
-local tbLevels = {90, 100, 120, 140, 160}
-    for i = 1, getn(tbLevels) do
-        local nLvl = tbLevels[i]
-        tinsert(tbSay, "§i ®Õn Tu LuyÖn CÊp "..nLvl.."/TuLuyen"..nLvl)
-    end
-    tinsert(tbSay, "Rêi khái/no")
-    Say("ThÇn hµnh phï, ®i ®Õn n¬i ng­¬i muèn.", getn(tbSay), tbSay)
-end
-
-function DoJumpCoc2(nLevelReq)
-    local nMapId = TB_TULUYEN_DATA_2[nLevelReq]
-    if GetLevel() < nLevelReq then
-        Say("§¼ng cÊp cña ng­êi ch­a ®ñ <color=yellow>"..nLevelReq.."<color> ®Ó vµo khu vùc nµy!", 0)
-        return
-    end
-    if nMapId then
-        NewWorld(nMapId, 1651, 3168)
-        SetFightState(1)
-        Msg2Player("DÞch chuyÓn ®Õn khu vùc Tu LuyÖn CÊp "..nLevelReq)
-    else
-        Msg2Player("Lçi: Kh«ng t×m thÊy d÷ liÖu Map cho mèc "..nLevelReq)
-    end
-end
-
-function TuLuyen90()  DoJumpCoc2(90)  end
-function TuLuyen100() DoJumpCoc2(100) end
-function TuLuyen120() DoJumpCoc2(120) end
-function TuLuyen140() DoJumpCoc2(140) end
-function TuLuyen160() DoJumpCoc2(160) end
-function TuLuyen180() DoJumpCoc2(180) end
 
 --*******************************************************************
 function findsmallboss()
@@ -422,19 +321,11 @@ function gotoluyencong()
 	
 	local tab_Content = {
 		"B¶n ®å cÊp 90/#goto_luyencong2(90,getn(tbMapTrain[90]))",
-		"B¶n ®å LuyÖn c«ng cña cao thñ./#gotobaitrain()",
 		"B¶n ®å LuyÖn c«ng cña t©n thñ./#luyencongtanthu()",
 		"Rêi khái/no",
 	}
 	Say("ThÇn hµnh phï, ®i ®Õn n¬i ng­¬i muèn.", getn(tab_Content), tab_Content);
 end;
-
-function gotobaitrain()
-	--NewWorld(336, 1426, 3179);
-	--NewWorld(969,1581,3197)
-	NewWorld(995,1581,3197)
-	SetFightState(1)
-end
 
 function luyencongtanthu()
 	local tab_Content = {	
@@ -711,14 +602,14 @@ function DoRescriptFunc(nSel)
 	end;
 	szstr = ""
 	if ( GetLevel() >= 40 and GetLevel() < 80 ) then
-		NewWorld( 325, tbsongjin_pos[1], tbsongjin_pos[2]);
+		NewWorld( 323, tbsongjin_pos[1], tbsongjin_pos[2]);
 	SetProtectTime(18*3) --ÈýÃë±£»¤Ê±¼ä
 	AddSkillState(963, 1, 0, 18*3)
 		SetFightState(0);
 		DisabledUseTownP(0); -- ²»ÏÞÖÆÆäÊ¹ÓÃ»Ø³Ç·û
 		Msg2Player( "§Õn n¬i b¸o danh ChiÕn Tr­êng Tèng Kim S¬ CÊp" );
 	elseif ( GetLevel() >= 80 and GetLevel() < 120 ) then
-		NewWorld( 325, tbsongjin_pos[1], tbsongjin_pos[2]);
+		NewWorld( 324, tbsongjin_pos[1], tbsongjin_pos[2]);
 	SetProtectTime(18*3) --ÈýÃë±£»¤Ê±¼ä
 	AddSkillState(963, 1, 0, 18*3)
 		SetFightState(0);

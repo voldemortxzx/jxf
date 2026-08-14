@@ -55,7 +55,7 @@ function main(nItemIdx)
 		{szName = "An Bang K™ Huy’t Thπch GiÌi Chÿ ", nQuality=1, tbProp = {0,167}, nRate = 0.02},
 		{szName = "An Bang CÛc Hoa Thπch Chÿ hoµn", nQuality=1, tbProp = {0,165}, nRate = 0.02},
 		{szName = "An Bang ßi“n Hoµng Thπch Ng‰c BÈi", nQuality=1, tbProp = {0,166}, nRate = 0.02},
-		{szName = "Hai m≠¨i vπn Æi”m kinh nghi÷m", nExp = 20000, nRate = 48.72},
+		{szName = "Hai m≠¨i vπn Æi”m kinh nghi÷m", nExp = 2000000, nRate = 48.72},
 	}
 	
 	local rtotal = 10000000

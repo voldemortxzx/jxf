@@ -83,7 +83,7 @@ CFG_TinSu			= 1
 
 ------Tèng Kim----------------
 ThamGiaTongKim = 1
-ThoiGianOpenTK ={2100} --b¸o danh giê lÎ
+ThoiGianOpenTK ={0100,0200, 0300,0400, 0500,0600, 0700,0800, 0900, 1100,1200, 1300, 1500, 1700, 1900, 2100, 2300} --b¸o danh giê lÎ
 ThoiGianBaoDanhTK = 1 --phót
 ThoiGianChienDauTK = 30 --phót
 SoLanThamGiaTongKimTrongNgay = 20
@@ -92,8 +92,8 @@ KhongCoNguoiDanhLenDiemTongKim = 1
 SoDiemToiDaMoiTran = 8
 GioiHanChenhLechTK = 200000
 --== Cap Do Trung Cap Khi Vao Cong Tong Kim o Tuong Duong - Chu Tien Tran
-CapDoTK1 = 60
-CapDoTK2 = 80
+CapDoTK1 = 80
+CapDoTK2 = 120
 
 ---Phong háa liªn thµnh---
 HoatDongPHLT = 1 --0: T¾t , 1: Më

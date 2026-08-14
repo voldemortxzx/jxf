@@ -141,43 +141,20 @@ SimMovement.KeoXe = {
         if tbNpc.isFighting == 1 then
             if SimCityIsPeaceZone and SimCityIsPeaceZone(tbNpc) == 1 then return tbNpc.fightSys:LeaveFight(simInstance, tbNpc, 0, "vao vung hoa binh -> ngung danh") end   -- [2026-06-26] CHI roi tran khi THAT SU trong vung hoa binh (thanh/thon); SimCityCanFight~=1 qua rong (tongkim/allowFighting) -> bot ngoai dong bi ep nghi danh
 
-            -- [2026-06-20] Combat: DUOI npc dich gan nhat bang NpcRun -> 2 bot danh nhau di chuyen muot nhu player. 
-            -- [MODIFIED] Chase nearest enemy (player or NPC) instead of prioritizing player
+            -- [2026-06-20] Combat: DUOI npc dich gan nhat bang NpcRun -> 2 bot danh nhau di chuyen muot nhu player. KHONG duoi player (de bot danh NHAU soi noi, ko bu theo nguoi choi). Player van bi cast skill khi lai gan (sim.fight uu tien player). Throttle 1/4.
             tbNpc.chaseN = (tbNpc.chaseN or 0) + 1
             if tbNpc.chaseN >= 10 then
                 tbNpc.chaseN = 0
-                -- Get current position FIRST (FIX: was missing, causing _mx/_my to be nil)
-                local _mx, _my = GetNpcPos(tbNpc.finalIndex)
-                local _tx, _ty
-                local _nearestEnemyType = nil
-                local _nearestDist = 9999
-                
-                -- Check NPC enemy distance
                 local _e = tbNpc.fightSys:IsNpcEnemyAround(simInstance, tbNpc)
+                local _tx, _ty
                 if _e and _e > 0 then
-                    local _ex, _ey = GetNpcPos(_e)
-                    _tx = floor(_ex/32)
-                    _ty = floor(_ey/32)
-                    _nearestDist = GetDistanceRadius(floor(_mx/32), floor(_my/32), _tx, _ty)
-                    _nearestEnemyType = "npc"
-                end
-                
-                -- Check player enemy distance
-                if tbNpc.isPlayerEnemyAround and tbNpc.isPlayerEnemyAround > 0 then
+                    local _ex, _ey = GetNpcPos(_e); _tx = floor(_ex/32); _ty = floor(_ey/32)
+                elseif tbNpc.isPlayerEnemyAround and tbNpc.isPlayerEnemyAround > 0 then  -- [2026-06-23] ko co NPC dich -> BAM THEO player
                     local _pw, _px, _py = CallPlayerFunction(tbNpc.isPlayerEnemyAround, GetWorldPos)
-                    if _px then
-                        local _playerDist = GetDistanceRadius(floor(_mx/32), floor(_my/32), _px, _py)
-                        if _playerDist < _nearestDist then
-                            _nearestDist = _playerDist
-                            _tx = _px
-                            _ty = _py
-                            _nearestEnemyType = "player"
-                        end
-                    end
+                    if _px then _tx = _px; _ty = _py end
                 end
-                
-                -- Chase the nearest enemy
                 if _tx then
+                    local _mx, _my = GetNpcPos(tbNpc.finalIndex)
                     if GetDistanceRadius(floor(_mx/32), floor(_my/32), _tx, _ty) > 2 then NpcRun(tbNpc.finalIndex, _tx, _ty) end
                 end
             end
@@ -206,23 +183,19 @@ SimMovement.KeoXe = {
         -- Binh thuong
         if (cachNguoiChoi <= DISTANCE_SUPPORT_PLAYER) then
             
-            -- Case 1: Check for NPC enemies FIRST (nearest enemy logic)
-            local foundNpcEnemy = tbNpc.fightSys:IsNpcEnemyAround(simInstance, tbNpc)
-            if foundNpcEnemy > 0 then
-                -- Attack NPC enemy directly (nearest enemy priority)
+            -- Case 1: someone around is fighting, we join
+            if (tbNpc.CHANCE_JOIN_FIGHT and random(0, tbNpc.CHANCE_JOIN_FIGHT) <= 2) then
                 if tbNpc.fightSys:TriggerFightWithNPC(simInstance, tbNpc) == 1 then
                     return 1
                 end
             end
 
-            -- Case 2: Only attack player if NO NPC enemies nearby
-            -- This ensures bots prioritize attacking nearest enemy (NPC) over players
+            -- Case 2: some player around is fighting and different camp, we join
             local myLife = NPCINFO_GetNpcCurrentLife(tbNpc.finalIndex)
             local maxLife = NPCINFO_GetNpcCurrentMaxLife(tbNpc.finalIndex)
 
-            if (foundNpcEnemy == 0 and 
-                tbNpc.CHANCE_ATTACK_PLAYER and 
-                random(0, tbNpc.CHANCE_ATTACK_PLAYER) <= 2) then
+            if ((tbNpc.CHANCE_ATTACK_PLAYER and random(0, tbNpc.CHANCE_ATTACK_PLAYER) <= 2) or (myLife < maxLife))
+            then
                 if tbNpc.fightSys:TriggerFightWithPlayer(simInstance, tbNpc) == 1 then
                     return 1
                 end
@@ -256,7 +229,6 @@ SimMovement.KeoXe = {
         -- respawn-qua-xa (tren) van keo bot lai gan player de populate map. Self-def (HP drop) van chase qua SimDuelMove.
         -- [2026-06-28] THEO SAU: player DI CHUYEN + bot cach xa -> chay theo; player DUNG -> DUNG IM (da so),
         -- chi ~15% bot dich nhe +-2 (tu nhien). Truoc: wander +-4 moi 4-10 tick -> 10 con nhuc nhich kho chiu.
-        -- [IMPROVED] Bot now actively hunts enemies instead of just wandering
         if tbNpc.isFighting == 0 then
             if tbNpc.lastPPosX ~= pX or tbNpc.lastPPosY ~= pY then
                 tbNpc.lastPPosX = pX; tbNpc.lastPPosY = pY
@@ -266,37 +238,8 @@ SimMovement.KeoXe = {
                 NpcRun(tbNpc.finalIndex, pX + random(-3, 3), pY + random(-3, 3))   -- player dang di -> chay theo
             elseif (not tbNpc.wanderTick or tbNpc.wanderTick <= tbNpc.tick_breath) then
                 tbNpc.wanderTick = tbNpc.tick_breath + random(15, 40)
-                -- [IMPROVED] Bot actively hunts enemies instead of just wandering randomly
-                -- Check for nearby enemies first
-                local foundEnemy = 0
-                if tbNpc.fightSys and tbNpc.fightSys:IsNpcEnemyAround(simInstance, tbNpc) then
-                    foundEnemy = tbNpc.fightSys:IsNpcEnemyAround(simInstance, tbNpc)
-                end
-                
-                if foundEnemy > 0 then
-                    -- Enemy found, move towards it
-                    local ex, ey = GetNpcPos(foundEnemy)
-                    if ex and ey then
-                        NpcRun(tbNpc.finalIndex, floor(ex/32), floor(ey/32))
-                    else
-                        -- Random movement if enemy position invalid
-                        NpcWalk(tbNpc.finalIndex, myPosX + random(-2, 2), myPosY + random(-2, 2))
-                    end
-                else
-                    -- No enemy nearby, move towards enemy camp area (more active hunting)
-                    -- Move in direction of enemy camp instead of random wandering
-                    local enemyCampX, enemyCampY = 0, 0
-                    if tbNpc.camp == 1 then
-                        -- Camp 1: move towards right/bottom (enemy camp 2 direction)
-                        enemyCampX = myPosX + 20
-                        enemyCampY = myPosY + 20
-                    else
-                        -- Camp 2: move towards left/top (enemy camp 1 direction)
-                        enemyCampX = myPosX - 20
-                        enemyCampY = myPosY - 20
-                    end
-                    NpcRun(tbNpc.finalIndex, enemyCampX, enemyCampY)
-                end
+                -- player DUNG -> DUNG IM TUYET DOI (doi <= 0 thanh <= 15 neu muon vai con dich nhe)
+                if random(1, 100) <= 0 then NpcWalk(tbNpc.finalIndex, myPosX + random(-2, 2), myPosY + random(-2, 2)) end   -- player DUNG -> da so dung im, vai con dich nhe
             end
         end
         return 1
@@ -841,43 +784,20 @@ SimMovement.Citizen = {
 
             if SimCityIsPeaceZone and SimCityIsPeaceZone(tbNpc) == 1 then return tbNpc.fightSys:LeaveFight(simInstance, tbNpc, 0, "vao vung hoa binh -> ngung danh") end   -- [2026-06-26] CHI roi tran khi THAT SU trong vung hoa binh (thanh/thon); SimCityCanFight~=1 qua rong (tongkim/allowFighting) -> bot ngoai dong bi ep nghi danh
 
-            -- [2026-06-20] Combat: DUOI npc dich gan nhat bang NpcRun -> 2 bot danh nhau di chuyen muot nhu player. 
-            -- [MODIFIED] Chase nearest enemy (player or NPC) instead of prioritizing player
+            -- [2026-06-20] Combat: DUOI npc dich gan nhat bang NpcRun -> 2 bot danh nhau di chuyen muot nhu player. KHONG duoi player (de bot danh NHAU soi noi, ko bu theo nguoi choi). Player van bi cast skill khi lai gan (sim.fight uu tien player). Throttle 1/4.
             tbNpc.chaseN = (tbNpc.chaseN or 0) + 1
             if tbNpc.chaseN >= 10 then
                 tbNpc.chaseN = 0
-                -- Get current position FIRST (FIX: was missing, causing _mx/_my to be nil)
-                local _mx, _my = GetNpcPos(tbNpc.finalIndex)
-                local _tx, _ty
-                local _nearestEnemyType = nil
-                local _nearestDist = 9999
-                
-                -- Check NPC enemy distance
                 local _e = tbNpc.fightSys:IsNpcEnemyAround(simInstance, tbNpc)
+                local _tx, _ty
                 if _e and _e > 0 then
-                    local _ex, _ey = GetNpcPos(_e)
-                    _tx = floor(_ex/32)
-                    _ty = floor(_ey/32)
-                    _nearestDist = GetDistanceRadius(floor(_mx/32), floor(_my/32), _tx, _ty)
-                    _nearestEnemyType = "npc"
-                end
-                
-                -- Check player enemy distance
-                if tbNpc.isPlayerEnemyAround and tbNpc.isPlayerEnemyAround > 0 then
+                    local _ex, _ey = GetNpcPos(_e); _tx = floor(_ex/32); _ty = floor(_ey/32)
+                elseif tbNpc.isPlayerEnemyAround and tbNpc.isPlayerEnemyAround > 0 then  -- [2026-06-23] ko co NPC dich -> BAM THEO player
                     local _pw, _px, _py = CallPlayerFunction(tbNpc.isPlayerEnemyAround, GetWorldPos)
-                    if _px then
-                        local _playerDist = GetDistanceRadius(floor(_mx/32), floor(_my/32), _px, _py)
-                        if _playerDist < _nearestDist then
-                            _nearestDist = _playerDist
-                            _tx = _px
-                            _ty = _py
-                            _nearestEnemyType = "player"
-                        end
-                    end
+                    if _px then _tx = _px; _ty = _py end
                 end
-                
-                -- Chase the nearest enemy
                 if _tx then
+                    local _mx, _my = GetNpcPos(tbNpc.finalIndex)
                     if GetDistanceRadius(floor(_mx/32), floor(_my/32), _tx, _ty) > 2 then NpcRun(tbNpc.finalIndex, _tx, _ty) end
                 end
             end
@@ -891,7 +811,7 @@ SimMovement.Citizen = {
             if tbNpc.fightSys:CanLeaveFight(simInstance, tbNpc) == 1 then
                 return 1
             end
-
+ 
             return 1 
         end
 
@@ -901,69 +821,24 @@ SimMovement.Citizen = {
             (tbNpc.isFighting == 0 and tbNpc.tick_canswitch < tbNpc.tick_breath)) then
             
             if (tbNpc.isAttractionAround == 0)then
-                -- [FIXED] Check for nearest enemy (player or NPC) before deciding to attack
-                -- ALWAYS prioritize nearest enemy regardless of type
-                local nearestNpcEnemy = tbNpc.fightSys:IsNpcEnemyAround(simInstance, tbNpc)
-                local nearestPlayerEnemy = tbNpc.isPlayerEnemyAround
-                
-                -- Calculate distances to both enemies
-                local npcDist = 9999
-                local playerDist = 9999
-                local nearestEnemyType = nil
-                local nearestEnemyId = nil
-                
-                if nearestNpcEnemy and nearestNpcEnemy > 0 then
-                    local _ex, _ey = GetNpcPos(nearestNpcEnemy)
-                    npcDist = GetDistanceRadius(myPosX, myPosY, floor(_ex/32), floor(_ey/32))
-                    nearestEnemyType = "npc"
-                    nearestEnemyId = nearestNpcEnemy
+                -- [2026-06-23] UU TIEN PLAYER: ~25% bot gan player khac camp nham PLAYER truoc (con lai danh NPC nhu cu)
+                if tbNpc.isPlayerEnemyAround and tbNpc.isPlayerEnemyAround > 0 and random(1, 100) <= (CHANCE_PREFER_PLAYER or 25) then
+                    if tbNpc.fightSys:TriggerFightWithPlayer(simInstance, tbNpc) == 1 then return 1 end
                 end
-                
-                if nearestPlayerEnemy and nearestPlayerEnemy > 0 then
-                    local _pw, _px, _py = CallPlayerFunction(nearestPlayerEnemy, GetWorldPos)
-                    if _px then
-                        playerDist = GetDistanceRadius(myPosX, myPosY, _px, _py)
-                        -- [FIXED] Always compare distances, don't prioritize player
-                        if npcDist > playerDist then
-                            nearestEnemyType = "player"
-                            nearestEnemyId = nearestPlayerEnemy
-                        end
-                    end
-                end
-                
-                -- [FIXED] Attack the absolute nearest enemy (no player priority)
-                if nearestEnemyId and nearestEnemyId > 0 then
-                    if nearestEnemyType == "npc" then
-                        -- Attack nearest NPC enemy
-                        if tbNpc.fightSys:TriggerFightWithNPC(simInstance, tbNpc) == 1 then return 1 end
-                    elseif nearestEnemyType == "player" then
-                        -- Attack nearest player enemy (only if it's actually the closest)
-                        local myLife = NPCINFO_GetNpcCurrentLife(tbNpc.finalIndex)
-                        local maxLife = NPCINFO_GetNpcCurrentMaxLife(tbNpc.finalIndex)
-                        
-                        if ((tbNpc.CHANCE_ATTACK_PLAYER and random(0, tbNpc.CHANCE_ATTACK_PLAYER) <= 2) or (myLife and maxLife and myLife < maxLife))
-                        then
-                            if tbNpc.fightSys:TriggerFightWithPlayer(simInstance, tbNpc) == 1 then
-                                return 1
-                            end
-                        end
-                    end
-                end
-                        local myLife = NPCINFO_GetNpcCurrentLife(tbNpc.finalIndex)
-                        local maxLife = NPCINFO_GetNpcCurrentMaxLife(tbNpc.finalIndex)
-                        
-                        if ((tbNpc.CHANCE_ATTACK_PLAYER and random(0, tbNpc.CHANCE_ATTACK_PLAYER) <= 2) or (myLife and maxLife and myLife < maxLife))
-                        then
-                            if tbNpc.fightSys:TriggerFightWithPlayer(simInstance, tbNpc) == 1 then
-                                return 1
-                            end
-                        end
-                    end
-                end
-                
-                -- Case 1: someone around is fighting, we join (if no nearest enemy found)
+                -- Case 1: someone around is fighting, we join
                 if (tbNpc.CHANCE_JOIN_FIGHT and random(0, tbNpc.CHANCE_JOIN_FIGHT) <= 2) then
                     if tbNpc.fightSys:TriggerFightWithNPC(simInstance, tbNpc) == 1 then
+                        return 1
+                    end
+                end
+
+                -- Case 2: some player around is fighting and different camp, we join
+                local myLife = NPCINFO_GetNpcCurrentLife(tbNpc.finalIndex)
+                local maxLife = NPCINFO_GetNpcCurrentMaxLife(tbNpc.finalIndex)
+
+                if ((tbNpc.CHANCE_ATTACK_PLAYER and random(0, tbNpc.CHANCE_ATTACK_PLAYER) <= 2) or (myLife and maxLife and myLife < maxLife))
+                then
+                    if tbNpc.fightSys:TriggerFightWithPlayer(simInstance, tbNpc) == 1 then
                         return 1
                     end
                 end
@@ -981,7 +856,9 @@ SimMovement.Citizen = {
                     end
 
                     if countFighting > 0 and tbNpc.worldInfo.showFightingArea == 1 then
-                     --   Msg2Map(nW,"Cï¿½ " .. countFighting .. " nhï¿½n sï¿½ ï¿½ang ï¿½ï¿½nh nhau tï¿½i " .. tbNpc.worldInfo.name .. " <color=yellow>" .. floor(myPosX / 8) .. " " .. floor(myPosY / 16) .. "<color>")
+                        Msg2Map(nW,
+                            "Cã " .. countFighting .. " nh©n sÜ ®ang ®¸nh nhau t¹i " .. tbNpc.worldInfo.name ..
+                            " <color=yellow>" .. floor(myPosX / 8) .. " " .. floor(myPosY / 16) .. "<color>")
                     end
 
                     if (countFighting > 0) then
@@ -1001,26 +878,10 @@ SimMovement.Citizen = {
             local _myA = _myM and _myM[3] and NPCINFO_GetNpcCurrentLife and (NPCINFO_GetNpcCurrentLife(_myM[3]) or 0) > 0
             local _enA = _enM and _enM[3] and NPCINFO_GetNpcCurrentLife and (NPCINFO_GetNpcCurrentLife(_enM[3]) or 0) > 0
             local _tx, _ty
--- TODO
-                -- _tx = _wi.tkCenter[1];
-  	--_ty = _wi.tkCenter[2]
---if _enA then
---    _tx = _enM[1]
---    _ty = _enM[2]
---elseif _wi.tkCenter then
---    _tx = _wi.tkCenter[1]
---    _ty = _wi.tkCenter[2]
---end
-
---if _wi.tkCenter then
---    _tx = _wi.tkCenter[1]
---    _ty = _wi.tkCenter[2]
---end
-            if _myA then _tx = _myM[1]; _ty = _myM[2]   -- co boss minh -> ve THU 
+            if _myA then _tx = _myM[1]; _ty = _myM[2]   -- co boss minh -> ve THU
             elseif _enA then _tx = _enM[1]; _ty = _enM[2]   -- boss dich -> qua DANH
             elseif _wi.tkCenter then _tx = _wi.tkCenter[1]; _ty = _wi.tkCenter[2] end   -- chua co boss -> don GIUA map
-
-           if _tx then
+            if _tx then
                 if GetDistanceRadius(myPosX, myPosY, _tx, _ty) > 6 then NpcRun(tbNpc.finalIndex, _tx + random(-6, 6), _ty + random(-6, 6)) end
                 return 1   -- da co diem rally; fight-trigger o tren lo danh dich gan
             end
@@ -1147,26 +1008,9 @@ SimMovement.Citizen = {
         end
 
         -- Mode 1: randomwalk
-        -- [IMPROVED] Bot actively hunts enemies instead of just wandering randomly
         tbNpc.tick_checklag = nil
         if self:HasArrived(simInstance, tbNpc) == 1 then
-            -- Check for nearby enemies first (more proactive hunting)
-            local foundEnemy = 0
-            if tbNpc.fightSys and tbNpc.fightSys:IsNpcEnemyAround(simInstance, tbNpc) then
-                foundEnemy = tbNpc.fightSys:IsNpcEnemyAround(simInstance, tbNpc)
-            end
-            
-            if foundEnemy > 0 then
-                -- Enemy found, move towards it immediately
-                local ex, ey = GetNpcPos(foundEnemy)
-                if ex and ey then
-                    NpcRun(tbNpc.finalIndex, floor(ex/32), floor(ey/32))
-                    self:CalculateChildrenPosition(simInstance, nListId, floor(ex/32)*32, floor(ey/32)*32)
-                    return 1
-                end
-            end
-            
-            -- No enemy nearby, be more proactive in hunting
+            -- Keep walking no stop
             local keepWalkingRate = 90
             if tbNpc.isAttractionAround > 0 then
                 keepWalkingRate = 5
@@ -1195,25 +1039,9 @@ SimMovement.Citizen = {
                     return 1
                 end
 
-            -- Normal walk - [IMPROVED] Move towards enemy camp instead of random wandering
+            -- Normal walk
             elseif (tbNpc.noStop == 1 or random(1, 100) < keepWalkingRate) then
-                -- [IMPROVED] TongKim and combat bots move towards enemy territory
-                if tbNpc.tongkim == 1 or tbNpc.mode == "chiendau" then
-                    -- Move towards enemy camp direction
-                    local targetX, targetY = myPosX, myPosY
-                    if tbNpc.camp == 1 then
-                        targetX = myPosX + 30  -- Move right/down towards enemy camp 2
-                        targetY = myPosY + 30
-                    else
-                        targetX = myPosX - 30  -- Move left/up towards enemy camp 1
-                        targetY = myPosY - 30
-                    end
-                    NpcRun(tbNpc.finalIndex, targetX, targetY)
-                    self:CalculateChildrenPosition(simInstance, nListId, targetX*32, targetY*32)
-                    return 1
-                else
-                    tbNpc.nPosId = tbNpc.movementSys:GetRandomWalkPoint(simInstance, tbNpc, tbNpc.nPosId)
-                end
+                tbNpc.nPosId = tbNpc.movementSys:GetRandomWalkPoint(simInstance, tbNpc, tbNpc.nPosId)
             
             -- Stop walking
             else
@@ -1366,43 +1194,20 @@ SimMovement.FormationChild = {
 
             if SimCityIsPeaceZone and SimCityIsPeaceZone(tbNpc) == 1 then return tbNpc.fightSys:LeaveFight(simInstance, tbNpc, 0, "vao vung hoa binh -> ngung danh") end   -- [2026-06-26] CHI roi tran khi THAT SU trong vung hoa binh (thanh/thon); SimCityCanFight~=1 qua rong (tongkim/allowFighting) -> bot ngoai dong bi ep nghi danh
 
-            -- [2026-06-20] Combat: DUOI npc dich gan nhat bang NpcRun -> 2 bot danh nhau di chuyen muot nhu player. 
-            -- [MODIFIED] Chase nearest enemy (player or NPC) instead of prioritizing player
+            -- [2026-06-20] Combat: DUOI npc dich gan nhat bang NpcRun -> 2 bot danh nhau di chuyen muot nhu player. KHONG duoi player (de bot danh NHAU soi noi, ko bu theo nguoi choi). Player van bi cast skill khi lai gan (sim.fight uu tien player). Throttle 1/4.
             tbNpc.chaseN = (tbNpc.chaseN or 0) + 1
             if tbNpc.chaseN >= 10 then
                 tbNpc.chaseN = 0
-                -- Get current position FIRST (FIX: was missing, causing _mx/_my to be nil)
-                local _mx, _my = GetNpcPos(tbNpc.finalIndex)
-                local _tx, _ty
-                local _nearestEnemyType = nil
-                local _nearestDist = 9999
-                
-                -- Check NPC enemy distance
                 local _e = tbNpc.fightSys:IsNpcEnemyAround(simInstance, tbNpc)
+                local _tx, _ty
                 if _e and _e > 0 then
-                    local _ex, _ey = GetNpcPos(_e)
-                    _tx = floor(_ex/32)
-                    _ty = floor(_ey/32)
-                    _nearestDist = GetDistanceRadius(floor(_mx/32), floor(_my/32), _tx, _ty)
-                    _nearestEnemyType = "npc"
-                end
-                
-                -- Check player enemy distance
-                if tbNpc.isPlayerEnemyAround and tbNpc.isPlayerEnemyAround > 0 then
+                    local _ex, _ey = GetNpcPos(_e); _tx = floor(_ex/32); _ty = floor(_ey/32)
+                elseif tbNpc.isPlayerEnemyAround and tbNpc.isPlayerEnemyAround > 0 then  -- [2026-06-23] ko co NPC dich -> BAM THEO player
                     local _pw, _px, _py = CallPlayerFunction(tbNpc.isPlayerEnemyAround, GetWorldPos)
-                    if _px then
-                        local _playerDist = GetDistanceRadius(floor(_mx/32), floor(_my/32), _px, _py)
-                        if _playerDist < _nearestDist then
-                            _nearestDist = _playerDist
-                            _tx = _px
-                            _ty = _py
-                            _nearestEnemyType = "player"
-                        end
-                    end
+                    if _px then _tx = _px; _ty = _py end
                 end
-                
-                -- Chase the nearest enemy
                 if _tx then
+                    local _mx, _my = GetNpcPos(tbNpc.finalIndex)
                     if GetDistanceRadius(floor(_mx/32), floor(_my/32), _tx, _ty) > 2 then NpcRun(tbNpc.finalIndex, _tx, _ty) end
                 end
             end

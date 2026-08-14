@@ -42,7 +42,7 @@ function execCastNormalSkill(self, simInstance, tbNpc)
         return
     end
 
-    if tbNpc.isFighting ~= 1 or (tbNpc.tick_canCast and tbNpc.tick_canCast > tbNpc.tick_breath) then
+    if tbNpc.fighting == 0 or (tbNpc.tick_canCast and tbNpc.tick_canCast > tbNpc.tick_breath) then
         return
     end
 
@@ -52,12 +52,7 @@ function execCastNormalSkill(self, simInstance, tbNpc)
         return
     end
  
-    -- Check for ANY enemy around (player or NPC)
-    local foundPlayerEnemy = tbNpc.isPlayerEnemyAround
-    local foundNpcEnemy = self:IsNpcEnemyAround(simInstance, tbNpc)
-    
-    -- If no enemies at all, don't cast skill
-    if foundPlayerEnemy == 0 and foundNpcEnemy == 0 then
+    if tbNpc.isPlayerEnemyAround == 0 and (random(1, 1000) > 50) then
         return
     end
   
@@ -66,46 +61,22 @@ function execCastNormalSkill(self, simInstance, tbNpc)
     local skillId = selectedSkill[1]
     local skillLevel = selectedSkill[2]
 
-    -- Find the NEAREST enemy (player or NPC) and attack it
-    local nearestEnemyType = nil  -- "player" or "npc"
-    local nearestEnemyDist = 9999
-    local nearestEnemyPos = {x = 0, y = 0}
-    
-    -- Check player enemy distance
+    local foundPlayerEnemy = tbNpc.isPlayerEnemyAround
     if foundPlayerEnemy > 0 then
         local targetX, targetY, targetW = CallPlayerFunction(foundPlayerEnemy, GetWorldPos)
-        local playerDist = GetDistanceRadius(tbNpc.lastPos.nX32/32, tbNpc.lastPos.nY32/32, targetX, targetY)
-        if playerDist < nearestEnemyDist then
-            nearestEnemyDist = playerDist
-            nearestEnemyType = "player"
-            nearestEnemyPos.x = targetX
-            nearestEnemyPos.y = targetY
-        end
-    end
-    
-    -- Check NPC enemy distance
-    if foundNpcEnemy > 0 then
-        local targetX, targetY, targetW = GetNpcPos(foundNpcEnemy)
-        local npcDist = GetDistanceRadius(tbNpc.lastPos.nX32/32, tbNpc.lastPos.nY32/32, targetX, targetY)
-        if npcDist < nearestEnemyDist then
-            nearestEnemyDist = npcDist
-            nearestEnemyType = "npc"
-            nearestEnemyPos.x = targetX
-            nearestEnemyPos.y = targetY
-        end
-    end
-    
-    -- Attack the nearest enemy
-    if nearestEnemyType == "player" and foundPlayerEnemy > 0 then
         if BotDoSkill and PIdx2NpcIdx then
-            BotDoSkill(tbNpc.finalIndex, skillId, skillLevel, PIdx2NpcIdx(foundPlayerEnemy))
+            local _r = BotDoSkill(tbNpc.finalIndex, skillId, skillLevel, PIdx2NpcIdx(foundPlayerEnemy))
         else
-            NpcCastSkill(tbNpc.finalIndex, skillId, skillLevel, nearestEnemyPos.x*32, nearestEnemyPos.y*32)
+            NpcCastSkill(tbNpc.finalIndex, skillId, skillLevel, targetX*32, targetY*32)
         end
         tbNpc.tick_canCast = tbNpc.tick_breath + 2*18/REFRESH_RATE
         return
-    elseif nearestEnemyType == "npc" and foundNpcEnemy > 0 then
-        NpcCastSkill(tbNpc.finalIndex, skillId, skillLevel, nearestEnemyPos.x, nearestEnemyPos.y)
+    end
+
+    local foundNpcEnemy = self:IsNpcEnemyAround(simInstance, tbNpc)
+    if foundNpcEnemy > 0 then
+        local targetX, targetY, targetW = GetNpcPos(foundNpcEnemy)
+        NpcCastSkill(tbNpc.finalIndex, skillId, skillLevel, targetX, targetY)
         tbNpc.tick_canCast = tbNpc.tick_breath + 2*18/REFRESH_RATE
         return
     end
@@ -270,8 +241,9 @@ SimFight.Citizen = {
     execCastOnParent = execCastOnParent,
     execCastOnSelf = execCastOnSelf,    
     TriggerFightWithNPC = function(self, simInstance, tbNpc)       
-        -- [FIXED] Removed isPlayerFighting check to allow bot to attack NPC enemies directly
-        -- This is needed for nearest enemy targeting logic
+        if tbNpc.isPlayerFighting == 0 and tbNpc.mode ~= "train" and tbNpc.tongkim ~= 1 then   
+            return 0
+        end
         if (self:IsNpcEnemyAround(simInstance, tbNpc) > 0) then
             return self:JoinFight(simInstance, tbNpc, "enemy around")
         end
@@ -336,7 +308,7 @@ SimFight.Citizen = {
                         if lastPos ~= nil and lastPos ~= "none" then
                             local node = getNodeInfoByNodeName(tbNpc, lastPos)
                             Msg2Map(tbNpc.nMapId,
-                                "<color=white>" .. name .. "<color> ï¿½ï¿½nh ngï¿½ï¿½i tï¿½i " .. tbNpc.worldInfo.name .. " " ..
+                                "<color=white>" .. name .. "<color> ®¸nh ng­êi t¹i " .. tbNpc.worldInfo.name .. " " ..
                                 floor(node.x / 8) .. " " .. floor(node.y / 16) .. "")
                         end
                     end
@@ -447,8 +419,9 @@ SimFight.KeoXe = {
     execCastOnParent = execCastOnParent,
     execCastOnSelf = execCastOnSelf,
     TriggerFightWithNPC = function(self, simInstance, tbNpc)
-        -- [FIXED] Removed isPlayerFighting check to allow bot to attack NPC enemies directly
-        -- This is needed for nearest enemy targeting logic
+        if tbNpc.isPlayerFighting == 0 then
+            return 0
+        end
         if (self:IsNpcEnemyAround(simInstance, tbNpc) > 0) then
             return self:JoinFight(simInstance, tbNpc, "enemy around")
         end

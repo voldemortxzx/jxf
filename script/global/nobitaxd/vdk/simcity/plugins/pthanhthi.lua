@@ -18,7 +18,7 @@ function createTaskSayThanhThi(extra)
 	if not extra then
 		extra = ""
 	end
-	tinsert(tbOpt, 1, "<dec><link=image[8,15]:#npcspr:?NPCSID="..tostring(nSettingIdx).."?ACTION="..tostring(nActionId)..">TriÃ–u MÃ‰n:<link> ThiÃ•p vÃ¨n khÂ«ng phÂ¶i ngÂ­Ãªi tÃ¨t, nhÂ­ng thiÃ•p Â®Ã¨i vÃ­i chÂµng... chÂ­a tÃµng gian dÃ¨i." .. extra);
+	tinsert(tbOpt, 1, "<dec><link=image[8,15]:#npcspr:?NPCSID="..tostring(nSettingIdx).."?ACTION="..tostring(nActionId)..">TriÖu MÉn:<link> ThiÕp vèn kh«ng ph¶i ng­êi tèt, nh­ng thiÕp ®èi víi chµng... ch­a tõng gian dèi." .. extra);
 	return tbOpt
 end
 
@@ -227,53 +227,53 @@ function SimCityThanhThi:caidat()
 	local tbSay = createTaskSayThanhThi()
 
 	if worldInfo.allowFighting == 1 then
-		tinsert(tbSay, "Cho phÃp Â®Â¸nh nhau [cÃ£]/#SimCityThanhThi:allowFighting(0)")
+		tinsert(tbSay, "Cho phĞp ®¸nh nhau [cã]/#SimCityThanhThi:allowFighting(0)")
 	else
-		tinsert(tbSay, "Cho phÃp Â®Â¸nh nhau [khÂ«ng]/#SimCityThanhThi:allowFighting(1)")
+		tinsert(tbSay, "Cho phĞp ®¸nh nhau [kh«ng]/#SimCityThanhThi:allowFighting(1)")
 	end
 
 	if getn(worldInfo.decoration) >= 1 then
 		if worldInfo.showDecoration == 0 then
-			tinsert(tbSay, "MÃ« hÃ©i chÃ® [khÂ«ng]/#SimCityThanhThi:showDecoration(1)")
+			tinsert(tbSay, "Më héi chî [kh«ng]/#SimCityThanhThi:showDecoration(1)")
 		else
-			tinsert(tbSay, "MÃ« hÃ©i chÃ® [cÃ£]/#SimCityThanhThi:showDecoration(0)")
+			tinsert(tbSay, "Më héi chî [cã]/#SimCityThanhThi:showDecoration(0)")
 		end
 	end
 
 
 	if worldInfo.allowChat == 1 then
-		tinsert(tbSay, "TrÃŸ chuyÃ–n [cÃ£]/#SimCityThanhThi:allowChat(0)")
+		tinsert(tbSay, "Trß chuyÖn [cã]/#SimCityThanhThi:allowChat(0)")
 	else
-		tinsert(tbSay, "TrÃŸ chuyÃ–n [khÂ«ng]/#SimCityThanhThi:allowChat(1)")
+		tinsert(tbSay, "Trß chuyÖn [kh«ng]/#SimCityThanhThi:allowChat(1)")
 	end
 
 	if worldInfo.showFightingArea == 1 then
-		tinsert(tbSay, "ThÂ«ng bÂ¸o nÂ¬i Â®Â¸nh nhau [cÃ£]/#SimCityThanhThi:showFightingArea(0)")
+		tinsert(tbSay, "Th«ng b¸o n¬i ®¸nh nhau [cã]/#SimCityThanhThi:showFightingArea(0)")
 	else
-		tinsert(tbSay, "ThÂ«ng bÂ¸o nÂ¬i Â®Â¸nh nhau [khÂ«ng]/#SimCityThanhThi:showFightingArea(1)")
+		tinsert(tbSay, "Th«ng b¸o n¬i ®¸nh nhau [kh«ng]/#SimCityThanhThi:showFightingArea(1)")
 	end
 
 	if worldInfo.showingId == 1 then
-		tinsert(tbSay, "HÂ« sÃ¨ bÂ¸o danh [cÃ£]/#SimCityThanhThi:showhideNpcId(0)")
+		tinsert(tbSay, "H« sè b¸o danh [cã]/#SimCityThanhThi:showhideNpcId(0)")
 	else
-		tinsert(tbSay, "HÂ« sÃ¨ bÂ¸o danh [khÂ«ng]/#SimCityThanhThi:showhideNpcId(1)")
+		tinsert(tbSay, "H« sè b¸o danh [kh«ng]/#SimCityThanhThi:showhideNpcId(1)")
 	end
 
 
 	if worldInfo.showName == 1 then
-		tinsert(tbSay, "TÂªn [tÃ¹ Â®Ã©ng]/#SimCityThanhThi:showName(0)")
+		tinsert(tbSay, "Tªn [tù ®éng]/#SimCityThanhThi:showName(0)")
 	else
-		tinsert(tbSay, "TÂªn [tÂ¾t]/#SimCityThanhThi:showName(1)")
+		tinsert(tbSay, "Tªn [t¾t]/#SimCityThanhThi:showName(1)")
 	end
 
-	tinsert(tbSay, "Quay lÂ¹i/main")
-	tinsert(tbSay, "KÃ•t thÃ³c Â®Ã¨i thoÂ¹i./no")
+	tinsert(tbSay, "Quay l¹i/main")
+	tinsert(tbSay, "KÕt thóc ®èi tho¹i./no")
 	CreateTaskSay(tbSay)
 	return 1
 end
 
 function SimCityThanhThi:createNpcCustomAsk()
-	g_AskClientStringEx(GetStringTask(TASK_S_POSITION), 0, 256, "<ID> <SÃ¨ LÂ­Ã®ng>", { self.askNo_confirm, { self } })
+	g_AskClientStringEx(GetStringTask(TASK_S_POSITION), 0, 256, "<ID> <Sè L­îng>", { self.askNo_confirm, { self } })
 end
 
 function SimCityThanhThi:askNo_confirm(inp)
@@ -296,12 +296,12 @@ function SimCityThanhThi:goiAnhHungThiepNgoaiTrang()
 
 
 	local tbSay = createTaskSayThanhThi()
-	tinsert(tbSay, "Â§Ã– tÃ¶ tinh anh (100 thiÃ•p)/#SimCityThanhThi:createAnhHung(1,100,1)")
-	tinsert(tbSay, "Cao thÃ± nhÃŠt lÂ­u (100 thiÃ•p)/#SimCityThanhThi:createAnhHung(2,100,1)")
-	tinsert(tbSay, "TuyÃ–t Â®Ã˜nh cao thÃ± (100 thiÃ•p)/#SimCityThanhThi:createAnhHung(3,100,1)")
-	tinsert(tbSay, "VÃ¢ lÂ©m chÃ tÂ«n (100 thiÃ•p)/#SimCityThanhThi:createAnhHung(4,100,1)")
+	tinsert(tbSay, "§Ö tö tinh anh (100 thiÕp)/#SimCityThanhThi:createAnhHung(1,100,1)")
+	tinsert(tbSay, "Cao thñ nhÊt l­u (100 thiÕp)/#SimCityThanhThi:createAnhHung(2,100,1)")
+	tinsert(tbSay, "TuyÖt ®Ønh cao thñ (100 thiÕp)/#SimCityThanhThi:createAnhHung(3,100,1)")
+	tinsert(tbSay, "Vâ l©m chİ t«n (100 thiÕp)/#SimCityThanhThi:createAnhHung(4,100,1)")
 
-	tinsert(tbSay, "KÃ•t thÃ³c Â®Ã¨i thoÂ¹i./no")
+	tinsert(tbSay, "KÕt thóc ®èi tho¹i./no")
 	CreateTaskSay(tbSay)
 	return 1
 end
@@ -312,12 +312,12 @@ function SimCityThanhThi:goiAnhHungThiep()
 
 
 	local tbSay = createTaskSayThanhThi()
-	tinsert(tbSay, "Cao cÃŠp 1 (100 thiÃ•p)/#SimCityThanhThi:createNpcSet(4,100)")
-	tinsert(tbSay, "Cao cÃŠp 2 (100 thiÃ•p)/#SimCityThanhThi:createNpcSet(3,100)")
-	tinsert(tbSay, "Cao cÃŠp 3 (100 thiÃ•p)/#SimCityThanhThi:createNpcSet(2,100)")
-	tinsert(tbSay, "Trung cÃŠp (100 thiÃ•p)/#SimCityThanhThi:createNpcSet(1,100)")
-	--tinsert(tbSay, "TÃ¹ chÃ¤n/#SimCityThanhThi:createNpcCustomAsk()")
-	tinsert(tbSay, "KÃ•t thÃ³c Â®Ã¨i thoÂ¹i./no")
+	tinsert(tbSay, "Cao cÊp 1 (100 thiÕp)/#SimCityThanhThi:createNpcSet(4,100)")
+	tinsert(tbSay, "Cao cÊp 2 (100 thiÕp)/#SimCityThanhThi:createNpcSet(3,100)")
+	tinsert(tbSay, "Cao cÊp 3 (100 thiÕp)/#SimCityThanhThi:createNpcSet(2,100)")
+	tinsert(tbSay, "Trung cÊp (100 thiÕp)/#SimCityThanhThi:createNpcSet(1,100)")
+	--tinsert(tbSay, "Tù chän/#SimCityThanhThi:createNpcCustomAsk()")
+	tinsert(tbSay, "KÕt thóc ®èi tho¹i./no")
 	CreateTaskSay(tbSay)
 	return 1
 end
@@ -327,18 +327,18 @@ function SimCityThanhThi:thanhthiMenu()
 	local worldInfo = SimCityWorld:Get(nW)
 
 	if not worldInfo.name then
-		local tbSay = createTaskSayThanhThi("<enter><enter>BÂ¶n Â®Ã¥ nÂµy chÂ­a Â®Â­Ã®c mÃ«. ChÂµng cÃ£ thÃ“ gÃ«i <color=yellow>Â®Ãa Â®Ã¥ chÃ<color> Â®Ã•n tÂ¸c giÂ¶ trÂªn fb hÃ©i quÂ¸n.")
-		tinsert(tbSay, "KÃ•t thÃ³c Â®Ã¨i thoÂ¹i./no")
+		local tbSay = createTaskSayThanhThi("<enter><enter>B¶n ®å nµy ch­a ®­îc më. Chµng cã thÓ gëi <color=yellow>®Şa ®å chİ<color> ®Õn t¸c gi¶ trªn fb héi qu¸n.")
+		tinsert(tbSay, "KÕt thóc ®èi tho¹i./no")
 		CreateTaskSay(tbSay)
 	else
 		local tbSay = createTaskSayThanhThi()
 		self.patrolMap = nW
-		tinsert(tbSay, "PhÂ¸t anh hÃ¯ng thiÃ•p/#SimCityThanhThi:goiAnhHungThiepNgoaiTrang()")
-		tinsert(tbSay, "PhÂ¸t quÂ¸i nhÂ©n thiÃ•p/#SimCityThanhThi:goiAnhHungThiep()")
-		tinsert(tbSay, "Â§iÃ’u Â®Ã©ng quÂ©n binh/#SimCityThanhThi:CreatePatrol()")
-		tinsert(tbSay, "Ban lÃ–nh/#SimCityThanhThi:caidat()")
-		tinsert(tbSay, "GiÂ¶i tÂ¸n/#SimCityThanhThi:removeAll()")
-		tinsert(tbSay, "KÃ•t thÃ³c Â®Ã¨i thoÂ¹i./no")
+		tinsert(tbSay, "Ph¸t anh hïng thiÕp/#SimCityThanhThi:goiAnhHungThiepNgoaiTrang()")
+		tinsert(tbSay, "Ph¸t qu¸i nh©n thiÕp/#SimCityThanhThi:goiAnhHungThiep()")
+		tinsert(tbSay, "§iÒu ®éng qu©n binh/#SimCityThanhThi:CreatePatrol()")
+		tinsert(tbSay, "Ban lÖnh/#SimCityThanhThi:caidat()")
+		tinsert(tbSay, "Gi¶i t¸n/#SimCityThanhThi:removeAll()")
+		tinsert(tbSay, "KÕt thóc ®èi tho¹i./no")
 		CreateTaskSay(tbSay)
 	end
 	return 1
@@ -355,25 +355,25 @@ function SimCityThanhThi:mainMenu()
 	SimCityChienTranh.nW = nW
 
 	if not worldInfo.name then
-		local tbSay = createTaskSayThanhThi("<enter><enter>BÂ¶n Â®Ã¥ nÂµy chÂ­a Â®Â­Ã®c mÃ«. ChÂµng cÃ£ thÃ“ gÃ«i <color=yellow>Â®Ãa Â®Ã¥ chÃ<color> Â®Ã•n tÂ¸c giÂ¶ trÂªn fb hÃ©i quÂ¸n.")
-		tinsert(tbSay, "KÃ•t thÃ³c Â®Ã¨i thoÂ¹i./no")
+		local tbSay = createTaskSayThanhThi("<enter><enter>B¶n ®å nµy ch­a ®­îc më. Chµng cã thÓ gëi <color=yellow>®Şa ®å chİ<color> ®Õn t¸c gi¶ trªn fb héi qu¸n.")
+		tinsert(tbSay, "KÕt thóc ®èi tho¹i./no")
 		CreateTaskSay(tbSay)
 	else
 		local counter = self:countMap(nW)
-		local tbSay = createTaskSayThanhThi("<enter><enter><color=yellow>NhÂ©n sÃ¨ hiÃ–n tÂ¹i: " .. counter .. "<color>")
+		local tbSay = createTaskSayThanhThi("<enter><enter><color=yellow>Nh©n sè hiÖn t¹i: " .. counter .. "<color>")
 
-		tinsert(tbSay, "ThÂµnh ThÃ - BÃ¨ cÂ¸o thiÂªn hÂ¹/#SimCityThanhThi:thanhthiMenu()")
-		tinsert(tbSay, "PhÂ¸t Â®Ã©ng Phong HÃ¡a LiÂªn ThÂµnh/#SimCityThanhThi:moPhongHoaLienThanh()")
-		tinsert(tbSay, "PhÂ¸t Â®Ã©ng chiÃ•n tranh/#SimCityChienTranh:mainMenu()")
+		tinsert(tbSay, "Thµnh ThŞ - Bè c¸o thiªn h¹/#SimCityThanhThi:thanhthiMenu()")
+		tinsert(tbSay, "Ph¸t ®éng Phong Háa Liªn Thµnh/#SimCityThanhThi:moPhongHoaLienThanh()")
+		tinsert(tbSay, "Ph¸t ®éng chiÕn tranh/#SimCityChienTranh:mainMenu()")
 
 
 		if self.autoAddThanhThi == 1 then
-			tinsert(tbSay, "TÃ¹ Â®Ã©ng thÂªm (mÃ«)/#SimCityThanhThi:autoThanhThi(0)")
+			tinsert(tbSay, "Tù ®éng thªm (më)/#SimCityThanhThi:autoThanhThi(0)")
 		else
-			tinsert(tbSay, "TÃ¹ Â®Ã©ng thÂªm (tÂ¾t)/#SimCityThanhThi:autoThanhThi(1)")
+			tinsert(tbSay, "Tù ®éng thªm (t¾t)/#SimCityThanhThi:autoThanhThi(1)")
 		end
 
-		tinsert(tbSay, "KÃ•t thÃ³c Â®Ã¨i thoÂ¹i./no")
+		tinsert(tbSay, "KÕt thóc ®èi tho¹i./no")
 		CreateTaskSay(tbSay)
 	end
 	return 1
@@ -385,9 +385,9 @@ function SimCityThanhThi:execPhongHoaLienThanh(level, phe)
 end
 function SimCityThanhThi:moPhongHoaLienThanh()
 	local tbSay = createTaskSayThanhThi("")
-	tinsert(tbSay, "TÃ¨ng VÃ– quÃ¨c Phong HÃ¡a liÂªn thÂµnh/#SimCityThanhThi:execPhongHoaLienThanh(2,1)")
-	tinsert(tbSay, "Kim VÃ– quÃ¨c Phong HÃ¡a liÂªn thÂµnh/#SimCityThanhThi:execPhongHoaLienThanh(2,2)")
-	tinsert(tbSay, "KÃ•t thÃ³c Â®Ã¨i thoÂ¹i./no")
+	tinsert(tbSay, "Tèng VÖ quèc Phong Háa liªn thµnh/#SimCityThanhThi:execPhongHoaLienThanh(2,1)")
+	tinsert(tbSay, "Kim VÖ quèc Phong Háa liªn thµnh/#SimCityThanhThi:execPhongHoaLienThanh(2,2)")
+	tinsert(tbSay, "KÕt thóc ®èi tho¹i./no")
 	CreateTaskSay(tbSay)
 
 	return 1
@@ -395,13 +395,13 @@ end
 
 function SimCityThanhThi:addNpcs()
 	--add_dialognpc({
-	--	{ 1617, 78,  1621, 3253, "\\script\\global\\nobitaxd\\vdk\\simcity\\controllers\\thanhthi.lua", "TriÃ–u MÃ‰n" }, -- TD
-	--	{ 1617, 37,  1719, 3091, "\\script\\global\\nobitaxd\\vdk\\simcity\\controllers\\thanhthi.lua", "TriÃ–u MÃ‰n" }, -- BK
-	--	{ 1617, 11,  3158, 5082, "\\script\\global\\nobitaxd\\vdk\\simcity\\controllers\\thanhthi.lua", "TriÃ–u MÃ‰n" }, -- TD
-	--	{ 1617, 1,   1569, 3198, "\\script\\global\\nobitaxd\\vdk\\simcity\\controllers\\thanhthi.lua", "TriÃ–u MÃ‰n" }, -- PT
-	--	{ 1617, 162, 1603, 3157, "\\script\\global\\nobitaxd\\vdk\\simcity\\controllers\\thanhthi.lua", "TriÃ–u MÃ‰n" }, -- DL
-	--	{ 1617, 80,  1785, 3034, "\\script\\global\\nobitaxd\\vdk\\simcity\\controllers\\thanhthi.lua", "TriÃ–u MÃ‰n" }, -- DC
-	--	{ 1617, 176, 1585, 2932, "\\script\\global\\nobitaxd\\vdk\\simcity\\controllers\\thanhthi.lua", "TriÃ–u MÃ‰n" }, -- LA
+	--	{ 1617, 78,  1621, 3253, "\\script\\global\\nobitaxd\\vdk\\simcity\\controllers\\thanhthi.lua", "TriÖu MÉn" }, -- TD
+	--	{ 1617, 37,  1719, 3091, "\\script\\global\\nobitaxd\\vdk\\simcity\\controllers\\thanhthi.lua", "TriÖu MÉn" }, -- BK
+	--	{ 1617, 11,  3158, 5082, "\\script\\global\\nobitaxd\\vdk\\simcity\\controllers\\thanhthi.lua", "TriÖu MÉn" }, -- TD
+	--	{ 1617, 1,   1569, 3198, "\\script\\global\\nobitaxd\\vdk\\simcity\\controllers\\thanhthi.lua", "TriÖu MÉn" }, -- PT
+	--	{ 1617, 162, 1603, 3157, "\\script\\global\\nobitaxd\\vdk\\simcity\\controllers\\thanhthi.lua", "TriÖu MÉn" }, -- DL
+	--	{ 1617, 80,  1785, 3034, "\\script\\global\\nobitaxd\\vdk\\simcity\\controllers\\thanhthi.lua", "TriÖu MÉn" }, -- DC
+	--	{ 1617, 176, 1585, 2932, "\\script\\global\\nobitaxd\\vdk\\simcity\\controllers\\thanhthi.lua", "TriÖu MÉn" }, -- LA
 	--})
 end
 
@@ -429,31 +429,7 @@ function SimCityThanhThi:countMap(nW)
 	return counter
 end
 
--- FIX: periodic maintenance pass, independent of onPlayerEnterMap/onPlayerExitMap.
--- autoCreateNpc() only fires once per enter/exit event, so a map with a player
--- staying on it for a long session never got re-checked in between. This scans
--- every occupied map on a fixed timer (see refillLoop in main.lua) and tops up
--- any map whose bot count has dropped below the threshold, so populations no
--- longer only ever shrink over time. Safe to call repeatedly since
--- createNpcSoCapByMap()/processBatches() already self-throttle by live count.
-function SimCityThanhThi:periodicRefillCheck()
-	if self.autoAddThanhThi ~= 1 then
-		return 1
-	end
-	for _, worldInfo in SimCityWorld.data do
-		local wid = worldInfo.worldId
-		if wid and worldInfo.name and worldInfo.name ~= ""
-			and worldInfo.playerTrackerCount and worldInfo.playerTrackerCount >= 1
-			and SimCityWorld:IsTongKimMap(wid) ~= 1
-			and self:countMap(wid) < (THANHTHI_MIN_REFILL or 10) then
-			self:createNpcSoCapByMap(wid)
-		end
-	end
-	return 1
-end
-
 function SimCityThanhThi:onPlayerEnterMap()
-	if SimCity_StartLoops then SimCity_StartLoops() end
 	local nW, pX, pY = GetWorldPos()
 	local worldInfo = SimCityWorld:Get(nW)
 	local camp = GetCurCamp()
@@ -500,17 +476,9 @@ end
 
 
 function SimCityThanhThi:autoCreateNpc(nW)
-	if SimCity_StartLoops then SimCity_StartLoops() end
 	local worldInfo = SimCityWorld:Get(nW)
 
-	if (SimCityWorld:IsTongKimMap(nW) ~= 1 and worldInfo.name ~= "" and worldInfo.playerTrackerCount >= 1
-		and self:countMap(nW) < (THANHTHI_MIN_REFILL or 10)) then
-		-- FIX: previously gated on countMap(nW) == 0 (map completely empty). That meant
-		-- as long as even a single fighter remained, the map could never be topped back
-		-- up even after most of its population was gone, so bot count only ever shrank
-		-- over time. Now refills whenever the count drops below a low threshold instead.
-		-- Safe to call repeatedly: processBatches() already stops adding once countMap()
-		-- reaches the size threshold, so this can't overshoot or duplicate bots.
+	if (SimCityWorld:IsTongKimMap(nW) ~= 1 and worldInfo.name ~= "" and worldInfo.playerTrackerCount >= 1 and self:countMap(nW) == 0) then
 		self:createNpcSoCapByMap(nW)
 	end
 
@@ -588,15 +556,9 @@ function SimCityThanhThi:createNpcSoCapByMap(worldId)
 			worldInfo.allowFighting = 0
 			local table1 = {}
 			local countPathNames = getn(getObjectKeys(worldInfo.presetPaths))
-			
-			-- [FIX] Check current bot count before spawning TongKim bots
-			local currentBotCount = self:countMap(nW)
-			if currentBotCount >= (TONGKIM_MAX_BOTS_PER_MAP or 60) then
-				-- Bot limit reached, skip spawning
-			else
+		
 			if countPathNames > 0 then
-				local spawnCount1 = math.min(random(20,40), (TONGKIM_MAX_BOTS_PER_MAP or 60) - currentBotCount)
-				for i = 1, spawnCount1 do 
+				for i = 1, random(20,40) do 
 				self:_createSingle(
 					tmpFound[random(1, N)], nW, { 
 						ngoaitrang = 1, 
@@ -612,8 +574,7 @@ function SimCityThanhThi:createNpcSoCapByMap(worldId)
 				end
 			end
 			if countPathNames > 1 then
-				local spawnCount2 = math.min(random(20,40), (TONGKIM_MAX_BOTS_PER_MAP or 60) - currentBotCount)
-				for i = 1, spawnCount2 do 
+				for i = 1, random(20,40) do 
 				self:_createSingle(
 					tmpFound[random(1, N)], nW, { 
 						ngoaitrang = 1, 
@@ -627,7 +588,6 @@ function SimCityThanhThi:createNpcSoCapByMap(worldId)
 					}
 				)
 				end
-			end
 			end
 		elseif map9x == 0 then
 			if isThanhThi then

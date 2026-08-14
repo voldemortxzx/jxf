@@ -69,8 +69,8 @@ end
 function execRestoreLife(tbNpc)
     if tbNpc.isDead == 0 and tbNpc.tick_breath > 0 
         and tbNpc.finalIndex 
-        and (SIMBOT_HEAL_PERCENT or LIFE_RESTORE_PERCENT) > 0
-        and mod(tbNpc.tick_breath, SIMBOT_HEAL_INTERVAL or (10*18/REFRESH_RATE)) == 0
+        and LIFE_RESTORE_PERCENT > 0 
+        and mod(tbNpc.tick_breath, 10*18/REFRESH_RATE) == 0
         then
         local currentLife = NPCINFO_GetNpcCurrentLife(tbNpc.finalIndex)
         local maxLife = NPCINFO_GetNpcCurrentMaxLife(tbNpc.finalIndex)
@@ -83,8 +83,7 @@ function execRestoreLife(tbNpc)
         -- Binh thuong = 3000 moi 10 giay
         if currentLife and maxLife and currentLife < maxLife then
             -- Calculate life to restore (percentage of max life)
-            local restoreAmount = floor(maxLife * (SIMBOT_HEAL_PERCENT or LIFE_RESTORE_PERCENT) / 100)
-            if restoreAmount < 3000 then restoreAmount = 3000 end
+            local restoreAmount = 3000 --maxLife * LIFE_RESTORE_PERCENT  -- Default 1% if not specified
                 
             -- Apply the restoration
             local newLife = currentLife + restoreAmount
@@ -127,10 +126,6 @@ function execAddScoreToAroundNPC(self, fighter, finalIndex)
         local fighter2 = self.fighterList[found[i]]
         if fighter2 and fighter2.id ~= fighter.id and fighter2.isFighting == 1 then
             fighter2.fightingScore = ceil(fighter2.fightingScore + (scoreTotal / N) + (scoreTotal / N) * fighter2.rank / 10)
-            -- [FIX] Cap fightingScore to prevent unlimited accumulation
-            if fighter2.fightingScore > (FIGHTING_SCORE_MAX or 200000) then
-                fighter2.fightingScore = FIGHTING_SCORE_MAX or 200000
-            end
             SimCityTongKim:updateRank(fighter2)
         end
     end

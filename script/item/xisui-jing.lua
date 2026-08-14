@@ -18,21 +18,19 @@ function main(sel)
 		"B¹n ®· ®äc 'TÈy Tñy Kinh', nhËn ®­îc %s",
 		"B¹n ®· xem kü quyÓn TÈy Tñy kinhnh­ng kh«ng thÓ hiÓu: ( "
 	}
-	--level = GetLevel()
-	level = 160
-	--if(level < 80) then  --µÈ¼¶Ì«µÍ£¬²»ÈÃÊ¹ÓÃ
-	--	Msg2Player(str[1])
-	--	return 1
-	--end
-	--if(times > 14) then --Ê¹ÓÃ³¬¹ı´ÎÊı
-	--	Msg2Player(str[3])
-	--	return 1
-	--end
-	--if(level > 89) then --°´µÈ¼¶·ÖÅäÇ±ÄÜ
-	--	level = 89
-	--end
-	--index = floor((level -80)/2) +1
-	index = 5
+	level = GetLevel()
+	if(level < 80) then  --µÈ¼¶Ì«µÍ£¬²»ÈÃÊ¹ÓÃ
+		Msg2Player(str[1])
+		return 1
+	end
+	if(times > 14) then --Ê¹ÓÃ³¬¹ı´ÎÊı
+		Msg2Player(str[3])
+		return 1
+	end
+	if(level > 89) then --°´µÈ¼¶·ÖÅäÇ±ÄÜ
+		level = 89
+	end
+	index = floor((level -80)/2) +1
 	AddProp(point[index].pot)
 	SetTask(81,times+1)
 	Msg2Player(format(str[2],point[index].msg))
