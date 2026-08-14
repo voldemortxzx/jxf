@@ -102,7 +102,10 @@ function execAddScoreToAroundNPC(self, fighter, finalIndex)
     local currRank = fighter.rank or 1
     local scoreTotal = currRank * 1000
 
-    local  allNpcs, nCount = GetNpcAroundNpcList(finalIndex, 15)
+    -- [FIX] radius nho (15) khien dong minh dung xa hon khong duoc cong diem khi ha guc
+    -- dich, cang ro khi bot gio san dich tren pham vi rong hon (TONGKIM_HUNT_RADIUS) ->
+    -- diem tich luy cham/dung lai o quy mo lon. Dung chung TONGKIM_SCORE_BONUS_RADIUS.
+    local  allNpcs, nCount = GetNpcAroundNpcList(finalIndex, TONGKIM_SCORE_BONUS_RADIUS or 40)
     local fighter2
     local found = {}
     if nCount > 0 then

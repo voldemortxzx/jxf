@@ -16,6 +16,16 @@ RADIUS_FIGHT_PLAYER = 50     -- tam quet+tan cong player (increased from 20)
 RADIUS_FIGHT_NPC = 30        -- tam quet NPC chung quanh va tan cong (increased from 8)
 RADIUS_FIGHT_SCAN = 30       -- tam quet dam danh nhau chung quanh de tham gia (increased from 8)
 
+-- [NEW FEATURE] Bot TongKim: pham vi "chu dong san quai" khi khong co ai trong tam RADIUS_FIGHT_SCAN
+-- Lon hon nhieu RADIUS_FIGHT_SCAN de bot tu di tim dich thay vi chi dung/di ngang doc theo preset path.
+-- Khi den gan trong pham vi RADIUS_FIGHT_SCAN/RADIUS_FIGHT_NPC thi co che tan cong binh thuong se kich hoat.
+TONGKIM_HUNT_RADIUS = 80
+
+-- [FIX] pham vi cong diem thuong khi ha guc dich (truoc day co dinh 15 -> qua nho so voi
+-- TONGKIM_HUNT_RADIUS moi, khien dong doi dung xa hon 15 khong duoc cong diem -> diem tich luy
+-- cham/dung lai o quy mo lon). Xem components/sim.fun.lua execAddScoreToAroundNPC
+TONGKIM_SCORE_BONUS_RADIUS = 40
+
 
 CHANCE_CHAT = 10               -- 10/1000 co hoi noi chuyen moi giay
 CHANCE_DROP_MONEY = 0 		   -- 1/10000 co hoi lam rot tien khi di chuyen
@@ -34,8 +44,12 @@ TIME_RESTING = { -- nghi ngoi, khong danh nhau lai trong vong thoi gian nay
 -- TONG KIM setup
 TONGKIM_SPAWN_MINSTAY = 0         -- thoi gian toi thieu o lai dai doanh truoc khi xong len
 TONGKIM_SPAWN_MAXSTAY = 1        -- thoi gian toi da co the nup trong dai doanh
-TONGKIM_MAX_BOTS_PER_SIDE = 30    -- [IMPROVED] max TongKim bots per side (30 per camp = 60 total)
-TONGKIM_MAX_BOTS_PER_MAP = 60     -- Total max bots (30 camp1 + 30 camp2)
+-- [CHANGED] Giam so luong bot Tong Kim: 20 bot/ben (tong 40 bot/map). Gia tri nay duoc
+-- SimCityChienTranh:taoHauDoanh() (plugins/pchientranh.lua) doc va ap dung RIENG cho tung camp
+-- (truoc day bien nay ton tai nhung khong duoc code doc o dau ca -- taoHauDoanh() hardcode
+-- tong 20 bot CHUNG cho ca 2 phe, khong tach rieng tung ben).
+TONGKIM_MAX_BOTS_PER_SIDE = 20
+TONGKIM_MAX_BOTS_PER_MAP = 40     -- Total max bots (20 camp1 + 20 camp2)
 FIGHTING_SCORE_MAX = 0            -- [IMPROVED] Unlimited fighting score (0 = no cap)
 
 

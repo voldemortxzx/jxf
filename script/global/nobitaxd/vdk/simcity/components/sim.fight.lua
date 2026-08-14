@@ -256,6 +256,32 @@ function BuffChar(self, simInstance, tbNpc)
         BotDoSkill(tbNpc.finalIndex, 178, 20, 0)
     end
 end
+-- [FIX] Focus tan cong len KE DICH GAN NHAT: engine tra ve allNpcs theo thu tu noi bo
+-- (khong theo khoang cach) -- ham cu tra ve PHAN TU DAU TIEN thoa camp, nen bot co the
+-- "khoa" mot dich o xa trong khi co dich khac dung sat ben. Quet toan bo danh sach va
+-- chon dich co khoang cach nho nhat. myX/myY la toa do O (tile), khong phai toa do *32.
+function _pickNearestEnemyNpc(allNpcs, nCount, tbNpc, myX, myY)
+    local nearestIdx = 0
+    local nearestDist = 9999999
+    for i = 1, nCount do
+        if allNpcs[i] ~= tbNpc.finalIndex then
+            local fighter2Kind = GetNpcKind(allNpcs[i])
+            local fighter2Camp = GetNpcCurCamp(allNpcs[i])
+            if fighter2Kind == 0 and ((tbNpc.mode == "train" and GetNpcParam(allNpcs[i], 4) ~= 1) or (IsAttackableCamp(tbNpc.camp, fighter2Camp) == 1)) then
+                local eX32, eY32 = GetNpcPos(allNpcs[i])
+                if eX32 and eY32 and myX and myY then
+                    local dist = GetDistanceRadius(myX, myY, eX32/32, eY32/32)
+                    if dist < nearestDist then
+                        nearestDist = dist
+                        nearestIdx = allNpcs[i]
+                    end
+                end
+            end
+        end
+    end
+    return nearestIdx, nearestDist
+end
+
 /*
     Public functions
 */
@@ -278,22 +304,13 @@ SimFight.Citizen = {
         return 0
     end,
     IsNpcEnemyAround = function(self, simInstance, tbNpc)
-        local allNpcs = {}
-        local nCount = 0
         local radius = tbNpc.RADIUS_FIGHT_SCAN or RADIUS_FIGHT_SCAN
 
         -- Thanh thi / tong kim / chien loan
-        allNpcs, nCount = GetNpcAroundNpcList(tbNpc.finalIndex, radius)
-        for i = 1, nCount do
-            if allNpcs[i] ~= tbNpc.finalIndex then
-                local fighter2Kind = GetNpcKind(allNpcs[i])
-                local fighter2Camp = GetNpcCurCamp(allNpcs[i])
-                if fighter2Kind == 0 and ((tbNpc.mode == "train" and GetNpcParam(allNpcs[i], 4) ~= 1) or (IsAttackableCamp(tbNpc.camp, fighter2Camp) == 1)) then  
-                    return allNpcs[i]
-                end
-            end
-        end
-        return 0
+        local allNpcs, nCount = GetNpcAroundNpcList(tbNpc.finalIndex, radius)
+        local myX32, myY32 = GetNpcPos(tbNpc.finalIndex)
+        if not myX32 then return 0 end
+        return _pickNearestEnemyNpc(allNpcs, nCount, tbNpc, myX32/32, myY32/32)
     end,
     CanLeaveFight = function(self, simInstance, tbNpc)
         if tbNpc.isDead == 1 then
@@ -456,23 +473,13 @@ SimFight.KeoXe = {
     end,
 
     IsNpcEnemyAround = function(self, simInstance, tbNpc)
-        local allNpcs = {}
-        local nCount = 0
         local radius = tbNpc.RADIUS_FIGHT_SCAN or RADIUS_FIGHT_SCAN
         -- Keo xe?
         local pID = simInstance:GetPlayer(tbNpc.id)
         if pID > 0 then
-            allNpcs, nCount = CallPlayerFunction(pID, GetAroundNpcList, radius)
-        
-            for i = 1, nCount do
-                if allNpcs[i] ~= tbNpc.finalIndex then
-                    local fighter2Kind = GetNpcKind(allNpcs[i])
-                    local fighter2Camp = GetNpcCurCamp(allNpcs[i])
-                    if fighter2Kind == 0 and ((tbNpc.mode == "train" and GetNpcParam(allNpcs[i], 4) ~= 1) or (IsAttackableCamp(tbNpc.camp, fighter2Camp) == 1)) then  
-                        return allNpcs[i]
-                    end
-                end
-            end
+            local allNpcs, nCount = CallPlayerFunction(pID, GetAroundNpcList, radius)
+            local pW, pX, pY = CallPlayerFunction(pID, GetWorldPos)
+            return _pickNearestEnemyNpc(allNpcs, nCount, tbNpc, pX, pY)
         end
         return 0
     end,
