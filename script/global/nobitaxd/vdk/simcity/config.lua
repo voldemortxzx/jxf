@@ -1,7 +1,6 @@
 CHANCE_AUTO_ATTACK = 1    -- 1/8000 co hoi chuyen sang chien dau
 CHANCE_JOIN_FIGHT = 1     -- 1/3000 co hoi tham gia danh nhau khi di ngang qua dam danh nhau
 CHANCE_ATTACK_PLAYER = 1  -- 1/3000 co hoi danh nguoi neu den gan nguoi choi dang chien dau
--- [MODIFIED] Bots now attack nearest enemy (player or NPC) instead of always prioritizing players
 
 STARTUP_AUTOADD_THANHTHI = 1 -- tu dong moi nhan si tren tat ca ban do
 THANHTHI_SIZE = 300   		 -- so luong nhan si trong thanh thi
@@ -35,6 +34,9 @@ TIME_RESTING = { -- nghi ngoi, khong danh nhau lai trong vong thoi gian nay
 -- TONG KIM setup
 TONGKIM_SPAWN_MINSTAY = 0         -- thoi gian toi thieu o lai dai doanh truoc khi xong len
 TONGKIM_SPAWN_MAXSTAY = 1        -- thoi gian toi da co the nup trong dai doanh
+TONGKIM_MAX_BOTS_PER_SIDE = 30    -- [IMPROVED] max TongKim bots per side (30 per camp = 60 total)
+TONGKIM_MAX_BOTS_PER_MAP = 60     -- Total max bots (30 camp1 + 30 camp2)
+FIGHTING_SCORE_MAX = 0            -- [IMPROVED] Unlimited fighting score (0 = no cap)
 
 
 -- PARAM setup
@@ -71,3 +73,6 @@ SIMBOT_RESPAWN_MAX_RETRIES = 3                 -- so lan thu respawn lai truoc k
 SIMBOT_POPULATION_CHECK_TICKS = 60 * 18        -- (du phong, xem ghi chu ben duoi ve THANHTHI_REFILL_INTERVAL_TICKS)
 
 ENABLE_BANNGUAMIXDEV = 0	   -- sua lai thanh 1 neu xai ban mix dev vi bi mat ban ngua
+
+-- SIMCITY BOT STALL PRICE/CHINH SUA GIA BAN CUA SIMBOT
+BOT_STALL_PRICE_MULTIPLIER = 20  -- 1=gia goc, 5=x5, 10=x10, 15=x15, ... (toi da 100)
