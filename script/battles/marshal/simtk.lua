@@ -6,7 +6,14 @@ function simTK:markWarStarted(idMap)
 	local wi = SimCityWorld:Get(idMap)
 	if wi then
 		wi.tkWarStarted = 1; wi.tkMarshal = nil
-		wi.tkMFB = nil			
+		wi.tkMFB = nil
+		-- [FIX] worldInfo.allowFighting chua bao gio duoc bat cho ban do Tong Kim cua he thong
+		-- marshal (pworld.lua modifyTongKimMap khong set, SimCityChienTranh:init cung khong set).
+		-- SimCityCanFight() (libs/common.lua) doi hoi allowFighting==1 (hoac cityPeace==1) sau khi
+		-- qua ai tkWarStarted check -> thieu dong nay khien bot KHONG THE tu do giao chien voi nhau,
+		-- chi danh duoc qua self-def/player gan -> diem tich luy dung lai som (~7500) vi da so bot
+		-- khong bao gio vao duoc trang thai isFighting qua co che chu dong tim dich.
+		wi.allowFighting = 1
 		if BT_GetBattleParam and getNpcInfo and SetMissionV then
 			for _ri = 1, 6 do
 				local t1, l1 = getNpcInfo(BT_GetBattleParam(_ri))
@@ -86,7 +93,7 @@ function SimCityChienTranh:taoNV_TK(id, camp, worldInfo, walkPathNames, nt, theo
 	local rank = 1
 	local realCamp = camp   
 	if camp == 1 then
-		name = "Tèng"
+		name = "Tï¿½ng"
 		realCamp = camp  
 	end
 	
@@ -243,7 +250,10 @@ function simTK:call_npc_simcity(nIdMap,startNPCIndex, stopNPCIndex, nCount ,ngoa
 
 end
 function simTK:add_npc_simcity(idMap)
-		self:call_npc_simcity(idMap, 2000,2023,100,1)
+		-- [FIX] hardcode 100/phe (200 bot tong) -> day chinh la nguyen nhan "bot rat dong" va
+		-- diem tich luy bi loang (moi bot it co co hoi duoc cong diem giua qua nhieu doi thu).
+		-- Dung chung TONGKIM_MAX_BOTS_PER_SIDE (config.lua, mac dinh 20) voi taoHauDoanh().
+		self:call_npc_simcity(idMap, 2000,2023,TONGKIM_MAX_BOTS_PER_SIDE or 20,1)
 	local _wi = SimCityWorld:Get(idMap)
 	if _wi then _wi.tkWarStarted = 0 end
 end

@@ -38,7 +38,12 @@ function IsActive(self, simInstance,tbNpc)
                 and tbNpc.camp ~= 0
                 and IsAttackableCamp(camp, tbNpc.camp) == 1
                 and GetDistanceRadius(tbNpc.lastPos.nX32/32, tbNpc.lastPos.nY32/32, pX, pY) <= scanFightRadius
-                and (SIMBOT_AGGRO_PLAYER == 1 or tbNpc.mode == "train")   -- [2026-06-28] train bot proximity-aggro player toi gan (thanh/thon van peace)   -- [2026-06-25] BO GetFightState: bot CHI danh tra khi BI DANH (self-def line duoi), KHONG aggro chi vi player o fight-mode danh con KHAC   -- [2026-06-20] SIMBOT_AGGRO_PLAYER=1: bot NHAM+danh player khac camp du player CHUA bat chien dau 
+                -- [FIX] SIMBOT_AGGRO_PLAYER khong duoc gan =1 o dau trong chuoi Include dang chay (chi con
+                -- trong group_fighter.class.lua, file khong duoc Include) -> luon nil -> dieu kien nay truoc
+                -- day CHI dung cho "train", bot Tong Kim khong bao gio chu dong nham player, CHI phan don
+                -- khi bi danh (self-def duoi). Sau khi bo "khoa duel doc quyen" (fix truoc), day la duong
+                -- DUY NHAT con lai de bot Tong Kim thay player -> nhieu bot khong con danh player nua.
+                and (SIMBOT_AGGRO_PLAYER == 1 or tbNpc.mode == "train" or tbNpc.tongkim == 1)   -- [2026-06-28] train bot proximity-aggro player toi gan (thanh/thon van peace)   -- [2026-06-25] BO GetFightState: bot CHI danh tra khi BI DANH (self-def line duoi), KHONG aggro chi vi player o fight-mode danh con KHAC   -- [2026-06-20] SIMBOT_AGGRO_PLAYER=1: bot NHAM+danh player khac camp du player CHUA bat chien dau 
                  then
                 tbNpc.isPlayerEnemyAround = pID
             end
@@ -993,35 +998,46 @@ SimMovement.Citizen = {
         end
 
         -- [TK RALLY 2026-06-28] dieu huong TK bot khi KHONG danh: co boss MINH -> ve THU; boss DICH -> qua DANH; chua co boss -> don GIUA map (soi dong, het idle/march cho cu).
+        -- [IMPROVED] Uu tien CHU DONG SAN DICH GAN NHAT (ban NPC lan player) trong pham vi
+        -- TONGKIM_HUNT_RADIUS (rong hon nhieu RADIUS_FIGHT_SCAN) truoc khi roi vao rally co dinh.
+        -- Truoc day bot tong kim CHI biet dung o nha hoac xong len/xuong doc theo preset path,
+        -- hoan toan khong chu dong tim dich khi dich ngoai tam RADIUS_FIGHT_SCAN (~30).
         if tbNpc.tongkim == 1 and tbNpc.worldInfo and tbNpc.isFighting == 0 and tbNpc.camp then
             local _wi = tbNpc.worldInfo
-            local _myM = _wi.tkMarshal and _wi.tkMarshal[tbNpc.camp]
-            local _enM = _wi.tkMarshal and _wi.tkMarshal[(tbNpc.camp == 1) and 2 or 1]
-            local _myA = _myM and _myM[3] and NPCINFO_GetNpcCurrentLife and (NPCINFO_GetNpcCurrentLife(_myM[3]) or 0) > 0
-            local _enA = _enM and _enM[3] and NPCINFO_GetNpcCurrentLife and (NPCINFO_GetNpcCurrentLife(_enM[3]) or 0) > 0
+            local _huntR = TONGKIM_HUNT_RADIUS or 80
+            local _huntNpcs, _huntN = GetNpcAroundNpcList(tbNpc.finalIndex, _huntR)
+            local _huntEnemy, _huntDist = _pickNearestEnemyNpc(_huntNpcs, _huntN, tbNpc, myPosX, myPosY)
+
             local _tx, _ty
--- TODO
-                -- _tx = _wi.tkCenter[1];
-  	--_ty = _wi.tkCenter[2]
---if _enA then
---    _tx = _enM[1]
---    _ty = _enM[2]
---elseif _wi.tkCenter then
---    _tx = _wi.tkCenter[1]
---    _ty = _wi.tkCenter[2]
---end
+            if _huntEnemy > 0 then
+                local _ex, _ey = GetNpcPos(_huntEnemy)
+                if _ex then _tx = floor(_ex/32); _ty = floor(_ey/32) end
+            end
 
---if _wi.tkCenter then
---    _tx = _wi.tkCenter[1]
---    _ty = _wi.tkCenter[2]
---end
-            if _myA then _tx = _myM[1]; _ty = _myM[2]   -- co boss minh -> ve THU 
-            elseif _enA then _tx = _enM[1]; _ty = _enM[2]   -- boss dich -> qua DANH
-            elseif _wi.tkCenter then _tx = _wi.tkCenter[1]; _ty = _wi.tkCenter[2] end   -- chua co boss -> don GIUA map
+            -- Dich player trong tam san (da duoc IsActive() quet o RADIUS_FIGHT_PLAYER)
+            if tbNpc.isPlayerEnemyAround and tbNpc.isPlayerEnemyAround > 0 then
+                local _pw, _px, _py = CallPlayerFunction(tbNpc.isPlayerEnemyAround, GetWorldPos)
+                if _px then
+                    local _pDist = GetDistanceRadius(myPosX, myPosY, _px, _py)
+                    if not _tx or _pDist < _huntDist then _tx = _px; _ty = _py end
+                end
+            end
 
-           if _tx then
+            -- Khong tim thay dich nao trong pham vi san -> rally nhu cu (ve thu/qua danh boss/don giua map)
+            if not _tx then
+                local _myM = _wi.tkMarshal and _wi.tkMarshal[tbNpc.camp]
+                local _enM = _wi.tkMarshal and _wi.tkMarshal[(tbNpc.camp == 1) and 2 or 1]
+                local _myA = _myM and _myM[3] and NPCINFO_GetNpcCurrentLife and (NPCINFO_GetNpcCurrentLife(_myM[3]) or 0) > 0
+                local _enA = _enM and _enM[3] and NPCINFO_GetNpcCurrentLife and (NPCINFO_GetNpcCurrentLife(_enM[3]) or 0) > 0
+
+                if _myA then _tx = _myM[1]; _ty = _myM[2]   -- co boss minh -> ve THU
+                elseif _enA then _tx = _enM[1]; _ty = _enM[2]   -- boss dich -> qua DANH
+                elseif _wi.tkCenter then _tx = _wi.tkCenter[1]; _ty = _wi.tkCenter[2] end   -- chua co boss -> don GIUA map
+            end
+
+            if _tx then
                 if GetDistanceRadius(myPosX, myPosY, _tx, _ty) > 6 then NpcRun(tbNpc.finalIndex, _tx + random(-6, 6), _ty + random(-6, 6)) end
-                return 1   -- da co diem rally; fight-trigger o tren lo danh dich gan
+                return 1   -- da co diem den; fight-trigger o tren lo danh dich gan
             end
         end
 

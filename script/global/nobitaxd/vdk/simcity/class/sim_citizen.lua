@@ -156,20 +156,34 @@ end
 
 -- ===== TEN BANG NGAU NHIEN cho bot Tong Kim. Sua list ten tuy y 
 g_TK_BangChance = 50   -- %% bot co ten bang (0-100)
-g_TK_BangRanks = g_TK_BangRanks or { "Bang Chñ", "Tr­ëng l·o", "§­êng Chñ", "§Ö Tö" }   -- Bang Chu/Truong Lao/Duong Chu/De Tu
+g_TK_BangRanks = g_TK_BangRanks or { "Bang Chï¿½", "Trï¿½ï¿½ng lï¿½o", "ï¿½ï¿½ï¿½ng Chï¿½", "ï¿½ï¿½ Tï¿½" }   -- Bang Chu/Truong Lao/Duong Chu/De Tu
 g_TK_BangNames = g_TK_BangNames or {
-	"AnhEm", "BèGiµ", "ThÝchPK", "Ph¸Thiªn", "Thiªn§Þa",
-	"T×nh", "TiÕuNg¹o", "Badboy", "Huynh§Ö", "S¸t",
+	"AnhEm", "Bï¿½Giï¿½", "Thï¿½chPK", "Phï¿½Thiï¿½n", "Thiï¿½nï¿½ï¿½a",
+	"Tï¿½nh", "Tiï¿½uNgï¿½o", "Badboy", "Huynhï¿½ï¿½", "Sï¿½t",
 }
 
 function SimCitizen:UpdateBotLadder(nW)  
     local bptS, bptJ = 0, 0
+    local topFighter, topScore = nil, -1
     for ii, ff in self.fighterList do
         if ff.nMapId == nW and ff.tongkim == 1 then
             if ff.camp == 1 then bptS = bptS + (ff.fightingScore or 0)
             else bptJ = bptJ + (ff.fightingScore or 0) end
+            if (ff.fightingScore or 0) > topScore then topScore = ff.fightingScore or 0; topFighter = ff end
         end
     end 
+
+    -- [DEBUG] tu dong ghi log dinh ky (khong can GM vao menu) de doi chieu bot diem cao nhat
+    -- dang tang hay dung, va co dang bi khoa duel voi player hay khong.
+    g_tkDebugLogTick = g_tkDebugLogTick or {}
+    g_tkDebugLogTick[nW] = (g_tkDebugLogTick[nW] or 0) + 1
+    if g_tkDebugLogTick[nW] >= 20 and WriteLog and topFighter then
+        g_tkDebugLogTick[nW] = 0
+        WriteLog("[TK-DEBUG] map=" .. nW .. " campTong=" .. bptS .. " campKim=" .. bptJ ..
+            " topBot=" .. (topFighter.hardsetName or topFighter.nNpcId) .. " score=" .. (topFighter.fightingScore or 0) ..
+            " isFighting=" .. tostring(topFighter.isFighting) .. " duelLock=" .. tostring(topFighter.duelPlayerId ~= nil))
+    end
+
     if (bptS + bptJ) == 0 then
         if BotLadderClear then BotLadderClear(SubWorldID2Idx(nW)) end
         return
@@ -341,7 +355,7 @@ function SimCitizen:ThongBaoBXH(nW)
         local swIdx = SubWorldID2Idx(nW)
         if BotLadderClear then BotLadderClear(swIdx) end
 
-        Msg2Map(nW, "<color=yellow>========= B¶ng XÕp H¹ng =========<color>")
+        Msg2Map(nW, "<color=yellow>========= Bï¿½ng Xï¿½p Hï¿½ng =========<color>")
         Msg2Map(nW, "<color=yellow>=================================<color>")
 
         local _bxhMult = (bt_getgn_awardtimes and bt_getgn_awardtimes()) or 1   
@@ -361,7 +375,7 @@ function SimCitizen:ThongBaoBXH(nW)
                         else
                             phe = "Kim"
                             if fighter.camp == 1 then
-                                phe = "Tèng"
+                                phe = "Tï¿½ng"
                             end
                         end
                     end

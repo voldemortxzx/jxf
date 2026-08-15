@@ -36,9 +36,9 @@ function createTaskSayChienTranh(mapId, extra)
 	-- Show it
 	if showVoKy == 1 then
 		nSettingIdx = 103
-		tinsert(tbOpt, 1, "<dec><link=image[0,14]:#npcspr:?NPCSID="..tostring(nSettingIdx).."?ACTION="..tostring(nActionId)..">V« Kþ:<link> Ng­êi H¸n lu«n cho r»ng ng­êi Kim lµ d· man, nh­ng ng­¬i cã biÕt chiÕn tranh b¾t ®Çu tõ ®©u kh«ng?" .. extra);
+		tinsert(tbOpt, 1, "<dec><link=image[0,14]:#npcspr:?NPCSID="..tostring(nSettingIdx).."?ACTION="..tostring(nActionId)..">Vï¿½ Kï¿½:<link> Ngï¿½ï¿½i Hï¿½n luï¿½n cho rï¿½ng ngï¿½ï¿½i Kim lï¿½ dï¿½ man, nhï¿½ng ngï¿½ï¿½i cï¿½ biï¿½t chiï¿½n tranh bï¿½t ï¿½ï¿½u tï¿½ ï¿½ï¿½u khï¿½ng?" .. extra);
 	else
-		tinsert(tbOpt, 1, "<dec><link=image[8,15]:#npcspr:?NPCSID="..tostring(nSettingIdx).."?ACTION="..tostring(nActionId)..">TriÖu MÉn:<link> Ng­êi H¸n c¸c ng­¬i lu«n cho r»ng ng­êi Kim chóng ta lµ d· man, nh­ng c¸c ng­¬i cã biÕt chiÕn tranh b¾t ®Çu tõ ®©u kh«ng?" .. extra);
+		tinsert(tbOpt, 1, "<dec><link=image[8,15]:#npcspr:?NPCSID="..tostring(nSettingIdx).."?ACTION="..tostring(nActionId)..">Triï¿½u Mï¿½n:<link> Ngï¿½ï¿½i Hï¿½n cï¿½c ngï¿½ï¿½i luï¿½n cho rï¿½ng ngï¿½ï¿½i Kim chï¿½ng ta lï¿½ dï¿½ man, nhï¿½ng cï¿½c ngï¿½ï¿½i cï¿½ biï¿½t chiï¿½n tranh bï¿½t ï¿½ï¿½u tï¿½ ï¿½ï¿½u khï¿½ng?" .. extra);
 	end
 
 	return tbOpt
@@ -122,7 +122,7 @@ function SimCityChienTranh:taoNV(id, camp, worldInfo, walkPathNames, nt, theosau
 	local rank = 1
 	local realCamp = 5
 	if camp == 1 then
-		name = "Tèng"
+		name = "Tï¿½ng"
 		realCamp = 0
 	end
 
@@ -197,7 +197,7 @@ function SimCityChienTranh:taodoi(thonglinh, camp, worldInfo, walkPathNames, chi
 	local realCamp = 5
 
 	if camp == 1 then
-		name = "Tèng Binh"
+		name = "Tï¿½ng Binh"
 		realCamp = 0
 	end
 	if children5 then
@@ -328,8 +328,8 @@ function SimCityChienTranh:phe_tudo(startNPCIndex, perPage, ngoaitrang)
 	local worldInfo = SimCityWorld:Get(self.nW)
 	-- local result = SimCityGraphToChienTranh:build(worldInfo, 32)
 	-- if (result == 0) then
-	-- 	--local tbSay = createTaskSayChienTranh("<enter><enter>ChiÕn lo¹n t¹i b¶n ®å nµy ch­a ®­îc më. Chµng cã thÓ gëi <color=yellow>®Þa ®å chÝ<color> ®Õn t¸c gi¶ trªn fb héi qu¸n.")
-	-- 	--tinsert(tbSay, "KÕt thóc ®èi tho¹i./no")
+	-- 	--local tbSay = createTaskSayChienTranh("<enter><enter>Chiï¿½n loï¿½n tï¿½i bï¿½n ï¿½ï¿½ nï¿½y chï¿½a ï¿½ï¿½ï¿½c mï¿½. Chï¿½ng cï¿½ thï¿½ gï¿½i <color=yellow>ï¿½ï¿½a ï¿½ï¿½ chï¿½<color> ï¿½ï¿½n tï¿½c giï¿½ trï¿½n fb hï¿½i quï¿½n.")
+	-- 	--tinsert(tbSay, "Kï¿½t thï¿½c ï¿½ï¿½i thoï¿½i./no")
 	-- 	--CreateTaskSay(tbSay)
 	-- 	print("Chien loan ban do nay chua mow")
 	-- 	return 1 
@@ -404,8 +404,8 @@ function SimCityChienTranh:nv_tudo(capHP)
 	local worldInfo = SimCityWorld:Get(self.nW)
 	local result = SimCityGraphToChienTranh:build(worldInfo, 32)
 	if (result == 0) then
-		--local tbSay = createTaskSayChienTranh("<enter><enter>ChiÕn lo¹n t¹i b¶n ®å nµy ch­a ®­îc më. Chµng cã thÓ gëi <color=yellow>®Þa ®å chÝ<color> ®Õn t¸c gi¶ trªn fb héi qu¸n.")
-		--tinsert(tbSay, "KÕt thóc ®èi tho¹i./no")
+		--local tbSay = createTaskSayChienTranh("<enter><enter>Chiï¿½n loï¿½n tï¿½i bï¿½n ï¿½ï¿½ nï¿½y chï¿½a ï¿½ï¿½ï¿½c mï¿½. Chï¿½ng cï¿½ thï¿½ gï¿½i <color=yellow>ï¿½ï¿½a ï¿½ï¿½ chï¿½<color> ï¿½ï¿½n tï¿½c giï¿½ trï¿½n fb hï¿½i quï¿½n.")
+		--tinsert(tbSay, "Kï¿½t thï¿½c ï¿½ï¿½i thoï¿½i./no")
 		--CreateTaskSay(tbSay)
 		print("Chien loan ban do nay chua mow")
 		return 1 
@@ -528,7 +528,7 @@ function SimCityChienTranh:getWorldName()
 			counter = counter + 1
 		end
 	end
-	return { worldInfo.name .. " ChiÕn Lo¹n<enter><color=yellow>Nh©n sè hiÖn t¹i: " .. counter }
+	return { worldInfo.name .. " Chiï¿½n Loï¿½n<enter><color=yellow>Nhï¿½n sï¿½ hiï¿½n tï¿½i: " .. counter }
 end
 
 
@@ -546,54 +546,54 @@ end
 function SimCityChienTranh:goiAnhHungThiepNgoaiTrang()
 
 	local counter = self:countMap(self.nW)
-	local extra = "<enter><enter><color=yellow>Nh©n sè hiÖn t¹i: " .. counter .. "<color>"
+	local extra = "<enter><enter><color=yellow>Nhï¿½n sï¿½ hiï¿½n tï¿½i: " .. counter .. "<color>"
 
 
 	local tbSay = createTaskSayChienTranh(self.nW, extra)	
 
-	tinsert(tbSay, "§Ö tö tinh anh (100 thiÕp)/#SimCityChienTranh:nv_tudo(1)")
-	tinsert(tbSay, "§Ö tö tinh anh (5 nhãm)/#SimCityChienTranh:nv_tudo_xe(1)")
+	tinsert(tbSay, "ï¿½ï¿½ tï¿½ tinh anh (100 thiï¿½p)/#SimCityChienTranh:nv_tudo(1)")
+	tinsert(tbSay, "ï¿½ï¿½ tï¿½ tinh anh (5 nhï¿½m)/#SimCityChienTranh:nv_tudo_xe(1)")
 
-	tinsert(tbSay, "Cao thñ nhÊt l­u (100 thiÕp)/#SimCityChienTranh:nv_tudo(2)")
-	tinsert(tbSay, "Cao thñ nhÊt l­u (5 nhãm)/#SimCityChienTranh:nv_tudo_xe(2)")
-
-
-	tinsert(tbSay, "TuyÖn ®Ønh cao thñ (100 thiÕp)/#SimCityChienTranh:nv_tudo(3)")
-	tinsert(tbSay, "TuyÖn ®Ønh cao thñ (5 nhãm)/#SimCityChienTranh:nv_tudo_xe(3)")
-
-	tinsert(tbSay, "Vâ l©m chÝ t«n (100 thiÕp)/#SimCityChienTranh:nv_tudo(4)")
-	tinsert(tbSay, "Vâ l©m chÝ t«n (5 nhãm)/#SimCityChienTranh:nv_tudo_xe(4)")
+	tinsert(tbSay, "Cao thï¿½ nhï¿½t lï¿½u (100 thiï¿½p)/#SimCityChienTranh:nv_tudo(2)")
+	tinsert(tbSay, "Cao thï¿½ nhï¿½t lï¿½u (5 nhï¿½m)/#SimCityChienTranh:nv_tudo_xe(2)")
 
 
-	tinsert(tbSay, "Quay l¹i./#SimCityChienTranh:mainMenu()")
-	tinsert(tbSay, "KÕt thóc ®èi tho¹i./no")
+	tinsert(tbSay, "Tuyï¿½n ï¿½ï¿½nh cao thï¿½ (100 thiï¿½p)/#SimCityChienTranh:nv_tudo(3)")
+	tinsert(tbSay, "Tuyï¿½n ï¿½ï¿½nh cao thï¿½ (5 nhï¿½m)/#SimCityChienTranh:nv_tudo_xe(3)")
+
+	tinsert(tbSay, "Vï¿½ lï¿½m chï¿½ tï¿½n (100 thiï¿½p)/#SimCityChienTranh:nv_tudo(4)")
+	tinsert(tbSay, "Vï¿½ lï¿½m chï¿½ tï¿½n (5 nhï¿½m)/#SimCityChienTranh:nv_tudo_xe(4)")
+
+
+	tinsert(tbSay, "Quay lï¿½i./#SimCityChienTranh:mainMenu()")
+	tinsert(tbSay, "Kï¿½t thï¿½c ï¿½ï¿½i thoï¿½i./no")
 	CreateTaskSay(tbSay)
 	return 1
 end
 
 function SimCityChienTranh:goiAnhHungThiep()
 	local counter = self:countMap(self.nW)
-	local extra = "<enter><enter><color=yellow>Nh©n sè hiÖn t¹i: " .. counter .. "<color>"
+	local extra = "<enter><enter><color=yellow>Nhï¿½n sï¿½ hiï¿½n tï¿½i: " .. counter .. "<color>"
 	local tbSay = createTaskSayChienTranh(self.nW, extra)
 
 
 
-	tinsert(tbSay, "Cao cÊp 1 (500 thiÕp)/#SimCityChienTranh:phe_tudo(1000,500,0)")
-	--tinsert(tbSay, "Cao cÊp 1 (5 xe)/#SimCityChienTranh:phe_tudo_xe(1000,500,0)")
+	tinsert(tbSay, "Cao cï¿½p 1 (500 thiï¿½p)/#SimCityChienTranh:phe_tudo(1000,500,0)")
+	--tinsert(tbSay, "Cao cï¿½p 1 (5 xe)/#SimCityChienTranh:phe_tudo_xe(1000,500,0)")
 
-	tinsert(tbSay, "Cao cÊp 2 (500 thiÕp)/#SimCityChienTranh:phe_tudo(1500,500,0)")
-	--tinsert(tbSay, "Cao cÊp 2 (5 xe)/#SimCityChienTranh:phe_tudo_xe(1500,500,0)")
+	tinsert(tbSay, "Cao cï¿½p 2 (500 thiï¿½p)/#SimCityChienTranh:phe_tudo(1500,500,0)")
+	--tinsert(tbSay, "Cao cï¿½p 2 (5 xe)/#SimCityChienTranh:phe_tudo_xe(1500,500,0)")
 
-	tinsert(tbSay, "Cao cÊp 3 (500 thiÕp)/#SimCityChienTranh:phe_tudo(2000,500,0)")
-	--tinsert(tbSay, "Cao cÊp 3 (5 xe)/#SimCityChienTranh:phe_tudo_xe(2000,500,0)")
+	tinsert(tbSay, "Cao cï¿½p 3 (500 thiï¿½p)/#SimCityChienTranh:phe_tudo(2000,500,0)")
+	--tinsert(tbSay, "Cao cï¿½p 3 (5 xe)/#SimCityChienTranh:phe_tudo_xe(2000,500,0)")
 
 
 
-	tinsert(tbSay, "Trung cÊp (500 thiÕp)/#SimCityChienTranh:phe_tudo(500,500,1)")
-	--tinsert(tbSay, "Trung cÊp (5 xe)/#SimCityChienTranh:phe_tudo_xe(500,500,0)")
+	tinsert(tbSay, "Trung cï¿½p (500 thiï¿½p)/#SimCityChienTranh:phe_tudo(500,500,1)")
+	--tinsert(tbSay, "Trung cï¿½p (5 xe)/#SimCityChienTranh:phe_tudo_xe(500,500,0)")
 
-	tinsert(tbSay, "Quay l¹i./#SimCityChienTranh:mainMenu()")
-	tinsert(tbSay, "KÕt thóc ®èi tho¹i./no")
+	tinsert(tbSay, "Quay lï¿½i./#SimCityChienTranh:mainMenu()")
+	tinsert(tbSay, "Kï¿½t thï¿½c ï¿½ï¿½i thoï¿½i./no")
 	CreateTaskSay(tbSay)
 	return 1
 end
@@ -604,7 +604,7 @@ function SimCityChienTranh:khaiChienPhongHoaLienThanh()
 		return 1
 	end
 	SetMissionV(5, 89)
-	Say("Qu©n ®Þch sÏ b¾t ®Çu c«ng thµnh trong 20 gi©y, c¸c T­íng sÜ h·y s½n sµng!")
+	Say("Quï¿½n ï¿½ï¿½ch sï¿½ bï¿½t ï¿½ï¿½u cï¿½ng thï¿½nh trong 20 giï¿½y, cï¿½c Tï¿½ï¿½ng sï¿½ hï¿½y sï¿½n sï¿½ng!")
 
 	-- FIX: tkWarStarted was never set anywhere, so SimCityCanFight() and
 	-- SimCore:OnTimer() (which both gate on worldInfo.tkWarStarted == 1)
@@ -630,11 +630,11 @@ function SimCityChienTranh:khaiChienTongKim()
 		return 1
 	end
 	if GetMissionV(1) ~= 2 then			
-		AddGlobalCountNews("Thêi gian b¸o danh ®· kÕt thóc. ChiÕn ®Êu chÝnh thøc b¾t ®Çu", 2);
-		Msg2Map(self.nW, "Phong V©n LuËn KiÕm chÝnh thøc khai chiÕn! C¸c chiÕn sÜ! X«ng lªn!");
+		AddGlobalCountNews("Thï¿½i gian bï¿½o danh ï¿½ï¿½ kï¿½t thï¿½c. Chiï¿½n ï¿½ï¿½u chï¿½nh thï¿½c bï¿½t ï¿½ï¿½u", 2);
+		Msg2Map(self.nW, "Phong Vï¿½n Luï¿½n Kiï¿½m chï¿½nh thï¿½c khai chiï¿½n! Cï¿½c chiï¿½n sï¿½! Xï¿½ng lï¿½n!");
 		SetMissionV(1,2);
 		BT_SetData( 46, GetGameTime() )
-		PutMessage("§Þch qu©n ®· b¾t ®Çu hµnh ®éng! C¸c chiÕn sÜ! X«ng lªn!")
+		PutMessage("ï¿½ï¿½ch quï¿½n ï¿½ï¿½ bï¿½t ï¿½ï¿½u hï¿½nh ï¿½ï¿½ng! Cï¿½c chiï¿½n sï¿½! Xï¿½ng lï¿½n!")
 
 		-- FIX: same tkWarStarted wiring bug as khaiChienPhongHoaLienThanh().
 		local worldInfo = SimCityWorld:Get(self.nW)
@@ -666,27 +666,64 @@ end
 function SimCityChienTranh:caidat()
 	local worldInfo = SimCityWorld:Get(self.nW)
 	local counter = self:countMap(self.nW)
-	local extra = "<enter><enter><color=yellow>Nh©n sè hiÖn t¹i: " .. counter .. "<color>"
+	local extra = "<enter><enter><color=yellow>Nhï¿½n sï¿½ hiï¿½n tï¿½i: " .. counter .. "<color>"
 	local tbSay = createTaskSayChienTranh(self.nW, extra)
 
 
 
 	if worldInfo.showBXH == 1 then
-		tinsert(tbSay, "Th«ng b¸o xÕp h¹ng mçi phót [cã]/#SimCityChienTranh:showBXH(0)")
+		tinsert(tbSay, "Thï¿½ng bï¿½o xï¿½p hï¿½ng mï¿½i phï¿½t [cï¿½]/#SimCityChienTranh:showBXH(0)")
 	else
-		tinsert(tbSay, "Th«ng b¸o xÕp h¹ng mçi phót [kh«ng]/#SimCityChienTranh:showBXH(1)")
+		tinsert(tbSay, "Thï¿½ng bï¿½o xï¿½p hï¿½ng mï¿½i phï¿½t [khï¿½ng]/#SimCityChienTranh:showBXH(1)")
 	end
 
 	if worldInfo.showThangCap == 1 then
-		tinsert(tbSay, "Th«ng b¸o th¨ng cÊp [cã]/#SimCityChienTranh:showThangCap(0)")
+		tinsert(tbSay, "Thï¿½ng bï¿½o thï¿½ng cï¿½p [cï¿½]/#SimCityChienTranh:showThangCap(0)")
 	else
-		tinsert(tbSay, "Th«ng b¸o th¨ng cÊp [kh«ng]/#SimCityChienTranh:showThangCap(1)")
+		tinsert(tbSay, "Thï¿½ng bï¿½o thï¿½ng cï¿½p [khï¿½ng]/#SimCityChienTranh:showThangCap(1)")
 	end
 
 
-	tinsert(tbSay, "Quay l¹i/#SimCityChienTranh:mainMenu()")
-	tinsert(tbSay, "KÕt thóc ®èi tho¹i./no")
+	tinsert(tbSay, "Quay lï¿½i/#SimCityChienTranh:mainMenu()")
+	tinsert(tbSay, "Kï¿½t thï¿½c ï¿½ï¿½i thoï¿½i./no")
 	CreateTaskSay(tbSay)
+	return 1
+end
+
+-- [DEBUG] liet ke top bot Tong Kim theo diem, kem trang thai isFighting/duel-lock/dich gan de
+-- tra loi truc tiep "vi sao diem bot X khong tang nua" ma khong can xem log server.
+function SimCityChienTranh:debugTongKimStatus()
+	local nW = self.nW
+	local rows = {}
+	for k, v in SimCitizen.fighterList do
+		if v.nMapId == nW and v.tongkim == 1 and v.role ~= "child" then
+			tinsert(rows, { k, v.fightingScore or 0 })
+		end
+	end
+
+	if getn(rows) == 0 then
+		Msg2Map(nW, "<color=yellow>Khong co bot Tong Kim nao tren ban do nay<color>")
+		return 1
+	end
+
+	sort(rows, _sortByScore)
+
+	Msg2Map(nW, "<color=yellow>===== DEBUG bot Tong Kim (toi da 15, sap theo diem) =====<color>")
+	local shown = getn(rows)
+	if shown > 15 then shown = 15 end
+	for i = 1, shown do
+		local v = SimCitizen.fighterList[rows[i][1]]
+		if v then
+			local campTxt = (v.camp == 1) and "Tong" or "Kim"
+			local fightState = (v.isFighting == 1) and "DANG DANH" or "KHONG DANH"
+			local lockTxt = v.duelPlayerId and " [KHOA DUEL PLAYER]" or ""
+			local npcE = (v.finalIndex and v.finalIndex > 0 and v.fightSys) and v.fightSys:IsNpcEnemyAround(SimCitizen, v) or 0
+			local playerETxt = (v.isPlayerEnemyAround and v.isPlayerEnemyAround > 0) and "co" or "khong"
+			Msg2Map(nW, i .. ". [" .. campTxt .. "] " .. (v.hardsetName or SimCityNPCInfo:getName(v.nNpcId)) ..
+				" - diem:" .. (v.fightingScore or 0) .. " - " .. fightState .. lockTxt ..
+				" - dichNPCgan:" .. tostring(npcE > 0) .. " - dichPlayerGan:" .. playerETxt)
+		end
+	end
 	return 1
 end
 
@@ -695,8 +732,8 @@ function SimCityChienTranh:mainMenu()
 	local result = SimCityGraphToChienTranh:build(worldInfo, 32)
 
 	if (result == 0) then
-		local tbSay = createTaskSayChienTranh("<enter><enter>ChiÕn lo¹n t¹i b¶n ®å nµy ch­a ®­îc më. Chµng cã thÓ gëi <color=yellow>®Þa ®å chÝ<color> ®Õn t¸c gi¶ trªn fb héi qu¸n.")
-		tinsert(tbSay, "KÕt thóc ®èi tho¹i./no")
+		local tbSay = createTaskSayChienTranh("<enter><enter>Chiï¿½n loï¿½n tï¿½i bï¿½n ï¿½ï¿½ nï¿½y chï¿½a ï¿½ï¿½ï¿½c mï¿½. Chï¿½ng cï¿½ thï¿½ gï¿½i <color=yellow>ï¿½ï¿½a ï¿½ï¿½ chï¿½<color> ï¿½ï¿½n tï¿½c giï¿½ trï¿½n fb hï¿½i quï¿½n.")
+		tinsert(tbSay, "Kï¿½t thï¿½c ï¿½ï¿½i thoï¿½i./no")
 		CreateTaskSay(tbSay)
 		return 1 
  	end
@@ -705,7 +742,7 @@ function SimCityChienTranh:mainMenu()
 	worldInfo.showFightingArea = 0
 
 	local counter = self:countMap(self.nW)
-	local extra = "<enter><enter><color=yellow>Nh©n sè hiÖn t¹i: " .. counter .. "<color>"
+	local extra = "<enter><enter><color=yellow>Nhï¿½n sï¿½ hiï¿½n tï¿½i: " .. counter .. "<color>"
 	local tbSay = createTaskSayChienTranh(self.nW, extra)
 	if SimCityThanhThi then
 		SimCityThanhThi:removeAll()
@@ -713,17 +750,21 @@ function SimCityChienTranh:mainMenu()
 
 	if worldInfo.isTongKim == 1 then
 		if GetMissionV(1) ~= 2 then
-			tinsert(tbSay, "Khai chiÕn/#SimCityChienTranh:khaiChienTongKim()")
+			tinsert(tbSay, "Khai chiï¿½n/#SimCityChienTranh:khaiChienTongKim()")
 		end
+		-- [NEW] GM co the tu kich hoat ngay viec cat bot du/bu thieu ve dung TONGKIM_MAX_BOTS_PER_SIDE,
+		-- khong can doi player khac vao map moi kich hoat qua onPlayerEnterMap.
+		tinsert(tbSay, "Can bang so luong bot Tong Kim (20/ben)/#SimCityChienTranh:taoHauDoanh(1)")
+		tinsert(tbSay, "Debug trang thai diem bot Tong Kim/#SimCityChienTranh:debugTongKimStatus()")
 	end
 
-	tinsert(tbSay, "Ph¸t anh hïng thiÕp/#SimCityChienTranh:goiAnhHungThiepNgoaiTrang()")
-	tinsert(tbSay, "Ph¸t qu¸i nh©n thiÕp/#SimCityChienTranh:goiAnhHungThiep()")
-	tinsert(tbSay, "§iÒu ®éng qu©n binh/#SimCityChienTranh:phe_quanbinh()")
-	tinsert(tbSay, "Xem b¶ng xÕp h¹ng/#SimCitizen:ThongBaoBXH(" .. (self.nW) .. ")")
-	tinsert(tbSay, "Ban lÖnh/#SimCityChienTranh:caidat()")
-	tinsert(tbSay, "Gi¶i t¸n/#SimCityChienTranh:removeAll()")
-	tinsert(tbSay, "KÕt thóc ®èi tho¹i./no")
+	tinsert(tbSay, "Phï¿½t anh hï¿½ng thiï¿½p/#SimCityChienTranh:goiAnhHungThiepNgoaiTrang()")
+	tinsert(tbSay, "Phï¿½t quï¿½i nhï¿½n thiï¿½p/#SimCityChienTranh:goiAnhHungThiep()")
+	tinsert(tbSay, "ï¿½iï¿½u ï¿½ï¿½ng quï¿½n binh/#SimCityChienTranh:phe_quanbinh()")
+	tinsert(tbSay, "Xem bï¿½ng xï¿½p hï¿½ng/#SimCitizen:ThongBaoBXH(" .. (self.nW) .. ")")
+	tinsert(tbSay, "Ban lï¿½nh/#SimCityChienTranh:caidat()")
+	tinsert(tbSay, "Giï¿½i tï¿½n/#SimCityChienTranh:removeAll()")
+	tinsert(tbSay, "Kï¿½t thï¿½c ï¿½ï¿½i thoï¿½i./no")
 	CreateTaskSay(tbSay)
 
 
@@ -731,38 +772,76 @@ function SimCityChienTranh:mainMenu()
 end
 
 
-function SimCityChienTranh:countMapSpawn(nW)
+-- [CHANGED] them tham so camp (tuy chon) de dem RIENG so bot cua tung phe -- truoc day
+-- chi dem TONG CA 2 PHE, nen mot phe co the hao het quan trong khi phe kia con day ma
+-- taoHauDoanh() van khong bu vi tong con tren nguong.
+function SimCityChienTranh:countMapSpawn(nW, camp)
 	local counter = 0
 	for k, v in SimCitizen.fighterList do
-		if v.nMapId and v.nMapId == nW and v.baoDanhTongKim == 1 then
+		if v.nMapId and v.nMapId == nW and v.baoDanhTongKim == 1 and (not camp or v.camp == camp) then
 			counter = counter + 1
 		end
 	end
 	return counter
 end
 
-
-function SimCityChienTranh:taoHauDoanh(ngoaitrang)
-	-- FIX: previously only refilled when population was EXACTLY 0, same class
-	-- of bug as SimCityThanhThi:autoCreateNpc() (see plugins/pthanhthi.lua). If
-	-- even one baoDanhTongKim fighter remained, reinforcements could never be
-	-- topped back up as the rest died off. Refill below a threshold instead.
-	if self:countMapSpawn(self.nW) >= (TONGKIM_HAUDOANH_MIN_REFILL or 10) then
-		return 1
+-- [FIX] Bot Tong Kim khong bao gio bi xoa vinh vien khi chet (luon hoi sinh tai cho), nen
+-- logic cu (chi THEM khi thieu) khong bao gio lam dan so 1 phe GIAM XUONG duoc -- neu phe do
+-- da tung bi don qua dong (lenh GM "Dieu dong quan binh", ban cu truoc khi co gioi han/camp
+-- rieng, v.v.) thi no cu dong mai. Ham nay dem + XOA BOT bot du (uu tien bot dang KHONG danh
+-- nhau) de dua tung phe ve dung <= maxPerCamp. Dem theo tongkim==1 (khong chi baoDanhTongKim)
+-- de bat het moi nguon spawn chien dau tren ban do Tong Kim, khong tinh children (role=="child"
+-- di theo troop cha, khong phai 1 "bot" rieng).
+function SimCityChienTranh:trimExcessBots(nW, camp, maxPerCamp)
+	local idle, fighting, n = {}, {}, 0
+	for k, v in SimCitizen.fighterList do
+		if v.nMapId == nW and v.tongkim == 1 and v.camp == camp and v.role ~= "child" then
+			n = n + 1
+			if v.isFighting == 1 then
+				tinsert(fighting, k)
+			else
+				tinsert(idle, k)
+			end
+		end
 	end
 
+	local excess = n - maxPerCamp
+	if excess > 0 then
+		local removed = 0
+		for i = 1, getn(idle) do
+			if removed >= excess then break end
+			SimCitizen:Remove(idle[i])
+			removed = removed + 1
+		end
+		for i = 1, getn(fighting) do
+			if removed >= excess then break end
+			SimCitizen:Remove(fighting[i])
+			removed = removed + 1
+		end
+		n = n - removed
+	end
+	return n
+end
+
+
+function SimCityChienTranh:taoHauDoanh(ngoaitrang)
 	local worldInfo = SimCityWorld:Get(self.nW)
 	if (not worldInfo.presetPaths.haudoanh1 and not worldInfo.presetPaths.haudoanh2) 
 		then
 		return 1
 	end
 
-	local forCamp = 1
 	local capHP = 3
 	local pool = SimCityNPCInfo:getPoolByCap(capHP)
-	local total = 0
 	local pW, pX, pY = GetWorldPos()
 	local userCamp = GetCurCamp()
+
+	-- [CHANGED] Gioi han + bu quan RIENG cho tung phe (truoc day dem CHUNG ca 2 phe roi
+	-- xen ke spawn -> mot phe co the day 20, phe kia con 0 ma van khong bu vi tong >= nguong).
+	-- Muc tieu: TONGKIM_MAX_BOTS_PER_SIDE bot/phe (mac dinh 20), bu khi phe do tut duoi
+	-- TONGKIM_HAUDOANH_MIN_REFILL.
+	local maxPerCamp = TONGKIM_MAX_BOTS_PER_SIDE or 20
+	local minRefill = TONGKIM_HAUDOANH_MIN_REFILL or 10
 
 	local firstPoint = nil
 	local firstPointX = 0
@@ -774,83 +853,81 @@ function SimCityChienTranh:taoHauDoanh(ngoaitrang)
 	local dist2 = 0
 	local myPath = nil
 	local id = 0
-	local loop = 0
-	while (total < 20 and loop < 100)  do
-		loop = loop + 1
-		id = pool[random(1, getn(pool))] 
-		 
-		myPath = nil
 
-		if worldInfo.presetPaths.haudoanh1 and worldInfo.presetPaths.haudoanh2 then
-			local myHauDoanh = "haudoanh1"			
+	for forCamp = 1, 2 do
+		local total = self:trimExcessBots(self.nW, forCamp, maxPerCamp)
+		if total < minRefill then
+			local loop = 0
+			while (total < maxPerCamp and loop < 100) do
+				loop = loop + 1
+				id = pool[random(1, getn(pool))]
 
-			-- Note: sometimes preset paths are swapped around in correctly, we need to check based on user position
-			firstPoint = worldInfo.presetPaths.haudoanh1[1]
-			firstPointX, firstPointY = nodeNameToCoords(firstPoint)
-			dist1 = GetDistanceRadius(pX, pY, firstPointX, firstPointY)
-
-			secondPoint = worldInfo.presetPaths.haudoanh2[1]
-			secondPointX, secondPointY = nodeNameToCoords(secondPoint)
-			dist2 = GetDistanceRadius(pX, pY, secondPointX, secondPointY)
-
-			-- TH 1, dang o chung camp voi user va haudoanh nao gan user nhat?
-			if userCamp == forCamp then 
-				if dist2 < dist1 then
-					myHauDoanh = "haudoanh2"
-				else
-					myHauDoanh = "haudoanh1"
-				end
-			-- TH 2, dang o khac camp voi user va hau doanh nao xa user nhat
-			elseif userCamp ~= forCamp then
-				if dist2 < dist1 then
-					myHauDoanh = "haudoanh1"
-				else
-					myHauDoanh = "haudoanh2"
-				end
-			end 
-
-			myPath = { {myHauDoanh, 1} }
-
-		elseif worldInfo.presetPaths.haudoanh1 then
-			firstPoint = worldInfo.presetPaths.haudoanh1[1]
-			firstPointX, firstPointY = nodeNameToCoords(firstPoint)
-			dist1 = GetDistanceRadius(pX, pY, firstPointX, firstPointY)
-
-			if (userCamp == forCamp and dist1 < 50) or 
-				(userCamp ~= forCamp and dist1 > 100) then
-				myPath = { {"haudoanh1", 1} }
-			else
 				myPath = nil
-			end
 
+				if worldInfo.presetPaths.haudoanh1 and worldInfo.presetPaths.haudoanh2 then
+					local myHauDoanh = "haudoanh1"
 
-		elseif worldInfo.presetPaths.haudoanh2 then
-			secondPoint = worldInfo.presetPaths.haudoanh2[1]
-			secondPointX, secondPointY = nodeNameToCoords(secondPoint)
-			dist2 = GetDistanceRadius(pX, pY, secondPointX, secondPointY)
-			
-			if (userCamp == forCamp and dist2 < 50) or 
-				(userCamp ~= forCamp and dist2 > 100) then
-				myPath = { {"haudoanh2", 1} }
-			else
-				myPath = nil
+					-- Note: sometimes preset paths are swapped around in correctly, we need to check based on user position
+					firstPoint = worldInfo.presetPaths.haudoanh1[1]
+					firstPointX, firstPointY = nodeNameToCoords(firstPoint)
+					dist1 = GetDistanceRadius(pX, pY, firstPointX, firstPointY)
+
+					secondPoint = worldInfo.presetPaths.haudoanh2[1]
+					secondPointX, secondPointY = nodeNameToCoords(secondPoint)
+					dist2 = GetDistanceRadius(pX, pY, secondPointX, secondPointY)
+
+					-- TH 1, dang o chung camp voi user va haudoanh nao gan user nhat?
+					if userCamp == forCamp then
+						if dist2 < dist1 then
+							myHauDoanh = "haudoanh2"
+						else
+							myHauDoanh = "haudoanh1"
+						end
+					-- TH 2, dang o khac camp voi user va hau doanh nao xa user nhat
+					elseif userCamp ~= forCamp then
+						if dist2 < dist1 then
+							myHauDoanh = "haudoanh1"
+						else
+							myHauDoanh = "haudoanh2"
+						end
+					end
+
+					myPath = { {myHauDoanh, 1} }
+
+				elseif worldInfo.presetPaths.haudoanh1 then
+					firstPoint = worldInfo.presetPaths.haudoanh1[1]
+					firstPointX, firstPointY = nodeNameToCoords(firstPoint)
+					dist1 = GetDistanceRadius(pX, pY, firstPointX, firstPointY)
+
+					if (userCamp == forCamp and dist1 < 50) or
+						(userCamp ~= forCamp and dist1 > 100) then
+						myPath = { {"haudoanh1", 1} }
+					else
+						myPath = nil
+					end
+
+				elseif worldInfo.presetPaths.haudoanh2 then
+					secondPoint = worldInfo.presetPaths.haudoanh2[1]
+					secondPointX, secondPointY = nodeNameToCoords(secondPoint)
+					dist2 = GetDistanceRadius(pX, pY, secondPointX, secondPointY)
+
+					if (userCamp == forCamp and dist2 < 50) or
+						(userCamp ~= forCamp and dist2 > 100) then
+						myPath = { {"haudoanh2", 1} }
+					else
+						myPath = nil
+					end
+				end
+
+				if myPath then
+					local fighter = self:taoNV(id, forCamp, worldInfo, myPath, ngoaitrang, nil, capHP, {
+						baoDanhTongKim = 1
+					})
+					if fighter then
+						total = total + 1
+					end
+				end
 			end
 		end
-
-		if myPath then
- 			local fighter = self:taoNV(id, forCamp, worldInfo, myPath, ngoaitrang, nil, capHP, {
-				baoDanhTongKim = 1
-			})
-			if fighter then 
-				total = total + 1
-			end
-		end
-		if forCamp == 1 then
-			forCamp = 2
-		else
-			forCamp = 1
-		end
-
 	end
-	
 end
